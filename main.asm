@@ -1,6 +1,9 @@
 
 FILE_BUF 	 equ #1388
 
+PLAYGROUND_BMP	 equ #2e53
+PLAYGROUND_SCR	 equ #e16a
+
 DATA_LEN 	 equ #3b83
 
 DATA_PTR 	 equ #4268
@@ -181,7 +184,7 @@ MAIN:
 ; l7ED8:
 DISPLAY_LAYOUT:
 	; --------------------
-	; Configure CRTC - change width/height 
+	; Configure CRTC - change screen width/height 
 	; --------------------
 	; BC01 -> #20		H DISPLAYED 32 characters
 	; BC02 -> #2A		H SYNC 42
@@ -204,7 +207,7 @@ DISPLAY_LAYOUT:
 
 	; --------------------
 	; Fill #C040 -> #FFFF with #C0
-	; using the Stack pointer push (thus going from #FFFF down to #C040)
+	; using stack pointer's push (thus going from #FFFF down to #C040)
 	; 255*32 words = 16320 bytes 
 	; --------------------
 	ld (sp_tmp),sp
@@ -252,7 +255,7 @@ DISPLAY_LAYOUT:
 	; Draw game title
 	; --------------------
 	ld hl,#c000
-	ld de,#4aff
+	ld de,#4aff	
 	call DRAW_ZBMP
 
 	; --------------------
@@ -408,18 +411,18 @@ CONFIGURATION:
 	ld hl,l99dd
 	call #bcdd	; remove/disable block
 
-	ld hl,l9ac9	; frame flyback block - Usage to be determined
-	ld de,l9ad4	; event routine address
+	ld hl,FLBK_l9ac9_BLOCK	; frame flyback block - Usage to be determined
+	ld de,FLBK_l9ac9_ISR	; event routine address
 	ld bc,#8100	; B: evt class | C: ROM select address of the routine
 	call #bcd7	; init block 
-	ld hl,l9ac9
+	ld hl,FLBK_l9ac9_BLOCK
 	call #bcdd	; remove/disable block
 
-	ld hl,l9b68	; frame flyback block	 - Usage to be determined
-	ld de,l9b74	; event routine address
+	ld hl,FLBK_l9b68_BLOCK	; frame flyback block	 - Usage to be determined
+	ld de,FLBK_l9b68_ISR	; event routine address
 	ld bc,#8100	; B: evt class | C: ROM
 	call #bcd7	; init block 
-	ld hl,l9b68
+	ld hl,FLBK_l9b68_BLOCK
 	call #bcdd	; remove/disable block
 
 	ld hl,SND_FLBK	; frame flyback block - Melody manager
@@ -437,10 +440,10 @@ CONFIGURATION:
 	call #bcdd	; remove/disable block
 
 	; ----------------------------------------
-	; Reset variable l94d3
+	; Reset variable l94d3 - TBD
 	; ----------------------------------------
 	xor a
-	ld (l94d3),a
+	ld (FLAG_l94d3),a
 
 	; ----------------------------------------
 	; Disable KBD key repeat 
@@ -484,7 +487,7 @@ CONFIGURATION:
 	; ??? maybe ???
 	; 20*210
 	; ----------------------------------------
-	call CLR_2E53_3EBB
+	call CLEAR_PLAYGROUND_BMP
 
 	; ----------------------------------------
 	; Draw curtain
@@ -931,8 +934,8 @@ MENU_4:
 	call GET_KEY_CODE
 
 	; Insert key code into playing routines
-	ld (l8916),a
-	ld (l94b7),a
+	ld (key_right),a
+	ld (KEY.right),a
 
 	; Display "GAUCHE:"
 	ld hl,#c5ca
@@ -947,8 +950,8 @@ MENU_4:
 	; Get corresponding key code
 	call GET_KEY_CODE
 	; Insert key code into playing routines
-	ld (l890e),a
-	ld (l94b8),a
+	ld (key_left),a
+	ld (KEY.left),a
 
 	; Display "ACCELERE:"
 	ld hl,#c608
@@ -957,7 +960,7 @@ MENU_4:
 	; Read CHAR
 	call #bb18
 	; Insert CHAR into routine ??
-	ld (l8906),a
+	ld (key_down),a
 	; Draw CHAR
 	call DRW_CHAR
 
@@ -968,7 +971,7 @@ MENU_4:
 	; Read CHAR
 	call #bb18
 	; Insert CHAR into routine ??
-	ld (l8900),a
+	ld (key_rotate),a
 	; Draw CHAR
 	call DRW_CHAR
 
@@ -1021,7 +1024,7 @@ START_GAME:
 	call #bcdd
 
 	; Clear playing area
-	ld hl,#e16a
+	ld hl,PLAYGROUND_SCR
 	ld bc,#d014
 	call CLEAR_AREA
 
@@ -1110,6 +1113,7 @@ PLAYER1:
 	inc hl
 	inc de
 	djnz .init_score
+
 	ld hl,(P1_LEVEL_PTR)
 	ld (CUR_LEVEL_PTR),hl
 	ld de,#7282
@@ -1127,16 +1131,17 @@ PLAYER1:
 	ld de,P1_SCORE_X00001
 	ld hl,CUR_SCORE_X00001
 	ld b,#05
-.save_score:
+.store_score:
 	ld a,(hl)
 	ld (de),a
 	inc hl
 	inc de
-	djnz .save_score
-	call l9af2
-	call l9b92
-	call l94d4
-	call l94b9
+	djnz .store_score
+
+	call FLBK_l9ac9_DISABLE
+	call FLBK_l9b68_DISABLE
+	call DISABLE_FLAG_l94d3
+	call NORMAL_DIRECTION
 	jp START_LEVEL.player2
 
 PLAYER2:
@@ -1170,23 +1175,23 @@ PLAYER2:
 	ld de,P2_SCORE_X00001
 	ld hl,CUR_SCORE_X00001
 	ld b,#05
-.save_score:
+.store_score:
 	ld a,(hl)
 	ld (de),a
 	inc hl
 	inc de
-	djnz .save_score
+	djnz .store_score
 
-	call l9af2
-	call l9b92
-	call l94d4
-	call l94b9
+	call FLBK_l9ac9_DISABLE
+	call FLBK_l9b68_DISABLE
+	call DISABLE_FLAG_l94d3
+	call NORMAL_DIRECTION
 	jp NEXT_LEVEL
 
 PLAY:
 	push de
-	call CLR_2E53_3EBB
-	ld hl,#e16a
+	call CLEAR_PLAYGROUND_BMP
+	ld hl,PLAYGROUND_SCR
 	ld bc,#d014
 	call CLEAR_AREA
 	call DRAW_POPUP_BOX
@@ -1209,11 +1214,11 @@ PLAY:
 
 	call DELAY
 	
-	ld hl,#e16a
+	ld hl,PLAYGROUND_SCR
 	ld bc,#d014
 	call CLEAR_AREA
 
-	ld hl,(CUR_LEVEL_PTR)
+	ld hl,(CUR_LEVEL_PTR)		; load ptr = &level[0]
 	ld de,CUR_LIGNES_X10
 	ld b,#02
 .copy_lignes:
@@ -1223,7 +1228,7 @@ PLAY:
 	inc de
 	djnz .copy_lignes
 
-	ld (CUR_LEVEL_PTR),hl
+	ld (CUR_LEVEL_PTR),hl		; store ptr = &level[2]
 	; Draw "DEFI"
 	ld de,#73cf
 	ld hl,#e36d
@@ -1284,47 +1289,50 @@ PLAY:
 
 	call DELAY
 
-	ld hl,(CUR_LEVEL_PTR)
+	ld hl,(CUR_LEVEL_PTR)	; load ptr = &level[2]
 	ld a,(hl)
-	ld (l88f6),a		; <- (88f6) = nb line (ten)
+	ld (l88f6),a		; ??
 
 	call l9063
 
-	inc hl
-	ld a,(hl)
-	inc hl
-	ld (CUR_LEVEL_PTR),hl
+	inc hl			; ptr = &level[3]
+	ld a,(hl)		; 
+	inc hl			; ptr = &level[4]
+	ld (CUR_LEVEL_PTR),hl	; <- store ptr = &level[4]
 
 	push af
-	bit 7,a
-	call nz,l9ae8
+	bit 7,a			; a.7 ->
+	call nz,FLBK_l9ac9_ENABLE
 	pop af
 	push af
-	bit 6,a
-	call nz,l9b88
+	bit 6,a			; a.6 ->
+	call nz,FLBK_l9b68_ENABLE
 	pop af
 	push af
-	bit 5,a
-	call nz,l94dd
+	bit 5,a			; a.5 ->
+	call nz,ENABLE_FLAG_l94d3
 	pop af
-	bit 4,a
-	call nz,l94c6
-	ld hl,(CUR_LEVEL_PTR)
+	bit 4,a			; a.4 -> reverse direction
+	call nz,REVERSE_DIRECTION
+
+	ld hl,(CUR_LEVEL_PTR)	; restore ptr = &level[4]
 	push hl
-	ld e,(hl)
-	inc hl
-	ld d,(hl)
-	inc hl
-	call l9c48
+	ld e,(hl)		; e = level[4]
+	inc hl			
+	ld d,(hl)		; d = level[5]
+	inc hl			; <-- useless (probably)
+	call SETUP_PLAYGROUND_MASK
 	pop hl
-	ld e,(hl)
-	inc hl
-	ld d,(hl)
-	inc hl
-	ld (CUR_LEVEL_PTR),hl
-	call l9c83
-	ld hl,#e16a
-	ld de,#2e53
+
+	ld e,(hl)		; e = level[4]
+	inc hl			; 
+	ld d,(hl)		; d = level[5]
+	inc hl			; ptr = &level[6]
+	ld (CUR_LEVEL_PTR),hl 	; store current ptr = &level[6]
+	call SETUP_PLAYGROUND_BMP
+
+	ld hl,PLAYGROUND_SCR
+	ld de,PLAYGROUND_BMP
 	ld bc,#d014
 	call DRAW_BMP
 	call l97f3
@@ -1376,8 +1384,8 @@ PLAY:
 	jp DELAY
 
 COUNT_BONUS:
-	ld hl,#e16a
-	ld de,#2e53
+	ld hl,PLAYGROUND_SCR
+	ld de,PLAYGROUND_BMP
 	ld bc,#d014
 	call DRAW_BMP
 	ld a,#05
@@ -1537,7 +1545,7 @@ l8810:
 l8836:
 	jp l8702
 l8839:
-	ld a,(l8906)
+	ld a,(key_down)
 	call GET_KEY_CODE
 	ld b,#ff
 	call #bb39
@@ -1570,7 +1578,7 @@ l886f:
 	ld (#758e),hl
 	ld de,(#75b8)
 	ld bc,(#75ba)
-	call l9653
+	call DRAW_BMP2
 	ld hl,(#75b6)
 	ld de,(#758e)
 	ld bc,(#75ba)
@@ -1622,26 +1630,28 @@ l88fa:
 	xor a
 	call #bb1b
 	push af
-l8900 equ $ + 1
+key_rotate equ $ + 1
 	cp #20
 	call z,l8e02
 	pop af
-l8906 equ $ + 1
+key_down equ $ + 1
 	cp #0a
 	jp z,l892e
 l890b equ $ + 1
 	jp l890d
-l890e equ $ + 1
+
+key_left equ $ + 1
 l890d:
 	ld a,#08
 	call #bb1e
 	jp nz,l8f76
-l8916 equ $ + 1
-	ld a,#01
-	call #bb1e
-	jp nz,l8fe8
+key_right equ $ + 1
+	ld a,#01	; right key
+	call #bb1e	; is right pressed ?
+	jp nz,l8fe8	; no
 l891e equ $ + 1
-	jp l88fa
+	jp l88fa	; yes
+
 l8921 equ $ + 1
 l8920:
 	ld a,#0c
@@ -1688,14 +1698,14 @@ l8933:
 	ld (#7592),hl
 	ld de,(#75b8)
 	ld bc,(#75ba)
-	call l9691
+	call CLEAR_BMP2
 	ld hl,(#758e)
 	ld bc,#00a0
 	add hl,bc
 	ld (#758e),hl
 	ld de,(#75b8)
 	ld bc,(#75ba)
-	call l9653
+	call DRAW_BMP2
 	ld hl,(#7590)
 	ld de,(#7592)
 	ld bc,(#75ba)
@@ -1907,8 +1917,8 @@ l8b1e:
 	dec c
 	jr nz,l8b1e
 	djnz l8b1c
-	ld hl,#e16a
-	ld de,#2e53
+	ld hl,PLAYGROUND_SCR
+	ld de,PLAYGROUND_BMP
 	ld bc,#d014
 	call DRAW_BMP
 	ld d,#03
@@ -2040,11 +2050,11 @@ l8c0e:
 l8c2c:
 	ld a,(#7582)
 	cp #18
-	jr nc,l8ca6
-	ld a,(l9ad3)
+	jr nc,GAME_OVER
+	ld a,(FLBK_l9ac9_CNT)
 	dec a
 	call z,l9afd
-	ld a,(l9b72)
+	ld a,(FLBK_l9b68_CNT)
 	dec a
 	call z,l9b9d
 	jp l8867
@@ -2071,7 +2081,7 @@ l8c44:
 	jp l8be2
 
 l8c75:
-	ld a,(l8906)
+	ld a,(key_down)
 	call GET_KEY_CODE
 	ld b,#00
 	call #bb39	; Disable KEY repeat
@@ -2104,18 +2114,18 @@ l8c75:
 	jp CFG_AY_SND	; OFF
 
 
-l8ca6:
-	ld a,(l8906)
+GAME_OVER:
+	ld a,(key_down)
 	call GET_KEY_CODE
 	ld b,#00	
 	call #bb39	; Disable KEY repeat
 	ld hl,l8d63
 	call #bcdd	; Disable Flyback block
 
-	call l9af2
-	call l9b92
-	call l94d4
-	call l94b9
+	call FLBK_l9ac9_DISABLE
+	call FLBK_l9b68_DISABLE
+	call DISABLE_FLAG_l94d3
+	call NORMAL_DIRECTION
 
 	ld hl,(l8d60)	; Load note address
 	ld a,(hl)	; load note
@@ -2200,8 +2210,8 @@ l8cf3:
 	ld hl,#e15a
 	ld bc,#200a
 	call CLEAR_AREA
-	call CLR_2E53_3EBB
-	ld hl,#e16a
+	call CLEAR_PLAYGROUND_BMP
+	ld hl,PLAYGROUND_SCR
 	ld bc,#d014
 	call CLEAR_AREA
 	call CURTAIN_UP
@@ -2466,7 +2476,7 @@ l8f1a:
 	ld hl,(#7592)
 	ld de,(#7594)
 	ld bc,(#7596)
-	call l9691
+	call CLEAR_BMP2
 	ld hl,(#75c8)
 	ld de,#75b8
 	ld b,#1a
@@ -2482,11 +2492,11 @@ l8f36:
 	ld (#758e),hl
 	ld de,(#75b8)
 	ld bc,(#75ba)
-	call l9653
+	call DRAW_BMP2
 	ld hl,(#7590)
 	ld de,(#7594)
 	ld bc,(#7596)
-	call l967b
+	call CLEAR_BMP
 	ld hl,(#75b6)
 	ld de,(#75c6)
 	add hl,de
@@ -2523,14 +2533,14 @@ l8f76:
 	ld hl,(#758e)
 	ld de,(#75b8)
 	ld bc,(#75ba)
-	call l9691
+	call CLEAR_BMP2
 	ld hl,(#758e)
 	dec hl
 	dec hl
 	ld (#758e),hl
 	ld de,(#75b8)
 	ld bc,(#75ba)
-	call l9653
+	call DRAW_BMP2
 	ld hl,(#75b6)
 	dec hl
 	dec hl
@@ -2571,14 +2581,14 @@ l8fe8:
 	ld (#7592),hl
 	ld de,(#75b8)
 	ld bc,(#75ba)
-	call l9691
+	call CLEAR_BMP2
 	ld hl,(#7592)
 	inc hl
 	inc hl
 	ld (#758e),hl
 	ld de,(#75b8)
 	ld bc,(#75ba)
-	call l9653
+	call DRAW_BMP2
 	ld hl,(#75b6)
 	ld (#7590),hl
 	inc hl
@@ -2779,12 +2789,12 @@ NEW_AMANT_MISSED:
 
 
 GAME_FINISHED:
-	ld a,(l8906)
+	ld a,(key_down)
 	call GET_KEY_CODE
 	ld b,#00
 	call #bb39		; Disable CHAR repeat
 	
-	ld hl,#e16a
+	ld hl,PLAYGROUND_SCR
 	ld bc,#d014
 	call CLEAR_AREA
 	
@@ -2964,7 +2974,7 @@ NEW_AMANT_WIN:
 	ld de,AMANT
 	ld a,(custom_game)
 	dec a
-	jr z,.custom_game
+	jr z,.use_custom_name
 	call #bb18
 .letter1:
 	dec de
@@ -3039,14 +3049,14 @@ NEW_AMANT_WIN:
 	pop bc
 	djnz .check_soupirants
 .finished:
-	ld hl,#e16a
+	ld hl,PLAYGROUND_SCR
 	ld bc,#d014
 	call CLEAR_AREA
-	call CLR_2E53_3EBB
+	call CLEAR_PLAYGROUND_BMP
 	call CURTAIN_UP
 	jp MAIN_START
 
-.custom_game:
+.use_custom_name:
 	ld hl,custom_name
 	ld b,#03
 .custom_next:
@@ -3112,11 +3122,13 @@ NEW_AMANT_WIN:
 	ld (de),a
 	jp .finished
 
-
+; ---------------------------------------
+; Check if current player's score is a high score
+; ---------------------------------------
+;#
 CHECK_HIGH_SCORE:
-	ld b,#05
+	ld b,#05		; nb of high score table's entry.
 	ld de,SOUPIRANT_1
-
 .check_entry:
 	push bc
 	push de
@@ -3182,7 +3194,7 @@ CHECK_HIGH_SCORE:
 	ld b,#03
 	call DRW_TXT
 
-	ld a,(l8906)
+	ld a,(key_down)
 	call GET_KEY_CODE
 	ld b,#00	
 	call #bb39	; Disable KBD repeat
@@ -3190,49 +3202,49 @@ CHECK_HIGH_SCORE:
 	pop de
 	ld a,(custom_game)
 	dec a
-	jr z,CUSTOM_GAME
+	jr z,.insert_custom_name
 
 	call #bb18	; Wait KEY
-.initiale_1:
+.letter1:
 	dec de
 	ld hl,#c471
 	call WAIT_KEY
 	inc de
 	cp #7f
-	jr z,.initiale_1
+	jr z,.letter1
 	ld (de),a
 	call DRW_CHAR
 	inc de
-.initiale_2:
+.letter2:
 	dec de
 	ld hl,#c473
 	call WAIT_KEY
 	cp #7f
-	jr z,.initiale_1
+	jr z,.letter1
 	inc de
 	ld (de),a
 	call DRW_CHAR
 	ld hl,#c475
 	call WAIT_KEY
 	cp #7f
-	jr z,.initiale_2
+	jr z,.letter2
 	inc de
 	ld (de),a
 	inc de
 	call DRW_CHAR
-	
-UPDATE_HIGH_SCORE:
+
+.insert_score:
 	ld a,#01
 	ld (HIGH_SCORE_CHANGED),a
 	ld hl,CUR_SCORE_X10000
 	ld b,#05
-.copy:
+.score_loop:
 	ld a,(hl)
 	add #2f
 	ld (de),a
 	dec hl
 	inc de
-	djnz .copy
+	djnz .score_loop
 
 	ld a,#2e
 	ld (de),a
@@ -3250,17 +3262,17 @@ UPDATE_HIGH_SCORE:
 	ld (de),a
 	ret
 
-CUSTOM_GAME:
+.insert_custom_name:
 	ld hl,custom_name
 	ld b,#03
-.cpy:
+.name_loop:
 	ld a,(hl)
 	ld (de),a
 	inc hl
 	inc de
-	djnz .cpy
+	djnz .name_loop
 	call DRAW_CUSTOM_NAME
-	jp UPDATE_HIGH_SCORE
+	jp .insert_score
 
 DRAW_CUSTOM_NAME:
 	push de
@@ -3295,38 +3307,53 @@ WAIT_KEY:
 	dec hl
 	jp #bb18	; wait key
 
-l94b9 equ $ + 2
-l94b8 equ $ + 1
-l94b7:
-	ld bc,#3a08
-	or a
-	sub h
-	ld (l8916),a
-	ld a,(l94b8)
-	ld (l890e),a
+KEY
+.right:
+	DB #01
+.left:
+	DB #08
+
+NORMAL_DIRECTION:
+	ld a,(KEY.right)
+	ld (key_right),a
+	ld a,(KEY.left)
+	ld (key_left),a
 	ret
 
-l94c6:
-	ld a,(l94b7)
-	ld (l890e),a
-	ld a,(l94b8)
-	ld (l8916),a
+REVERSE_DIRECTION:
+	ld a,(KEY.right)
+	ld (key_left),a
+	ld a,(KEY.left)
+	ld (key_right),a
 	ret
-l94d3:
+
+;l94d3:
+FLAG_l94d3:
 	DB #00
-l94d4:
-	ld a,(l94d3)
+
+; -------------------
+; Disable FLAG ll94d3
+; -------------------
+;#94d4
+DISABLE_FLAG_l94d3:
+	ld a,(FLAG_l94d3)
 	dec a
 	ret nz
 	ld a,#00
 	jr l94e4
-l94dd:
-	ld a,(l94d3)
+
+; -------------------
+; Enable FLAG ll94d3
+; -------------------
+;#94dd
+ENABLE_FLAG_l94d3:
+	ld a,(FLAG_l94d3)
 	dec a
 	ret z
 	ld a,#01
+
 l94e4:
-	ld (l94d3),a
+	ld (FLAG_l94d3),a
 	ld hl,#7c5b
 	ld de,l950f
 	ld b,#03
@@ -3360,136 +3387,28 @@ l94fe:
 	djnz l94ef
 	ret
 l950f:
-	sbc (hl)
-	nop
-	ld a,#00
-	xor l
-	ld a,h
-	nop
-	nop
-	ld bc,#0c00
-	nop
-	inc c
-	nop
-	ld (bc),a
-	nop
-	ld (bc),a
-	nop
-	ld e,a
-	ld a,h
-	inc c
-	nop
-	ld bc,#0100
-	nop
-	ld a,(bc)
-	nop
-	nop
-	nop
-	nop
-	nop
-	ld a,c
-	ld a,h
-	ld bc,#0c00
-	nop
-	inc c
-	nop
-	ld bc,#6000
-	rst #38
-	ret nz
-	rst #38
-	sub e
-	ld a,h
-	ld (bc),a
-	nop
-	ld a,(bc)
-	nop
-	ld bc,#0100
-	nop
-	sbc (hl)
-	nop
-	ld a,#00
-	add hl,de
-	ld a,l
-	ld bc,#0c00
-	nop
-	dec bc
-	nop
-	ld bc,#0200
-	nop
-	ld (bc),a
-	nop
-	bit 7,h
-	inc c
-	nop
-	ld bc,#0100
-	nop
-	inc c
-	nop
-	nop
-	nop
-	nop
-	nop
-	push hl
-	ld a,h
-	ld bc,#0100
-	nop
-	dec bc
-	nop
-	inc c
-	nop
-	ld h,b
-	rst #38
-	ret nz
-	rst #38
-	rst #38
-	ld a,h
-	nop
-	nop
-	inc c
-	nop
-	ld bc,#0100
-	nop
-	sbc (hl)
-	nop
-	ld a,#00
-	add l
-	ld a,l
-	ld bc,#0b00
-	nop
-	ld bc,#0c00
-	nop
-	ld (bc),a
-	nop
-	ld (bc),a
-	nop
-	scf
-	ld a,l
-	inc c
-	nop
-	ld bc,#0100
-	nop
-	dec bc
-	nop
-	nop
-	nop
-	nop
-	nop
-	ld d,c
-	ld a,l
-	ld bc,#0c00
-	nop
-	ld bc,#0b00
-	nop
-	ld h,b
-	rst #38
-	ret nz
-	rst #38
-	ld l,e
-	ld a,l
-	ld bc,#0b00
-	nop
-	ld bc,#0100
-	nop
+	db #9e,#00,#3e,#00,#ad,#7c,#00,#00
+	db #01,#00,#0c,#00,#0c,#00,#02,#00
+	db #02,#00,#5f,#7c,#0c,#00,#01,#00
+	db #01,#00,#0a,#00,#00,#00,#00,#00
+	db #79,#7c,#01,#00,#0c,#00,#0c,#00
+	db #01,#00,#60,#ff,#c0,#ff,#93,#7c
+	db #02,#00,#0a,#00,#01,#00,#01,#00
+	db #9e,#00,#3e,#00,#19,#7d,#01,#00
+	db #0c,#00,#0b,#00,#01,#00,#02,#00
+	db #02,#00,#cb,#7c,#0c,#00,#01,#00
+	db #01,#00,#0c,#00,#00,#00,#00,#00
+	db #e5,#7c,#01,#00,#01,#00,#0b,#00
+	db #0c,#00,#60,#ff,#c0,#ff,#ff,#7c
+	db #00,#00,#0c,#00,#01,#00,#01,#00
+	db #9e,#00,#3e,#00,#85,#7d,#01,#00
+	db #0b,#00,#01,#00,#0c,#00,#02,#00
+	db #02,#00,#37,#7d,#0c,#00,#01,#00
+	db #01,#00,#0b,#00,#00,#00,#00,#00
+	db #51,#7d,#01,#00,#0c,#00,#01,#00
+	db #0b,#00,#60,#ff,#c0,#ff,#6b,#7d
+	db #01,#00,#0b,#00,#01,#00,#01,#00
+
 
 ; -------------------------------------------------------
 ; Delay loop (2 or 3 seconds... TBD)
@@ -3643,7 +3562,7 @@ DRAW_BMP:
 	djnz DRAW_BMP
 	ret
 
-l9653:
+DRAW_BMP2:
 	push bc
 	push hl
 l9655:
@@ -3660,9 +3579,11 @@ l965c:
 	ld bc,#0014
 	add hl,bc
 	pop bc
-	djnz l9653
+	djnz DRAW_BMP2
 	ret
-l9669:
+
+
+DRAW_BMP3:
 	push bc
 	push hl
 l966b:
@@ -3676,9 +3597,10 @@ l966b:
 	ld bc,#0022
 	add hl,bc
 	pop bc
-	djnz l9669
+	djnz DRAW_BMP3
 	ret
-l967b:
+
+CLEAR_BMP:
 	push bc
 	push hl
 l967d:
@@ -3694,9 +3616,10 @@ l9685:
 	pop hl
 	call NXT_SCR_LINE
 	pop bc
-	djnz l967b
+	djnz CLEAR_BMP
 	ret
-l9691:
+
+CLEAR_BMP2:
 	push bc
 	push hl
 l9693:
@@ -3713,7 +3636,7 @@ l969b:
 	ld bc,#0014
 	add hl,bc
 	pop bc
-	djnz l9691
+	djnz CLEAR_BMP2
 	ret
 
 
@@ -3923,7 +3846,7 @@ DRW_WCHAR:
 	pop hl
 	push hl
 	ld b,#07
-l97c5:
+.loop:
 	push bc
 	ld a,(de)
 	inc de
@@ -3935,10 +3858,10 @@ l97c5:
 	dec hl
 	ld bc,#0800
 	add hl,bc
-	jr nc,l97d8
+	jr nc,.cont1
 	ld bc,#c040
 	add hl,bc
-l97d8:
+.cont1:
 	ld a,(de)
 	inc de
 	ld (hl),a
@@ -3949,12 +3872,12 @@ l97d8:
 	dec hl
 	ld bc,#0800
 	add hl,bc
-	jr nc,l97ea
+	jr nc,.cont2
 	ld bc,#c040
 	add hl,bc
-l97ea:
+.cont2:
 	pop bc
-	djnz l97c5
+	djnz .loop
 	pop hl
 	inc hl
 	inc hl
@@ -3962,8 +3885,9 @@ l97ea:
 	pop bc
 	ret
 
-
-
+; ------------------------
+; Random ??? seed ?
+; ------------------------
 l97f3:
 	ld a,r
 	ld c,a
@@ -4026,6 +3950,7 @@ l9839:
 	ld a,(hl)
 	ld e,e
 	ld a,h
+
 l9847:
 	ld hl,#fc82
 	ld de,#2fc9
@@ -4193,8 +4118,8 @@ l9936:
 
 
 l9943:
-	call CLR_2E53_3EBB
-	ld hl,#2e53
+	call CLEAR_PLAYGROUND_BMP
+	ld hl,PLAYGROUND_BMP
 	ld a,#3f
 	ld b,#0c
 l994d:
@@ -4230,11 +4155,11 @@ l996f:
 	ld hl,#2fc9
 	ld de,#5f77
 	ld bc,#6405
-	call l9669
+	call DRAW_BMP3
 	ld hl,#2fe1
 	ld de,#616b
 	ld bc,#640a
-	call l9669
+	call DRAW_BMP3
 	call CURTAIN_UP
 	ld hl,#d605
 	ld de,#4a9b
@@ -4440,49 +4365,52 @@ l9ac4:
 
 ;
 ; Flyback block
-;
-l9ac9:
+;#9ac9
+FLBK_l9ac9_BLOCK:
 	DB #00,#00
 	DB #00
 	DB #00
 	DB #00,#00
 	DB #00
 	DB #00,#00,#00
-l9ad3:
+;#9ad3
+FLBK_l9ac9_CNT:
 	DB #00
 
 
 ;
 ; Flyback ISR routine
 ; it decrease a counter and stop if it reaches 0
-;
-l9ad4:
+;#9ad4
+FLBK_l9ac9_ISR:
 	push af
 	; Decrease 'counter'
-	ld a,(l9ad3)
+	ld a,(FLBK_l9ac9_CNT)
 	dec a
 	jr nz,.cont
 	; Disable flyback
-	ld hl,l9ac9
+	ld hl,FLBK_l9ac9_BLOCK
 	call #bcdd
 	ld a,#01
 .cont:
-	ld (l9ad3),a
+	ld (FLBK_l9ac9_CNT),a
 	pop af
 	ret
 
 ; Enable flyback block
-l9ae8:
+;#9ae8
+FLBK_l9ac9_ENABLE:
 	xor a
-	ld (l9ad3),a
-	ld hl,l9ac9
+	ld (FLBK_l9ac9_CNT),a
+	ld hl,FLBK_l9ac9_BLOCK
 	jp #bcda
 
 ; Disable flyback block
-l9af2:
+;#9af2
+FLBK_l9ac9_DISABLE:
 	ld a,#ff
-	ld (l9ad3),a
-	ld hl,l9ac9
+	ld (FLBK_l9ac9_CNT),a
+	ld hl,FLBK_l9ac9_BLOCK
 	jp #bcdd
 
 
@@ -4533,57 +4461,65 @@ l9b2f equ $ + 1
 	ld (ix+#00),#01
 	ld de,#65d3
 	ld bc,#0802
-	call l9653
-	ld hl,#e16a
-	ld de,#2e53
+	call DRAW_BMP2
+	ld hl,PLAYGROUND_SCR
+	ld de,PLAYGROUND_BMP
 	ld bc,#d014
 	call DRAW_BMP
-	ld a,#c8
-	ld (l9ad3),a
-	ld hl,l9ac9
-	jp #bcda
 
+	ld a,#c8
+	ld (FLBK_l9ac9_CNT),a
+	ld hl,FLBK_l9ac9_BLOCK
+	jp #bcda		; Enable Flyback block
+
+; --------------
 ; Flyback block
-l9b68:
+;#9b68
+FLBK_l9b68_BLOCK:
 	DB #00,#00
 	DB #00
 	DB #00
 	DB #00,#00
 	DB #00
 	DB #00,#00,#00
-l9b72:
+;#9b72
+FLBK_l9b68_CNT:
 	DB #00
+;#9b73
 l9b73:
 	DB #00
 
 ; Flyback routine...
 ; Decrease counter ???
-l9b74:
+;#9b74
+FLBK_l9b68_ISR:
 	push af
-	ld a,(l9b72)
+	ld a,(FLBK_l9b68_CNT)
 	dec a
 	jr nz,.cont
 	; Disable flyback block
-	ld hl,l9b68
+	ld hl,FLBK_l9b68_BLOCK
 	call #bcdd
 	ld a,#01
 .cont:
-	ld (l9b72),a
+	ld (FLBK_l9b68_CNT),a
 	pop af
 	ret
 
 ; Enable Flyback block
-l9b88:
+;#9b88
+FLBK_l9b68_ENABLE:
 	xor a
-	ld (l9b72),a
-	ld hl,l9b68
+	ld (FLBK_l9b68_CNT),a		; reset variable. Usage TBD
+	ld hl,FLBK_l9b68_BLOCK
 	jp #bcda
 
 ; Disable Flyback block
-l9b92:
+;#9b92
+FLBK_l9b68_DISABLE:
 	ld a,#ff
-	ld (l9b72),a
-	ld hl,l9b68
+	ld (FLBK_l9b68_CNT),a
+	ld hl,FLBK_l9b68_BLOCK
 	jp #bcdd
 
 
@@ -4607,7 +4543,7 @@ l9bb1:
 	jr nz,l9bb1
 	djnz l9baf
 
-	ld hl,#2e53
+	ld hl,PLAYGROUND_BMP
 	ld de,#2ef3
 	ld b,#c8
 l9bc2:
@@ -4647,7 +4583,7 @@ l9bf5:
 	push hl
 	ld de,#6583
 	ld bc,#0802
-	call l9653
+	call DRAW_BMP2
 	pop hl
 	inc hl
 	inc hl
@@ -4655,13 +4591,13 @@ l9bf5:
 	inc ix
 	pop bc
 	djnz l9bee
-	ld hl,#e16a
-	ld de,#2e53
+	ld hl,PLAYGROUND_SCR
+	ld de,PLAYGROUND_BMP
 	ld bc,#d014
 	call DRAW_BMP
 	ld a,#fa
-	ld (l9b72),a
-	ld hl,l9b68
+	ld (FLBK_l9b68_CNT),a
+	ld hl,FLBK_l9b68_BLOCK
 	jp #bcda
 l9c25:
 	push hl
@@ -4689,118 +4625,164 @@ l9c40 equ $ + 2
 	inc ix
 	ld a,#00
 	jr l9bf5
-l9c48:
-	ld b,#14
-	ld hl,#3ebb
-l9c4d:
-	ld (hl),#01
+
+;
+; Set up playing area mask (either 0 or 1) 
+; 28 lines of 12 blocks
+;
+;	100000000001
+;	100000000001
+;	100000000001
+;	100000000001
+;	100000000001
+;	100000000001
+;	100000000001
+;	100000000001
+;	100000000001
+;	100000000001
+;	100000000001
+;	100000000001
+;	100000000001
+;	100000000001
+;	100000000001
+;	100000000001
+;	100000000001
+;	100000000001
+;	100000000001
+;	100000000001
+; DE -> ????????????	
+;	????????????
+;	????????????
+;	????????????
+;	????????????
+;	????????????
+;	222222222222
+;       222222222222
+;#9c48
+SETUP_PLAYGROUND_MASK:
+	ld b,#14		
+	ld hl,#3ebb		; <- probably playing area mask array address
+.fill1:
+	ld (hl),#01		; left border
 	inc hl
-	ld c,#0a
-l9c52:
+	ld c,#0a		; 10 zeros
+.fill2:
 	ld (hl),#00
 	inc hl
 	dec c
-	jr nz,l9c52
-	ld (hl),#01
+	jr nz,.fill2
+	ld (hl),#01		; right border
 	inc hl
-	djnz l9c4d
+	djnz .fill1
+
 	ld b,#48
-l9c5f:
+.pattern:
 	ld a,(de)
 	inc de
 	cp #00
-	jr z,l9c67
-	ld a,#01
-l9c67:
+	jr z,.copy	; empty
+	ld a,#01	; occupied
+.copy:
 	ld (hl),a
 	inc hl
-	djnz l9c5f
+	djnz .pattern
 	ld b,#18
-l9c6d:
+.bottom:
 	ld (hl),#02
 	inc hl
-	djnz l9c6d
+	djnz .bottom
 	ret
 
-; Clear RAM #2E53 -> #3EBB (len=#D2*#14= #1068) 
-; Usage ???
-CLR_2E53_3EBB:
-l9c73:
-	ld hl,#2e53
+; ----------------------------------
+; Clear play ground bitmap
+; ----------------------------------
+;#9c73
+CLEAR_PLAYGROUND_BMP:
+
+	ld hl,PLAYGROUND_BMP
 	ld b,#d2
-l9c78:
+.loop_y:
 	ld c,#14
-l9c7a:
+.loop_x:
 	ld (hl),#00
 	inc hl
 	dec c
-	jr nz,l9c7a
-	djnz l9c78
+	jr nz,.loop_x
+	djnz .loop_y
 	ret
 
-l9c83:
-	ld hl,#2e53
+;
+; Setup playing area bitmap
+;
+;#9c83
+SETUP_PLAYGROUND_BMP:
+	ld hl,PLAYGROUND_BMP	; <- playing area bitmap buffer
+	; Clear 20 first lines of 10 blocks
 	ld b,#a0
-l9c88:
+.clear1:
 	ld c,#14
-l9c8a:
+.clear2:
 	ld (hl),#00
 	inc hl
 	dec c
-	jr nz,l9c8a
-	djnz l9c88
+	jr nz,.clear2
+	djnz .clear1
+	
+	; Setup last 6 line with level's initial pattern
 	ld b,#06
-l9c94:
-	inc de
+.next_line:
+	; skip level pattern's left border
+	inc de		
+	; setup line (10 blocks)
 	ld c,#0a
-l9c97:
+.next_block:
 	push bc
 	push de
 	push hl
 	ld b,#08
 	ld a,(de)
 	cp #00
-	jr z,l9cc2
+	jr z,.empty
 	cp #01
-	jr z,l9cc7
+	jr z,.block1
 	cp #02
-	jr z,l9ccc
+	jr z,.block2
 	cp #03
-	jr z,l9cd1
+	jr z,.block3
 	cp #04
-	jr z,l9cd6
+	jr z,.block4
 	cp #05
-	jr z,l9cdb
+	jr z,.block5
 	cp #06
-	jr z,l9ce0
+	jr z,.block6
 	cp #07
-	jr z,l9ce5
-	ld de,#65d3
-	jr l9ce8
-l9cc2:
-	ld de,#6553
-	jr l9ce8
-l9cc7:
-	ld de,#6563
-	jr l9ce8
-l9ccc:
-	ld de,#6573
-	jr l9ce8
-l9cd1:
-	ld de,#6583
-	jr l9ce8
-l9cd6:
-	ld de,#6593
-	jr l9ce8
-l9cdb:
-	ld de,#65a3
-	jr l9ce8
-l9ce0:
-	ld de,#65b3
-	jr l9ce8
-l9ce5:
-	ld de,#65c3
-l9ce8:
+	jr z,.block7
+	ld de,#65d3	; <- single block 8
+	jr .copy_block
+.empty:
+	ld de,#6553	; empty block
+	jr .copy_block
+.block1:
+	ld de,#6563	; single block color 1
+	jr .copy_block
+.block2:
+	ld de,#6573	; single block color 2
+	jr .copy_block
+.block3:
+	ld de,#6583	; single block color 3
+	jr .copy_block
+.block4:
+	ld de,#6593	; single block color 4
+	jr .copy_block
+.block5:
+	ld de,#65a3	; single block color 5
+	jr .copy_block
+.block6:
+	ld de,#65b3	; single block color 6
+	jr .copy_block
+.block7:
+	ld de,#65c3	; single block color 7
+.copy_block:
 	push bc
 	ld a,(de)
 	inc de
@@ -4812,7 +4794,8 @@ l9ce8:
 	ld bc,#0013
 	add hl,bc
 	pop bc
-	djnz l9ce8
+	djnz .copy_block
+
 	pop hl
 	inc hl
 	inc hl
@@ -4820,13 +4803,14 @@ l9ce8:
 	inc de
 	pop bc
 	dec c
-	jr nz,l9c97
+	jr nz,.next_block
+	; skip level pattern's right border
 	inc de
 	push bc
 	ld bc,#008c
 	add hl,bc
 	pop bc
-	djnz l9c94
+	djnz .next_line
 	ret
 
 ; -----------------------------------
@@ -4884,8 +4868,8 @@ CFG_AY_SND:
 ; *****************************
 ; * Draw 'compressed' bitmap 
 ; *****************************
-; DE: bitmap address
-; HL: screen address
+; DE: compressed bitmap's address
+; HL: destination address
 ;
 ; bitmap format:
 ; bmp[0] = number of line
@@ -4897,7 +4881,7 @@ CFG_AY_SND:
 ;		scr[...] = bmp[n+1] * (len&7F)
 ;               
 ;
-; l9D45
+; #9d45
 DRAW_ZBMP:
 	ld a,(de)
 	inc de
@@ -4947,7 +4931,7 @@ DRAW_ZBMP:
 ; C  = box inner width 
 ; ------------------------------
 ;
-;l9d6f:
+;#9d6f:
 BOX_TOP:
 	ld de,box_top_pattern
 	ld b,#04
