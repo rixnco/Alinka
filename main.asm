@@ -5,10 +5,11 @@ DATA_LEN 	 equ #3b83
 
 DATA_PTR 	 equ #4268
 
+
 CURTAIN_BMP	 equ #5bbf
 CURTAIN_BMP2	 equ #3d55
 
-HIGH_SCORE_CHANGED	 equ #71e8	; High score updated
+HIGH_SCORE_CHANGED	 equ #71e8	; High score changed
 
 AMANT		 equ #7207	; Lover's Score entry
 AMANT_SCORE	 equ #720b	; Lover's score
@@ -24,8 +25,14 @@ P1_LEVEL_PTR	 equ #7483	; P1 level ptr
 P2_LEVEL_PTR	 equ #7485	; P2 level ptr
 LEVEL_TABLE	 equ #7487	; Level table
 				; 31 Level entries
-
-
+				; 1 entry is 7 bytes long
+				;    	0: nb lines ten's
+				;    	1: nb lines unit's
+				;    	2: ????
+				;    	3: ????
+				;    	4: ????
+				;    	5: ????
+				;    	6: ????
 
 
 CUR_SCORE_SCR 	 equ #7561	; Current score screen location
@@ -380,50 +387,50 @@ CONFIGURATION:
 	; ----------------------------------------
 	; Configure flyback callbacks
 	; ----------------------------------------
-	ld hl,l8d63	; frame flyback block
+	ld hl,l8d63	; frame flyback block - Usage to be determined
 	ld de,l8d74	; event routine address
 	ld bc,#8100	; B: evt class | C: ROM select address of the routine
 	call #bcd7	; init block
 	ld hl,l8d63
 	call #bcdd	; remove/disable block;
 
-	ld hl,l8dd0	; frame flyback block
+	ld hl,l8dd0	; frame flyback block - Usage to be determined
 	ld de,l8ddf	; event routine address
 	ld bc,#8100	; B: evt class | C: ROM select address of the routine
 	call #bcd7	; init block
 	ld hl,l8dd0
 	call #bcdd	; remove/disable block
 
-	ld hl,l99dd	; frame flyback block
+	ld hl,l99dd	; frame flyback block - Usage to be determined
 	ld de,l99ef	; event routine address
 	ld bc,#8100	; B: evt class | C: ROM select address of the routine
 	call #bcd7	; init block
 	ld hl,l99dd
 	call #bcdd	; remove/disable block
 
-	ld hl,l9ac9	; frame flyback block
+	ld hl,l9ac9	; frame flyback block - Usage to be determined
 	ld de,l9ad4	; event routine address
 	ld bc,#8100	; B: evt class | C: ROM select address of the routine
 	call #bcd7	; init block 
 	ld hl,l9ac9
 	call #bcdd	; remove/disable block
 
-	ld hl,l9b68	; frame flyback block	
+	ld hl,l9b68	; frame flyback block	 - Usage to be determined
 	ld de,l9b74	; event routine address
 	ld bc,#8100	; B: evt class | C: ROM
 	call #bcd7	; init block 
 	ld hl,l9b68
 	call #bcdd	; remove/disable block
 
-	ld hl,SND_FLBK	; frame flyback block
+	ld hl,SND_FLBK	; frame flyback block - Melody manager
 	ld de,SND_ISR	; event routine address
 	ld bc,#8100	; B: evt class | C: ROM
 	call #bcd7	; init block 
 	ld hl,SND_FLBK
 	call #bcdd	; remove/disable block
 
-	ld hl,HSCORE_FLBK	; frame flyback block
-	ld de,HSCORE_ISR	; event routine address
+	ld hl,HSCORE_FLBK ; frame flyback block	- Main screen animation handler
+	ld de,HSCORE_ISR  ; event routine address
 	ld bc,#8100	; B: evt class | C: ROM
 	call #bcd7	; init block 
 	ld hl,HSCORE_FLBK
@@ -484,7 +491,7 @@ CONFIGURATION:
 	; ----------------------------------------
 	ld hl,#e442
 	ld b,#03
-.curtain:
+.draw_loop:
 	push bc
 	push hl
 	ld de,CURTAIN_BMP
@@ -494,10 +501,10 @@ CONFIGURATION:
 	pop hl
 	call NXT_SCR_LINE
 	pop bc
-	djnz .curtain
+	djnz .draw_loop
 
 	; ----------------------------------------
-	; Draw Player 1 head
+	; Draw Player 1's head
 	; ----------------------------------------
 	ld hl,#e303
 	ld de,#5eaf
@@ -505,13 +512,13 @@ CONFIGURATION:
 	call DRAW_BMP
 
 	; ----------------------------------------
-	; Draw Player 2 head
+	; Draw Player 2's head
 	; ----------------------------------------
 	ld hl,#c31e
 	ld de,#5f13
 	ld bc,#1405
 	call DRAW_BMP
-
+;#80de
 MAIN_START:
 	ld a,(HIGH_SCORE_CHANGED)
 	dec a
@@ -532,11 +539,11 @@ MAIN_START:
 	call #bc98
 	call #bc8f
 	jr MAIN_SCREEN
+;#8105:
 FILE_TBL:
-l8105:
 	DB "ALINKA.TBL"
 
-;l810f
+;#810f
 MAIN_SCREEN:
 	call ENBL_SND
 
@@ -3619,16 +3626,17 @@ l962d:
 ; C: width
 ; DE: src address
 ; HL: dst address
+;#9642
 DRAW_BMP:
 	push bc
 	push hl
-l9644:
+.loop:
 	ld a,(de)
 	inc de
 	ld (hl),a
 	inc hl
 	dec c
-	jr nz,l9644
+	jr nz,.loop
 	pop hl
 	call NXT_SCR_LINE
 	pop bc
