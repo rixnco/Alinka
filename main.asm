@@ -26,7 +26,7 @@ YELLOW_BLOCK_BMP equ #6593	; id = #04
 GREEN_BLOCK_BMP  equ #65a3	; id = #05
 BLUE_BLOCK_BMP   equ #65b3	; id = #06
 LBLUE_BLOCK_BMP  equ #65c3	; id = #07
-DBLUE_BLOCK_BMP  equ #65d3	; id = #08
+BLINK_BLOCK_BMP  equ #65d3	; id = #08
 
 
 HIGH_SCORE_CHANGED	 equ #71e8	; High score changed
@@ -459,38 +459,38 @@ CONFIGURATION:
 	; Configure flyback callbacks
 	; ----------------------------------------
 	ld hl,FLBK_l8d63_BLOCK	; frame flyback block - Usage to be determined
-	ld de,FLBK_l8d74_ISR	; event routine address
+	ld de,FLBK_l8d63_ISR	; event routine address
 	ld bc,#8100	; B: evt class | C: ROM select address of the routine
 	call #bcd7	; init block
 	ld hl,FLBK_l8d63_BLOCK
 	call #bcdd	; remove/disable block;
 
 	ld hl,FLBK_l8dd0_BLOCK	; frame flyback block - Usage to be determined
-	ld de,FLBK_l8ddf_ISR	; event routine address
+	ld de,FLBK_l8dd0_ISR	; event routine address
 	ld bc,#8100	; B: evt class | C: ROM select address of the routine
 	call #bcd7	; init block
 	ld hl,FLBK_l8dd0_BLOCK
 	call #bcdd	; remove/disable block
 
 	ld hl,FLBK_l99dd_BLOCK	; frame flyback block - Usage to be determined
-	ld de,FLBK_l99ef_ISR	; event routine address
+	ld de,FLBK_l99dd_ISR	; event routine address
 	ld bc,#8100	; B: evt class | C: ROM select address of the routine
 	call #bcd7	; init block
 	ld hl,FLBK_l99dd_BLOCK
 	call #bcdd	; remove/disable block
 
-	ld hl,FLBK_l9ac9_BLOCK	; frame flyback block - Usage to be determined
-	ld de,FLBK_l9ac9_ISR	; event routine address
+	ld hl,FLBK_RNDM_BLCK_BLOCK	; frame flyback block - Usage to be determined
+	ld de,FLBK_RNDM_BLCK_ISR	; event routine address
 	ld bc,#8100	; B: evt class | C: ROM select address of the routine
 	call #bcd7	; init block 
-	ld hl,FLBK_l9ac9_BLOCK
+	ld hl,FLBK_RNDM_BLCK_BLOCK
 	call #bcdd	; remove/disable block
 
-	ld hl,FLBK_l9b68_BLOCK	; frame flyback block	 - Usage to be determined
-	ld de,FLBK_l9b68_ISR	; event routine address
+	ld hl,FLBK_MOVE_UP_BLOCK	; frame flyback block	 - Usage to be determined
+	ld de,FLBK_MOVE_UP_ISR	; event routine address
 	ld bc,#8100	; B: evt class | C: ROM
 	call #bcd7	; init block 
-	ld hl,FLBK_l9b68_BLOCK
+	ld hl,FLBK_MOVE_UP_BLOCK
 	call #bcdd	; remove/disable block
 
 	ld hl,SND_FLBK	; frame flyback block - Melody manager
@@ -1205,8 +1205,8 @@ PLAYER1:
 	inc de
 	djnz .store_score
 
-	call FLBK_l9ac9_DISABLE
-	call FLBK_l9b68_DISABLE
+	call FLBK_RNDM_BLCK_DISABLE
+	call FLBK_MOVE_UP_DISABLE
 	call SET_ROT_NORMAL
 	call SET_DIR_NORMAL
 	jp START_LEVEL.player2
@@ -1249,8 +1249,8 @@ PLAYER2:
 	inc de
 	djnz .store_score
 
-	call FLBK_l9ac9_DISABLE
-	call FLBK_l9b68_DISABLE
+	call FLBK_RNDM_BLCK_DISABLE
+	call FLBK_MOVE_UP_DISABLE
 	call SET_ROT_NORMAL
 	call SET_DIR_NORMAL
 	jp NEXT_LEVEL
@@ -1369,11 +1369,11 @@ PLAY:
 
 	push af
 	bit 7,a			; a.7 ->
-	call nz,FLBK_l9ac9_ENABLE
+	call nz,FLBK_RNDM_BLCK_ENABLE
 	pop af
 	push af
 	bit 6,a			; a.6 ->
-	call nz,FLBK_l9b68_ENABLE
+	call nz,FLBK_MOVE_UP_ENABLE
 	pop af
 	push af
 	bit 5,a			; a.5 ->
@@ -1745,6 +1745,7 @@ l8920:
 	ld hl,l88fa
 	ld (l890b),hl
 	jp l88fa
+
 MOVE_DOWN:
 	ld b,#01
 	call l96c6
@@ -1753,22 +1754,22 @@ l8933:
 	ld bc,#000c
 	add hl,bc
 	ld (PIECE_PRV_MSK_POS),hl
-	ld bc,(#75bc)
+	ld bc,(PIECE_MSK_O1)
 	add hl,bc
 	ld a,(hl)
 	cp #00
 	jp nz,l89ec
-	ld bc,(#75be)
+	ld bc,(PIECE_MSK_O2)
 	add hl,bc
 	ld a,(hl)
 	cp #00
 	jp nz,l89ec
-	ld bc,(#75c0)
+	ld bc,(PIECE_MSK_O3)
 	add hl,bc
 	ld a,(hl)
 	cp #00
 	jp nz,l89ec
-	ld bc,(#75c2)
+	ld bc,(PIECE_MSK_O4)
 	add hl,bc
 	ld a,(hl)
 	cp #00
@@ -1861,16 +1862,16 @@ l89ff:
 	jr nz,l89ff
 	djnz l89fd
 	ld hl,(PIECE_CUR_MSK_POS)
-	ld bc,(#75bc)
+	ld bc,(PIECE_MSK_O1)
 	add hl,bc
 	ld (hl),#01
-	ld bc,(#75be)
+	ld bc,(PIECE_MSK_O2)
 	add hl,bc
 	ld (hl),#01
-	ld bc,(#75c0)
+	ld bc,(PIECE_MSK_O3)
 	add hl,bc
 	ld (hl),#01
-	ld bc,(#75c2)
+	ld bc,(PIECE_MSK_O4)
 	add hl,bc
 	ld (hl),#01
 	ld hl,#73a7
@@ -2157,10 +2158,10 @@ l8c2c:
 	ld a,(#7582)
 	cp #18
 	jr nc,GAME_OVER
-	ld a,(FLBK_l9ac9_CNT)
+	ld a,(FLBK_RNDM_BLCK_CNT)
 	dec a
-	call z,l9afd
-	ld a,(FLBK_l9b68_CNT)
+	call z,INSERT_RNDM_BLCK
+	ld a,(FLBK_MOVE_UP_CNT)
 	dec a
 	call z,PLAYGROUND_MOVE_UP
 	jp l8867
@@ -2228,8 +2229,8 @@ GAME_OVER:
 	ld hl,FLBK_l8d63_BLOCK
 	call #bcdd	; Disable Flyback block
 
-	call FLBK_l9ac9_DISABLE
-	call FLBK_l9b68_DISABLE
+	call FLBK_RNDM_BLCK_DISABLE
+	call FLBK_MOVE_UP_DISABLE
 	call SET_ROT_NORMAL
 	call SET_DIR_NORMAL
 
@@ -2341,7 +2342,12 @@ l8d72:
 	DB #00
 	DB #00
 
-FLBK_l8d74_ISR:
+; ----------------------------
+; Automatic move down ISR
+; need some work...
+; ----------------------------
+; #8d74
+FLBK_l8d63_ISR:
 	di
 	push af
 	push hl
@@ -2406,7 +2412,9 @@ FLBK_l8dd0_BLOCK:
 	DB #00,#00,#00
 l8dde:
 	DB #00
-FLBK_l8ddf_ISR:
+
+; #8ddf
+FLBK_l8dd0_ISR:
 	di
 	push hl
 	push af
@@ -2428,6 +2436,9 @@ l8dfc:
 	pop hl
 	ei
 	ret
+
+
+
 ROTATE:
 	ld hl,(PIECE_CUR_OFF_POS)
 	ld (PIECE_PRV_OFF_POS),hl
@@ -2581,7 +2592,7 @@ l8f36:
 	ld (de),a
 	inc de
 	djnz l8f36
-	ld de,(#75c4)
+	ld de,(PIECE_ROT_OFF_OFST)
 	ld hl,(PIECE_CUR_OFF_POS)
 	add hl,de
 	ld (PIECE_CUR_OFF_POS),hl
@@ -2593,32 +2604,34 @@ l8f36:
 	ld bc,(PIECE_PRV_DIM)
 	call DRAW_MASK_BMP
 	ld hl,(PIECE_CUR_SCR_POS)
-	ld de,(#75c6)
+	ld de,(PIECE_ROT_SCR_OFST)
 	add hl,de
 	ld (PIECE_CUR_SCR_POS),hl
 	ld de,(PIECE_CUR_OFF_POS)
 	ld bc,(PIECE_CUR_DIM)
 	jp DRAW_BMP_SYNC
+
 MOVE_LEFT:
+	; Check if move is possible
 	ld hl,(PIECE_CUR_MSK_POS)
-	dec hl
+	dec hl				; move 1 cell left
 	ld (PIECE_PRV_MSK_POS),hl
-	ld bc,(#75bc)
+	ld bc,(PIECE_MSK_O1)		; Check if the piece block1 
+	add hl,bc			; hits something
+	ld a,(hl)
+	cp #00
+	jp nz,l8920			; Move impossible -> abort
+	ld bc,(PIECE_MSK_O2)
 	add hl,bc
 	ld a,(hl)
 	cp #00
 	jp nz,l8920
-	ld bc,(#75be)
+	ld bc,(PIECE_MSK_O3)
 	add hl,bc
 	ld a,(hl)
 	cp #00
 	jp nz,l8920
-	ld bc,(#75c0)
-	add hl,bc
-	ld a,(hl)
-	cp #00
-	jp nz,l8920
-	ld bc,(#75c2)
+	ld bc,(PIECE_MSK_O4)
 	add hl,bc
 	ld a,(hl)
 	cp #00
@@ -2646,26 +2659,27 @@ MOVE_LEFT:
 	inc c
 	call DRAW_BMP_SYNC
 	jp l8920
+
 MOMVE_RIGHT:
 	ld hl,(PIECE_CUR_MSK_POS)
 	inc hl
 	ld (PIECE_PRV_MSK_POS),hl
-	ld bc,(#75bc)
+	ld bc,(PIECE_MSK_O1)
 	add hl,bc
 	ld a,(hl)
 	cp #00
 	jp nz,l8920
-	ld bc,(#75be)
+	ld bc,(PIECE_MSK_O2)
 	add hl,bc
 	ld a,(hl)
 	cp #00
 	jp nz,l8920
-	ld bc,(#75c0)
+	ld bc,(PIECE_MSK_O3)
 	add hl,bc
 	ld a,(hl)
 	cp #00
 	jp nz,l8920
-	ld bc,(#75c2)
+	ld bc,(PIECE_MSK_O4)
 	add hl,bc
 	ld a,(hl)
 	cp #00
@@ -4343,7 +4357,8 @@ l99ec:
 l99ed:
 	DB #00,#00
 
-FLBK_l99ef_ISR:
+; #99ef
+FLBK_l99dd_ISR:
 	push af
 	ld a,(l99ec)
 	dec a
@@ -4492,10 +4507,11 @@ l9ac4:
 
 
 
-;
-; Flyback block
+; ---------------------------
+; Random block flyback's block
+; ---------------------------
 ;#9ac9
-FLBK_l9ac9_BLOCK:
+FLBK_RNDM_BLCK_BLOCK:
 	DB #00,#00
 	DB #00
 	DB #00
@@ -4503,48 +4519,56 @@ FLBK_l9ac9_BLOCK:
 	DB #00
 	DB #00,#00,#00
 ;#9ad3
-FLBK_l9ac9_CNT:
+FLBK_RNDM_BLCK_CNT:
 	DB #00
 
 
 ;
-; Flyback ISR routine
-; it decrease a counter and stop if it reaches 0
+; ---------------------------
+; Random block flyback ISR
+; ---------------------------
 ;#9ad4
-FLBK_l9ac9_ISR:
+FLBK_RNDM_BLCK_ISR:
 	push af
 	; Decrease 'counter'
-	ld a,(FLBK_l9ac9_CNT)
+	ld a,(FLBK_RNDM_BLCK_CNT)
 	dec a
 	jr nz,.cont
 	; Disable flyback
-	ld hl,FLBK_l9ac9_BLOCK
+	ld hl,FLBK_RNDM_BLCK_BLOCK
 	call #bcdd
 	ld a,#01
 .cont:
-	ld (FLBK_l9ac9_CNT),a
+	ld (FLBK_RNDM_BLCK_CNT),a
 	pop af
 	ret
 
-; Enable flyback block
+; ---------------------------
+; Enable random block flyback
+; ---------------------------
 ;#9ae8
-FLBK_l9ac9_ENABLE:
+FLBK_RNDM_BLCK_ENABLE:
 	xor a
-	ld (FLBK_l9ac9_CNT),a
-	ld hl,FLBK_l9ac9_BLOCK
+	ld (FLBK_RNDM_BLCK_CNT),a
+	ld hl,FLBK_RNDM_BLCK_BLOCK
 	jp #bcda
 
-; Disable flyback block
+; ---------------------------
+; Disable random block flyback
+; ---------------------------
 ;#9af2
-FLBK_l9ac9_DISABLE:
+FLBK_RNDM_BLCK_DISABLE:
 	ld a,#ff
-	ld (FLBK_l9ac9_CNT),a
-	ld hl,FLBK_l9ac9_BLOCK
+	ld (FLBK_RNDM_BLCK_CNT),a
+	ld hl,FLBK_RNDM_BLCK_BLOCK
 	jp #bcdd
 
 
-
-l9afd:
+; ---------------------------
+; Insert a random block into playground area
+; ---------------------------
+;#9afd
+INSERT_RNDM_BLCK:
 	ld a,(random)
 	and #03
 	inc a
@@ -4588,7 +4612,7 @@ l9b2f equ $ + 1
 	dec a
 	jr z,l9b19
 	ld (ix+#00),#01
-	ld de,DBLUE_BLOCK_BMP
+	ld de,BLINK_BLOCK_BMP
 	ld bc,#0802
 	call DRAW_MASK_BMP_OFFSCREEN1
 	ld hl,PLAYGROUND_SCR
@@ -4597,14 +4621,15 @@ l9b2f equ $ + 1
 	call DRAW_BMP
 
 	ld a,#c8
-	ld (FLBK_l9ac9_CNT),a
-	ld hl,FLBK_l9ac9_BLOCK
+	ld (FLBK_RNDM_BLCK_CNT),a
+	ld hl,FLBK_RNDM_BLCK_BLOCK
 	jp #bcda		; Enable Flyback block
 
-; --------------
-; Flyback block
+; ---------------------------
+; Playground move up Flyback's block
+; ---------------------------
 ;#9b68
-FLBK_l9b68_BLOCK:
+FLBK_MOVE_UP_BLOCK:
 	DB #00,#00
 	DB #00
 	DB #00
@@ -4612,47 +4637,52 @@ FLBK_l9b68_BLOCK:
 	DB #00
 	DB #00,#00,#00
 ;#9b72
-FLBK_l9b68_CNT:
+FLBK_MOVE_UP_CNT:
 	DB #00
 ;#9b73
 l9b73:
 	DB #00
 
-; Flyback routine...
-; Decrease counter ???
+; ---------------------------
+; Playground move up Flyback's ISR
+; ---------------------------
 ;#9b74
-FLBK_l9b68_ISR:
+FLBK_MOVE_UP_ISR:
 	push af
-	ld a,(FLBK_l9b68_CNT)
+	ld a,(FLBK_MOVE_UP_CNT)
 	dec a
 	jr nz,.cont
 	; Disable flyback block
-	ld hl,FLBK_l9b68_BLOCK
+	ld hl,FLBK_MOVE_UP_BLOCK
 	call #bcdd
 	ld a,#01
 .cont:
-	ld (FLBK_l9b68_CNT),a
+	ld (FLBK_MOVE_UP_CNT),a
 	pop af
 	ret
 
-; Enable Flyback block
+; ---------------------------
+; Playground move up Flyback enable
+; ---------------------------
 ;#9b88
-FLBK_l9b68_ENABLE:
+FLBK_MOVE_UP_ENABLE:
 	xor a
-	ld (FLBK_l9b68_CNT),a		; reset variable. Usage TBD
-	ld hl,FLBK_l9b68_BLOCK
+	ld (FLBK_MOVE_UP_CNT),a		; reset variable. Usage TBD
+	ld hl,FLBK_MOVE_UP_BLOCK
 	jp #bcda
 
-; Disable Flyback block
+; ---------------------------
+; Playground move up Flyback disable
+; ---------------------------
 ;#9b92
-FLBK_l9b68_DISABLE:
+FLBK_MOVE_UP_DISABLE:
 	ld a,#ff
-	ld (FLBK_l9b68_CNT),a
-	ld hl,FLBK_l9b68_BLOCK
+	ld (FLBK_MOVE_UP_CNT),a
+	ld hl,FLBK_MOVE_UP_BLOCK
 	jp #bcdd
 
 ; ---------------------------------
-; Move playground 1 line up !!!
+; Move playground one line up !!!
 ; ---------------------------------
 PLAYGROUND_MOVE_UP:
 	ld a,(#7582)
@@ -4730,8 +4760,8 @@ l9bf5:
 	ld bc,PLAYGROUND_SIZE
 	call DRAW_BMP
 	ld a,#fa
-	ld (FLBK_l9b68_CNT),a
-	ld hl,FLBK_l9b68_BLOCK
+	ld (FLBK_MOVE_UP_CNT),a
+	ld hl,FLBK_MOVE_UP_BLOCK
 	jp #bcda
 l9c25:
 	push hl
@@ -4891,7 +4921,7 @@ SETUP_PLAYGROUND_BMP:
 	jr z,.block6
 	cp #07
 	jr z,.block7
-	ld de,DBLUE_BLOCK_BMP	; <- single block 8
+	ld de,BLINK_BLOCK_BMP	; <- single block 8
 	jr .copy_block
 .empty:
 	ld de,EMPTY_BLOCK_BMP	; empty block
