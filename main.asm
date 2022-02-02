@@ -51,9 +51,9 @@ LEVEL_TABLE	 equ #7487	; Level table
 				;    	0: nb lines ten's
 				;    	1: nb lines unit's
 				;    	2: ????
-				;    	3: ????
-				;    	4: ????
-				;    	5: ????
+				;    	3: trick flags, ie reverse rotation, reverse direction, random block, random lines
+				;    	4: initial playground setup ptr LSB
+				;    	5: initial playground setup ptr HSB
 				;    	6: ????
 
 CUR_SCORE_SCR 	 equ #7561	; Current score screen location
@@ -92,20 +92,57 @@ CUR_BONUS_X100	 equ #757b	; bonus X100 +1
 CUR_BONUS_X010	 equ #757c	; bonus X010 +1
 CUR_BONUS_X001	 equ #757d	; bonus X001 +1
 
+PIECE_CUR_MSK_POS equ #757e	; current piece position in mask playground.
+PIECE_PRV_MSK_POS equ #7580	; current piece next position in mask playground
+
+
+PIECE_CUR_OFF_POS equ #758e	; current piece offscreen position
+PIECE_PRV_SCR_POS equ #7590	; piece pos before rotating
+PIECE_PRV_OFF_POS equ #7592	; previous piece offscreen position
+PIECE_PRV_BMP	  equ #7594	; piece bitmap before rotating
+PIECE_PRV_DIM	  equ #7596	; piece size (w/h) before rotating
+
 				; Next piece definition
-NXT_PIECE_SCR	 equ #7598	; [0,1]: piece's area screen addr
-NXT_PIECE_XXX	 equ #759a	; [2,3]: ?? offscreen start pos ??
-NXT_PIECE_BMP	 equ #759c	; [4,5]: memory bmp source addr
-NXT_PIECE_SIZE	 equ #759e	; [6,7]: bmp width and height
-; ...
-; ...
-; ...
-; ...		     #75b5
+
+; Next piece definition's buffer
+NXT_PIECE_AREA_POS equ #7598	; [0,1]  : piece's area screen addr
+NXT_PIECE_SCR_POS  equ #759a	; [2,3]  : piece screen area
+NXT_PIECE_CUR_BMP  equ #759c	; [4,5]  : memory bmp source addr
+NXT_PIECE_CUR_DIM  equ #759e	; [6,7]  : bmp dimensions: width and height
+NXT_PIECE_MSK_O1   equ #75a0	; [8,9]  : mask offset from piece origin of block 1 of the current piece
+NXT_PIECE_MSK_O2   equ #75a2	; [10,11]: mask offset from piece origin of block 2 of the current piece
+NXT_PIECE_MSK_O3   equ #75a4	; [12,13]: mask offset from piece origin of block 3 of the current piece
+NXT_PIECE_MSK_O4   equ #75a6	; [14,15]: mask offset from piece origin of block 4 of the current piece
+NXT_PIECE_ROT_OFF_OFST equ #75a8; [16,17]: offset to apply to offscreen position when rotating
+NXT_PIECE_ROT_SCR_OFST equ #75aa; [18,19]: offset to apply to screen position when rotating
+NXT_PIECE_ROT_BMP  equ #75ac	; [20,11]: bitmap pointer to the rotated piece
+NXT_PIECE_ROT_O1   equ #75ae	; [22,13]: mask offset of block 1 of the rotated piece
+NXT_PIECE_ROT_O2   equ #75b0	; [24,25]: mask offset of block 2 of the rotated piece
+NXT_PIECE_ROT_O3   equ #75b2	; [26,27]: mask offset of block 3 of the rotated piece
+NXT_PIECE_ROT_O4   equ #75b4	; [28,29]: mask offset of block 4 of the rotated piece
 
 
-CUR_PIECE_XXX	 equ #75b6	; [0,1]: ?? offscreen start pos ??
-CUR_PIECE_BMP	 equ #75b8	; [2,3]: memory bmp source addr
-CUR_PIECE_SIZE	 equ #75ba	; [4,5]: bmp width and height
+
+; Current piece definition's buffer
+PIECE_CUR_SCR_POS  equ #75b6	; piece current screen position
+PIECE_CUR_BMP	   equ #75b8	; piece bitmap
+PIECE_CUR_DIM	   equ #75ba	; piece size (w/h)
+PIECE_MSK_O1 	   equ #75bc	; mask offset from piece origin of block 1 of the current piece
+PIECE_MSK_O2 	   equ #75be	; mask offset from piece origin of block 1 of the current piece
+PIECE_MSK_O3 	   equ #75c0	; mask offset from piece origin of block 1 of the current piece
+PIECE_MSK_O4	   equ #75c2	; mask offset from piece origin of block 1 of the current piece
+PIECE_ROT_OFF_OFST equ #75c4    ; offset to apply to offscreen position when rotating
+PIECE_ROT_SCR_OFST equ #75c6    ; offset to apply to screen position when rotating
+PIECE_ROT_BMP 	   equ #75c8	; bitmap pointer to the rotated piece
+PIECE_ROT_O1	   equ #75ca	; mask offset of block 1 of the rotated piece
+PIECE_ROT_O2	   equ #75cc	; mask offset of block 2 of the rotated piece
+PIECE_ROT_O3	   equ #75ce	; mask offset of block 3 of the rotated piece
+PIECE_ROT_O4	   equ #75d0	; mask offset of block 4 of the rotated piece
+
+
+;???		  equ #75d2
+;???		  equ #75d3
+
 
 
 
@@ -421,25 +458,25 @@ CONFIGURATION:
 	; ----------------------------------------
 	; Configure flyback callbacks
 	; ----------------------------------------
-	ld hl,l8d63	; frame flyback block - Usage to be determined
-	ld de,l8d74	; event routine address
+	ld hl,FLBK_l8d63_BLOCK	; frame flyback block - Usage to be determined
+	ld de,FLBK_l8d74_ISR	; event routine address
 	ld bc,#8100	; B: evt class | C: ROM select address of the routine
 	call #bcd7	; init block
-	ld hl,l8d63
+	ld hl,FLBK_l8d63_BLOCK
 	call #bcdd	; remove/disable block;
 
-	ld hl,l8dd0	; frame flyback block - Usage to be determined
-	ld de,l8ddf	; event routine address
+	ld hl,FLBK_l8dd0_BLOCK	; frame flyback block - Usage to be determined
+	ld de,FLBK_l8ddf_ISR	; event routine address
 	ld bc,#8100	; B: evt class | C: ROM select address of the routine
 	call #bcd7	; init block
-	ld hl,l8dd0
+	ld hl,FLBK_l8dd0_BLOCK
 	call #bcdd	; remove/disable block
 
-	ld hl,l99dd	; frame flyback block - Usage to be determined
-	ld de,l99ef	; event routine address
+	ld hl,FLBK_l99dd_BLOCK	; frame flyback block - Usage to be determined
+	ld de,FLBK_l99ef_ISR	; event routine address
 	ld bc,#8100	; B: evt class | C: ROM select address of the routine
 	call #bcd7	; init block
-	ld hl,l99dd
+	ld hl,FLBK_l99dd_BLOCK
 	call #bcdd	; remove/disable block
 
 	ld hl,FLBK_l9ac9_BLOCK	; frame flyback block - Usage to be determined
@@ -474,7 +511,7 @@ CONFIGURATION:
 	; Reset variable l94d3 - TBD
 	; ----------------------------------------
 	xor a
-	ld (FLAG_l94d3),a
+	ld (is_rot_reversed),a
 
 	; ----------------------------------------
 	; Disable KBD key repeat 
@@ -1170,8 +1207,8 @@ PLAYER1:
 
 	call FLBK_l9ac9_DISABLE
 	call FLBK_l9b68_DISABLE
-	call DISABLE_FLAG_l94d3
-	call NORMAL_DIRECTION
+	call SET_ROT_NORMAL
+	call SET_DIR_NORMAL
 	jp START_LEVEL.player2
 
 PLAYER2:
@@ -1214,8 +1251,8 @@ PLAYER2:
 
 	call FLBK_l9ac9_DISABLE
 	call FLBK_l9b68_DISABLE
-	call DISABLE_FLAG_l94d3
-	call NORMAL_DIRECTION
+	call SET_ROT_NORMAL
+	call SET_DIR_NORMAL
 	jp NEXT_LEVEL
 
 PLAY:
@@ -1340,10 +1377,10 @@ PLAY:
 	pop af
 	push af
 	bit 5,a			; a.5 ->
-	call nz,ENABLE_FLAG_l94d3
+	call nz,SET_ROT_REVERSED
 	pop af
 	bit 4,a			; a.4 -> reverse direction
-	call nz,REVERSE_DIRECTION
+	call nz,SET_DIR_REVERSED
 
 	ld hl,(CUR_LEVEL_PTR)	; restore ptr = &level[4]
 	push hl
@@ -1366,9 +1403,9 @@ PLAY:
 	ld bc,PLAYGROUND_SIZE
 	call DRAW_BMP
 	call GET_RNDM_PIECE
-	ld hl,(NXT_PIECE_SCR)
-	ld de,(NXT_PIECE_BMP)
-	ld bc,(NXT_PIECE_SIZE)
+	ld hl,(NXT_PIECE_AREA_POS)
+	ld de,(NXT_PIECE_CUR_BMP)
+	ld bc,(NXT_PIECE_CUR_DIM)
 	call DRAW_BMP
 	call DELAY
 
@@ -1590,7 +1627,7 @@ l8839:
 	ld (l8d60),hl
 	ld a,#01
 	ld (l8d62),a
-	ld hl,l8d63
+	ld hl,FLBK_l8d63_BLOCK
 	call #bcda
 	ld a,#07
 	ld c,#30
@@ -1603,9 +1640,9 @@ l8839:
 
 l8867:
 
-	; Move next piece to current piece
-	ld hl,CUR_PIECE_XXX
-	ld de,NXT_PIECE_XXX
+	; Move next piece info to current piece info
+	ld hl,PIECE_CUR_SCR_POS
+	ld de,NXT_PIECE_SCR_POS
 	ld b,#1c
 .copy:
 	ld a,(de)
@@ -1618,19 +1655,19 @@ l8867:
 	call GET_RNDM_PIECE
 
 	ld hl,#2ef9			; reset offscreen1 start address ??
-	ld (#758e),hl
-	ld de,(CUR_PIECE_BMP)
-	ld bc,(CUR_PIECE_SIZE)
+	ld (PIECE_CUR_OFF_POS),hl
+	ld de,(PIECE_CUR_BMP)
+	ld bc,(PIECE_CUR_DIM)
 	call DRAW_MASK_BMP_OFFSCREEN1
 
-	ld hl,(CUR_PIECE_XXX)
-	ld de,(#758e)
-	ld bc,(CUR_PIECE_SIZE)
+	ld hl,(PIECE_CUR_SCR_POS)
+	ld de,(PIECE_CUR_OFF_POS)
+	ld bc,(PIECE_CUR_DIM)
 	call DRAW_BMP_SYNC
 
-	ld hl,(NXT_PIECE_SCR)
-	ld de,(NXT_PIECE_BMP)
-	ld bc,(NXT_PIECE_SIZE)
+	ld hl,(NXT_PIECE_AREA_POS)
+	ld de,(NXT_PIECE_CUR_BMP)
+	ld bc,(NXT_PIECE_CUR_DIM)
 	call DRAW_BMP
 	
 	ld b,#03
@@ -1644,7 +1681,7 @@ l88ad:			; |
 	jr nz,l88ad	; -
 
 	ld hl,#3ebf
-	ld (#757e),hl
+	ld (PIECE_CUR_MSK_POS),hl
 	ld a,#01
 	ld (l8d71),a
 	ld a,#1a
@@ -1663,6 +1700,7 @@ l88de:
 	ld a,(l8d71)
 	dec a
 	jr z,l88e9
+
 	ld hl,l88fa
 	jr l88ec
 l88e9:
@@ -1680,11 +1718,11 @@ l88fa:
 	push af
 key_rotate equ $ + 1
 	cp #20
-	call z,l8e02
+	call z,ROTATE
 	pop af
 key_down equ $ + 1
 	cp #0a
-	jp z,l892e
+	jp z,MOVE_DOWN
 l890b equ $ + 1
 	jp l890d
 
@@ -1692,13 +1730,13 @@ key_left equ $ + 1
 l890d:
 	ld a,#08
 	call #bb1e
-	jp nz,l8f76
+	jp nz,MOVE_LEFT
 key_right equ $ + 1
-	ld a,#01	; right key
-	call #bb1e	; is right pressed ?
-	jp nz,l8fe8	; no
+	ld a,#01		; right key
+	call #bb1e		; is right pressed ?
+	jp nz,MOMVE_RIGHT	; yes
 l891e equ $ + 1
-	jp l88fa	; yes
+	jp l88fa		; no
 
 l8921 equ $ + 1
 l8920:
@@ -1707,14 +1745,14 @@ l8920:
 	ld hl,l88fa
 	ld (l890b),hl
 	jp l88fa
-l892e:
+MOVE_DOWN:
 	ld b,#01
 	call l96c6
 l8933:
-	ld hl,(#757e)
+	ld hl,(PIECE_CUR_MSK_POS)
 	ld bc,#000c
 	add hl,bc
-	ld (#7580),hl
+	ld (PIECE_PRV_MSK_POS),hl
 	ld bc,(#75bc)
 	add hl,bc
 	ld a,(hl)
@@ -1735,54 +1773,74 @@ l8933:
 	ld a,(hl)
 	cp #00
 	jp nz,l89ec
-	ld hl,(#7580)
-	ld (#757e),hl
-	ld hl,(CUR_PIECE_XXX)
-	ld (#7590),hl
+	ld hl,(PIECE_PRV_MSK_POS)
+	ld (PIECE_CUR_MSK_POS),hl
+	
+	ld hl,(PIECE_CUR_SCR_POS)
+	ld (PIECE_PRV_SCR_POS),hl
 	ld bc,#0040
 	add hl,bc
-	ld (CUR_PIECE_XXX),hl
-	ld hl,(#758e)
-	ld (#7592),hl
-	ld de,(CUR_PIECE_BMP)
-	ld bc,(CUR_PIECE_SIZE)
+	ld (PIECE_CUR_SCR_POS),hl
+
+	ld hl,(PIECE_CUR_OFF_POS)
+	ld (PIECE_PRV_OFF_POS),hl
+	ld de,(PIECE_CUR_BMP)
+	ld bc,(PIECE_CUR_DIM)
 	call CLEAR_MASK_BMP_OFFSCREEN1
-	ld hl,(#758e)
+	ld hl,(PIECE_CUR_OFF_POS)
 	ld bc,#00a0
 	add hl,bc
-	ld (#758e),hl
-	ld de,(CUR_PIECE_BMP)
-	ld bc,(CUR_PIECE_SIZE)
+	ld (PIECE_CUR_OFF_POS),hl
+	ld de,(PIECE_CUR_BMP)
+	ld bc,(PIECE_CUR_DIM)
 	call DRAW_MASK_BMP_OFFSCREEN1
-	ld hl,(#7590)
-	ld de,(#7592)
-	ld bc,(CUR_PIECE_SIZE)
+	
+	; draw offscreen playground
+	; from previous pos to an extended height (one more line)
+	; This will clear the piece from it previous position 
+	; and display it at its new position.
+	ld hl,(PIECE_PRV_SCR_POS)
+	ld de,(PIECE_PRV_OFF_POS)
+	ld bc,(PIECE_CUR_DIM)
 	ld a,#08
 	add b
 	ld b,a
 	call DRAW_BMP_SYNC
+	
+	; (#7583) = (#7583)-1
 	ld a,(#7583)
 	dec a
 	ld (#7583),a
+	
+	; (#7586) = (#7586)+#40
 	ld hl,(#7586)
 	ld bc,#0040
 	add hl,bc
 	ld (#7586),hl
+
+	; (#7584) = (#7584) + #0c
 	ld hl,(#7584)
 	ld bc,#000c
 	add hl,bc
 	ld (#7584),hl
+
+	; (#7588) = (#7588) + #a0
 	ld hl,(#7588)
 	ld bc,#00a0
 	add hl,bc
 	ld (#7588),hl
+
+	; (#758a) = (#758a) + 1
 	ld a,(#758a)
 	inc a
 	ld (#758a),a
+
+	; (#758b) = (#758b) + #08
 	ld a,(#758b)
 	ld b,#08
 	add b
 	ld (#758b),a
+
 	jp l88de
 l89ec:
 	ld d,#08
@@ -1802,7 +1860,7 @@ l89ff:
 	dec c
 	jr nz,l89ff
 	djnz l89fd
-	ld hl,(#757e)
+	ld hl,(PIECE_CUR_MSK_POS)
 	ld bc,(#75bc)
 	add hl,bc
 	ld (hl),#01
@@ -2010,7 +2068,7 @@ l8b5c:
 	ld (#75d2),a
 	ld a,#49
 	ld (l8dde),a
-	ld hl,l8dd0
+	ld hl,FLBK_l8dd0_BLOCK
 	call #bcda
 	ld a,(l88f6)
 	dec a
@@ -2133,7 +2191,7 @@ l8c75:
 	call GET_KEY_CODE
 	ld b,#00
 	call #bb39	; Disable KEY repeat
-	ld hl,l8d63
+	ld hl,FLBK_l8d63_BLOCK
 	call #bcdd	; Disable Flyback block
 	
 	ld hl,(l8d60)	; Load note address
@@ -2167,13 +2225,13 @@ GAME_OVER:
 	call GET_KEY_CODE
 	ld b,#00	
 	call #bb39	; Disable KEY repeat
-	ld hl,l8d63
+	ld hl,FLBK_l8d63_BLOCK
 	call #bcdd	; Disable Flyback block
 
 	call FLBK_l9ac9_DISABLE
 	call FLBK_l9b68_DISABLE
-	call DISABLE_FLAG_l94d3
-	call NORMAL_DIRECTION
+	call SET_ROT_NORMAL
+	call SET_DIR_NORMAL
 
 	ld hl,(l8d60)	; Load note address
 	ld a,(hl)	; load note
@@ -2265,31 +2323,25 @@ l8cf3:
 	call CURTAIN_UP
 	jp MAIN_START
 l8d60:
-	nop
-	nop
+	DB #00
+	DB #00
 l8d62:
-	nop
-l8d63:
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
+	DB #00
+FLBK_l8d63_BLOCK:
+	DB #00,#00
+	DB #00
+	DB #00
+	DB #00,#00
+	DB #00
+	DB #00,#00,#00,#00  
+	DB #00,#00,#00
 l8d71:
-	nop
+	DB #00
 l8d72:
-	nop
-	nop
-l8d74:
+	DB #00
+	DB #00
+
+FLBK_l8d74_ISR:
 	di
 	push af
 	push hl
@@ -2333,6 +2385,7 @@ l8db8:
 	pop af
 	ei
 	ret
+
 l8dbd:
 	ld hl,l8933
 	ld (l890b),hl
@@ -2342,24 +2395,18 @@ l8dc8:
 	ld hl,l890d
 	ld (l890b),hl
 	jr l8dae
-l8dd0:
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
-	nop
+
+FLBK_l8dd0_BLOCK:
+	DB #00,#00
+	DB #00
+	DB #00
+	DB #00,#00
+	DB #00
+	DB #00,#00,#00,#00  
+	DB #00,#00,#00
 l8dde:
-	nop
-l8ddf:
+	DB #00
+FLBK_l8ddf_ISR:
 	di
 	push hl
 	push af
@@ -2372,7 +2419,7 @@ l8ddf:
 	ld hl,#c349
 	ld bc,#0814
 	call CLEAR_SCREEN_AREA
-	ld hl,l8dd0
+	ld hl,FLBK_l8dd0_BLOCK
 	call #bcdd
 l8dfc:
 	pop bc
@@ -2381,152 +2428,152 @@ l8dfc:
 	pop hl
 	ei
 	ret
-l8e02:
-	ld hl,(#758e)
-	ld (#7592),hl
-	ld hl,(CUR_PIECE_XXX)
-	ld (#7590),hl
-	ld hl,(CUR_PIECE_SIZE)
-	ld (#7596),hl
-	ld hl,(CUR_PIECE_BMP)
-	ld (#7594),hl
-	ld hl,(#757e)
-	ld (#7580),hl
-	ld bc,(#75ca)
+ROTATE:
+	ld hl,(PIECE_CUR_OFF_POS)
+	ld (PIECE_PRV_OFF_POS),hl
+	ld hl,(PIECE_CUR_SCR_POS)
+	ld (PIECE_PRV_SCR_POS),hl
+	ld hl,(PIECE_CUR_DIM)
+	ld (PIECE_PRV_DIM),hl
+	ld hl,(PIECE_CUR_BMP)
+	ld (PIECE_PRV_BMP),hl
+	ld hl,(PIECE_CUR_MSK_POS)
+	ld (PIECE_PRV_MSK_POS),hl
+	ld bc,(PIECE_ROT_O1)
 	add hl,bc
 	ld a,(hl)
 	cp #00
 	jr nz,l8e4b
-	ld bc,(#75cc)
+	ld bc,(PIECE_ROT_O2)
 	add hl,bc
 	ld a,(hl)
 	cp #00
 	jr nz,l8e4b
-	ld bc,(#75ce)
+	ld bc,(PIECE_ROT_O3)
 	add hl,bc
 	ld a,(hl)
 	cp #00
 	jr nz,l8e4b
-	ld bc,(#75d0)
+	ld bc,(PIECE_ROT_O4)
 	add hl,bc
 	ld a,(hl)
 	cp #00
 	jr nz,l8e4b
 	jp l8f1a
 l8e4b:
-	ld hl,(#757e)
+	ld hl,(PIECE_CUR_MSK_POS)
 	dec hl
-	ld (#7580),hl
-	ld bc,(#75ca)
-	ld bc,(#75ca)
+	ld (PIECE_PRV_MSK_POS),hl
+	ld bc,(PIECE_ROT_O1)
+	ld bc,(PIECE_ROT_O1)
 	add hl,bc
 	ld a,(hl)
 	cp #00
 	jp nz,l8e92
-	ld bc,(#75cc)
+	ld bc,(PIECE_ROT_O2)
 	add hl,bc
 	ld a,(hl)
 	cp #00
 	jr nz,l8e92
-	ld bc,(#75ce)
+	ld bc,(PIECE_ROT_O3)
 	add hl,bc
 	ld a,(hl)
 	cp #00
 	jr nz,l8e92
-	ld bc,(#75d0)
+	ld bc,(PIECE_ROT_O4)
 	add hl,bc
 	ld a,(hl)
 	cp #00
 	jr nz,l8e92
-	ld hl,(#758e)
+	ld hl,(PIECE_CUR_OFF_POS)
 	dec hl
 	dec hl
-	ld (#758e),hl
-	ld hl,(CUR_PIECE_XXX)
+	ld (PIECE_CUR_OFF_POS),hl
+	ld hl,(PIECE_CUR_SCR_POS)
 	dec hl
 	dec hl
-	ld (CUR_PIECE_XXX),hl
+	ld (PIECE_CUR_SCR_POS),hl
 	jp l8f1a
 l8e92:
-	ld hl,(#757e)
+	ld hl,(PIECE_CUR_MSK_POS)
 	inc hl
-	ld (#7580),hl
-	ld bc,(#75ca)
+	ld (PIECE_PRV_MSK_POS),hl
+	ld bc,(PIECE_ROT_O1)
 	add hl,bc
 	ld a,(hl)
 	cp #00
 	jp nz,l8ed5
-	ld bc,(#75cc)
+	ld bc,(PIECE_ROT_O2)
 	add hl,bc
 	ld a,(hl)
 	cp #00
 	jr nz,l8ed5
-	ld bc,(#75ce)
+	ld bc,(PIECE_ROT_O3)
 	add hl,bc
 	ld a,(hl)
 	cp #00
 	jr nz,l8ed5
-	ld bc,(#75d0)
+	ld bc,(PIECE_ROT_O4)
 	add hl,bc
 	ld a,(hl)
 	cp #00
 	jr nz,l8ed5
-	ld hl,(#758e)
+	ld hl,(PIECE_CUR_OFF_POS)
 	inc hl
 	inc hl
-	ld (#758e),hl
-	ld hl,(CUR_PIECE_XXX)
+	ld (PIECE_CUR_OFF_POS),hl
+	ld hl,(PIECE_CUR_SCR_POS)
 	inc hl
 	inc hl
-	ld (CUR_PIECE_XXX),hl
+	ld (PIECE_CUR_SCR_POS),hl
 	jp l8f1a
 l8ed5:
-	ld hl,(#757e)
+	ld hl,(PIECE_CUR_MSK_POS)
 	dec hl
 	dec hl
-	ld (#7580),hl
-	ld bc,(#75ca)
-	ld bc,(#75ca)
+	ld (PIECE_PRV_MSK_POS),hl
+	ld bc,(PIECE_ROT_O1)
+	ld bc,(PIECE_ROT_O1)
 	add hl,bc
 	ld a,(hl)
 	cp #00
 	ret nz
-	ld bc,(#75cc)
+	ld bc,(PIECE_ROT_O2)
 	add hl,bc
 	ld a,(hl)
 	cp #00
 	ret nz
-	ld bc,(#75ce)
+	ld bc,(PIECE_ROT_O3)
 	add hl,bc
 	ld a,(hl)
 	cp #00
 	ret nz
-	ld bc,(#75d0)
+	ld bc,(PIECE_ROT_O4)
 	add hl,bc
 	ld a,(hl)
 	cp #00
 	jr nz,l8ed5
-	ld hl,(#758e)
+	ld hl,(PIECE_CUR_OFF_POS)
 	dec hl
 	dec hl
 	dec hl
 	dec hl
-	ld (#758e),hl
-	ld hl,(CUR_PIECE_XXX)
+	ld (PIECE_CUR_OFF_POS),hl
+	ld hl,(PIECE_CUR_SCR_POS)
 	dec hl
 	dec hl
 	dec hl
 	dec hl
-	ld (CUR_PIECE_XXX),hl
+	ld (PIECE_CUR_SCR_POS),hl
 l8f1a:
-	ld hl,(#7580)
-	ld (#757e),hl
-	ld hl,(#7592)
-	ld de,(#7594)
-	ld bc,(#7596)
+	ld hl,(PIECE_PRV_MSK_POS)
+	ld (PIECE_CUR_MSK_POS),hl
+	ld hl,(PIECE_PRV_OFF_POS)
+	ld de,(PIECE_PRV_BMP)
+	ld bc,(PIECE_PRV_DIM)
 	call CLEAR_MASK_BMP_OFFSCREEN1
-	ld hl,(#75c8)
-	ld de,CUR_PIECE_BMP
+	ld hl,(PIECE_ROT_BMP)
+	ld de,PIECE_CUR_BMP
 	ld b,#1a
 l8f36:
 	ld a,(hl)
@@ -2535,27 +2582,27 @@ l8f36:
 	inc de
 	djnz l8f36
 	ld de,(#75c4)
-	ld hl,(#758e)
+	ld hl,(PIECE_CUR_OFF_POS)
 	add hl,de
-	ld (#758e),hl
-	ld de,(CUR_PIECE_BMP)
-	ld bc,(CUR_PIECE_SIZE)
+	ld (PIECE_CUR_OFF_POS),hl
+	ld de,(PIECE_CUR_BMP)
+	ld bc,(PIECE_CUR_DIM)
 	call DRAW_MASK_BMP_OFFSCREEN1
-	ld hl,(#7590)
-	ld de,(#7594)
-	ld bc,(#7596)
+	ld hl,(PIECE_PRV_SCR_POS)
+	ld de,(PIECE_PRV_BMP)
+	ld bc,(PIECE_PRV_DIM)
 	call DRAW_MASK_BMP
-	ld hl,(CUR_PIECE_XXX)
+	ld hl,(PIECE_CUR_SCR_POS)
 	ld de,(#75c6)
 	add hl,de
-	ld (CUR_PIECE_XXX),hl
-	ld de,(#758e)
-	ld bc,(CUR_PIECE_SIZE)
+	ld (PIECE_CUR_SCR_POS),hl
+	ld de,(PIECE_CUR_OFF_POS)
+	ld bc,(PIECE_CUR_DIM)
 	jp DRAW_BMP_SYNC
-l8f76:
-	ld hl,(#757e)
+MOVE_LEFT:
+	ld hl,(PIECE_CUR_MSK_POS)
 	dec hl
-	ld (#7580),hl
+	ld (PIECE_PRV_MSK_POS),hl
 	ld bc,(#75bc)
 	add hl,bc
 	ld a,(hl)
@@ -2576,33 +2623,33 @@ l8f76:
 	ld a,(hl)
 	cp #00
 	jp nz,l8920
-	ld hl,(#7580)
-	ld (#757e),hl
-	ld hl,(#758e)
-	ld de,(CUR_PIECE_BMP)
-	ld bc,(CUR_PIECE_SIZE)
+	ld hl,(PIECE_PRV_MSK_POS)
+	ld (PIECE_CUR_MSK_POS),hl
+	ld hl,(PIECE_CUR_OFF_POS)
+	ld de,(PIECE_CUR_BMP)
+	ld bc,(PIECE_CUR_DIM)
 	call CLEAR_MASK_BMP_OFFSCREEN1
-	ld hl,(#758e)
+	ld hl,(PIECE_CUR_OFF_POS)
 	dec hl
 	dec hl
-	ld (#758e),hl
-	ld de,(CUR_PIECE_BMP)
-	ld bc,(CUR_PIECE_SIZE)
+	ld (PIECE_CUR_OFF_POS),hl
+	ld de,(PIECE_CUR_BMP)
+	ld bc,(PIECE_CUR_DIM)
 	call DRAW_MASK_BMP_OFFSCREEN1
-	ld hl,(CUR_PIECE_XXX)
+	ld hl,(PIECE_CUR_SCR_POS)
 	dec hl
 	dec hl
-	ld (CUR_PIECE_XXX),hl
-	ld de,(#758e)
-	ld bc,(CUR_PIECE_SIZE)
+	ld (PIECE_CUR_SCR_POS),hl
+	ld de,(PIECE_CUR_OFF_POS)
+	ld bc,(PIECE_CUR_DIM)
 	inc c
 	inc c
 	call DRAW_BMP_SYNC
 	jp l8920
-l8fe8:
-	ld hl,(#757e)
+MOMVE_RIGHT:
+	ld hl,(PIECE_CUR_MSK_POS)
 	inc hl
-	ld (#7580),hl
+	ld (PIECE_PRV_MSK_POS),hl
 	ld bc,(#75bc)
 	add hl,bc
 	ld a,(hl)
@@ -2623,28 +2670,28 @@ l8fe8:
 	ld a,(hl)
 	cp #00
 	jp nz,l8920
-	ld hl,(#7580)
-	ld (#757e),hl
-	ld hl,(#758e)
-	ld (#7592),hl
-	ld de,(CUR_PIECE_BMP)
-	ld bc,(CUR_PIECE_SIZE)
+	ld hl,(PIECE_PRV_MSK_POS)
+	ld (PIECE_CUR_MSK_POS),hl
+	ld hl,(PIECE_CUR_OFF_POS)
+	ld (PIECE_PRV_OFF_POS),hl
+	ld de,(PIECE_CUR_BMP)
+	ld bc,(PIECE_CUR_DIM)
 	call CLEAR_MASK_BMP_OFFSCREEN1
-	ld hl,(#7592)
+	ld hl,(PIECE_PRV_OFF_POS)
 	inc hl
 	inc hl
-	ld (#758e),hl
-	ld de,(CUR_PIECE_BMP)
-	ld bc,(CUR_PIECE_SIZE)
+	ld (PIECE_CUR_OFF_POS),hl
+	ld de,(PIECE_CUR_BMP)
+	ld bc,(PIECE_CUR_DIM)
 	call DRAW_MASK_BMP_OFFSCREEN1
-	ld hl,(CUR_PIECE_XXX)
-	ld (#7590),hl
+	ld hl,(PIECE_CUR_SCR_POS)
+	ld (PIECE_PRV_SCR_POS),hl
 	inc hl
 	inc hl
-	ld (CUR_PIECE_XXX),hl
-	ld hl,(#7590)
-	ld de,(#7592)
-	ld bc,(CUR_PIECE_SIZE)
+	ld (PIECE_CUR_SCR_POS),hl
+	ld hl,(PIECE_PRV_SCR_POS)
+	ld de,(PIECE_PRV_OFF_POS)
+	ld bc,(PIECE_CUR_DIM)
 	inc c
 	inc c
 	call DRAW_BMP_SYNC
@@ -3361,14 +3408,14 @@ KEY
 .left:
 	DB #08
 
-NORMAL_DIRECTION:
+SET_DIR_NORMAL:
 	ld a,(KEY.right)
 	ld (key_right),a
 	ld a,(KEY.left)
 	ld (key_left),a
 	ret
 
-REVERSE_DIRECTION:
+SET_DIR_REVERSED:
 	ld a,(KEY.right)
 	ld (key_left),a
 	ld a,(KEY.left)
@@ -3376,34 +3423,34 @@ REVERSE_DIRECTION:
 	ret
 
 ;l94d3:
-FLAG_l94d3:
+is_rot_reversed:
 	DB #00
 
 ; -------------------
-; Disable FLAG ll94d3
+; Set normal piece's rotation
 ; -------------------
 ;#94d4
-DISABLE_FLAG_l94d3:
-	ld a,(FLAG_l94d3)
+SET_ROT_NORMAL:
+	ld a,(is_rot_reversed)
 	dec a
 	ret nz
 	ld a,#00
-	jr l94e4
+	jr SWITCH_ROT_DIRECTION
 
 ; -------------------
-; Enable FLAG ll94d3
+; Set reversed piece's rotation
 ; -------------------
 ;#94dd
-ENABLE_FLAG_l94d3:
-	ld a,(FLAG_l94d3)
+SET_ROT_REVERSED:
+	ld a,(is_rot_reversed)
 	dec a
 	ret z
 	ld a,#01
 
-l94e4:
-	ld (FLAG_l94d3),a
+SWITCH_ROT_DIRECTION:
+	ld (is_rot_reversed),a
 	ld hl,#7c5b
-	ld de,l950f
+	ld de,reversed_rot_buffer
 	ld b,#03
 l94ef:
 	push bc
@@ -3434,7 +3481,7 @@ l94fe:
 	pop bc
 	djnz l94ef
 	ret
-l950f:
+reversed_rot_buffer:
 	db #9e,#00,#3e,#00,#ad,#7c,#00,#00
 	db #01,#00,#0c,#00,#0c,#00,#02,#00
 	db #02,#00,#5f,#7c,#0c,#00,#01,#00
@@ -3994,10 +4041,10 @@ GET_RNDM_PIECE:
 	ld e,(hl)		; 
 	inc hl			;
 	ld d,(hl)		; DE = piece_table[random]
-	ld hl,NXT_PIECE_SCR	; Copy piece data into current piece buffer
-	ld b,#1e		; piece data is #1E long
-				; 
 
+
+	ld hl,NXT_PIECE_AREA_POS; Copy piece data into current piece buffer
+	ld b,#1e		; piece data is #1E long
 .copy:			
 	ld a,(de)
 	inc de
@@ -4252,7 +4299,7 @@ l996f:
 	ld (l99ec),a
 	ld hl,#7431
 	ld (l99ed),hl
-	ld hl,l99dd
+	ld hl,FLBK_l99dd_BLOCK
 	call #bcda
 
 	ld bc,#0000
@@ -4283,7 +4330,7 @@ l99d7:
 ;
 ; Flyback block
 ; Which one ???
-l99dd:
+FLBK_l99dd_BLOCK:
 	DB #00,#00
 	DB #00
 	DB #00
@@ -4296,7 +4343,7 @@ l99ec:
 l99ed:
 	DB #00,#00
 
-l99ef:
+FLBK_l99ef_ISR:
 	push af
 	ld a,(l99ec)
 	dec a
@@ -4314,7 +4361,7 @@ l99ef:
 	jr nz,l9a18
 	ld a,#00
 	ld (l99ec),a
-	ld hl,l99dd
+	ld hl,FLBK_l99dd_BLOCK
 	call #bcdd
 	jp l9a29
 l9a18:
