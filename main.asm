@@ -1,8 +1,10 @@
 
 FILE_BUF 	 equ #1388
 
+
 PLAYGROUND_BMP	 equ #2e53
 PLAYGROUND_SCR	 equ #e16a
+PLAYGROUND_SIZE	 equ #d014
 
 DATA_LEN 	 equ #3b83
 
@@ -11,6 +13,21 @@ DATA_PTR 	 equ #4268
 
 CURTAIN_BMP	 equ #5bbf
 CURTAIN_BMP2	 equ #3d55
+
+PLAYGROUND_BUF   equ #3ebb	; Playground mask buffer
+				; 22 lignes of 12 cells.
+				; cell: 0 is empty, occupied otherwise
+
+EMPTY_BLOCK_BMP	 equ #6553	; id = #00
+PURPLE_BLOCK_BMP equ #6563	; id = #01
+RED_BLOCK_BMP	 equ #6573	; id = #02
+ORANGE_BLOCK_BMP equ #6583	; id = #03
+YELLOW_BLOCK_BMP equ #6593	; id = #04
+GREEN_BLOCK_BMP  equ #65a3	; id = #05
+BLUE_BLOCK_BMP   equ #65b3	; id = #06
+LBLUE_BLOCK_BMP  equ #65c3	; id = #07
+DBLUE_BLOCK_BMP  equ #65d3	; id = #08
+
 
 HIGH_SCORE_CHANGED	 equ #71e8	; High score changed
 
@@ -22,6 +39,8 @@ SOUPIRANT_3 	 equ #722a	; High Score table entry 3
 SOUPIRANT_4 	 equ #7237	; High Score table entry 4
 SOUPIRANT_5 	 equ #7244	; High Score table entry 5
 
+P1_NAME		 equ #7282	; Player 1 name:"SOUPIRANT 1"
+P2_NAME		 equ #7297	; Player 2 name:"SOUPIRANT 2"
 
 CUR_LEVEL_PTR	 equ #7481	; current player level ptr
 P1_LEVEL_PTR	 equ #7483	; P1 level ptr
@@ -36,7 +55,6 @@ LEVEL_TABLE	 equ #7487	; Level table
 				;    	4: ????
 				;    	5: ????
 				;    	6: ????
-
 
 CUR_SCORE_SCR 	 equ #7561	; Current score screen location
 
@@ -74,7 +92,20 @@ CUR_BONUS_X100	 equ #757b	; bonus X100 +1
 CUR_BONUS_X010	 equ #757c	; bonus X010 +1
 CUR_BONUS_X001	 equ #757d	; bonus X001 +1
 
+				; Next piece definition
+NXT_PIECE_SCR	 equ #7598	; [0,1]: piece's area screen addr
+NXT_PIECE_XXX	 equ #759a	; [2,3]: ?? offscreen start pos ??
+NXT_PIECE_BMP	 equ #759c	; [4,5]: memory bmp source addr
+NXT_PIECE_SIZE	 equ #759e	; [6,7]: bmp width and height
+; ...
+; ...
+; ...
+; ...		     #75b5
 
+
+CUR_PIECE_XXX	 equ #75b6	; [0,1]: ?? offscreen start pos ??
+CUR_PIECE_BMP	 equ #75b8	; [2,3]: memory bmp source addr
+CUR_PIECE_SIZE	 equ #75ba	; [4,5]: bmp width and height
 
 
 
@@ -259,12 +290,12 @@ DISPLAY_LAYOUT:
 	call DRAW_ZBMP
 
 	; --------------------
-	; Draw box: game area 
+	; Draw box: playground area 
 	; --------------------
 	ld hl,#c168
 	ld c,#14
 	call BOX_TOP
-	ld bc,#d014
+	ld bc,PLAYGROUND_SIZE
 	call BOX_SIDES
 	ld c,#14
 	call BOX_BOTTOM
@@ -707,7 +738,7 @@ MAIN_CHOICE:
 MENU_3:
 	ld hl,#c582
 	ld bc,#3822
-	call CLEAR_AREA
+	call CLEAR_SCREEN_AREA
 	; Display "TES"
 	ld hl,#c5c6
 	ld de,#7358
@@ -862,7 +893,7 @@ MENU_3:
 
 	ld hl,#c582
 	ld bc,#3822
-	call CLEAR_AREA
+	call CLEAR_SCREEN_AREA
 	; Display level ten's digit in menu
 	ld hl,#c18f
 	ld a,(start_levelX10)
@@ -883,7 +914,7 @@ MENU_3:
 	ld (start_level_ptr),hl
 	ld hl,#c582
 	ld bc,#3822
-	call CLEAR_AREA
+	call CLEAR_SCREEN_AREA
 	ld hl,#c18f
 	ld a,(start_levelX10)
 	add #2f
@@ -917,7 +948,7 @@ MENU_4:
 	; Clear MENU Area
 	ld hl,#c582
 	ld bc,#3822
-	call CLEAR_AREA
+	call CLEAR_SCREEN_AREA
 	
 	; Display "DROITE:"
 	ld hl,#c58a
@@ -978,7 +1009,7 @@ MENU_4:
 	; Clear MENU Area
 	ld hl,#c582
 	ld bc,#3822
-	call CLEAR_AREA
+	call CLEAR_SCREEN_AREA
 	jp MAIN_MENU
 
 MENU_1:
@@ -1025,10 +1056,9 @@ START_GAME:
 
 	; Clear playing area
 	ld hl,PLAYGROUND_SCR
-	ld bc,#d014
-	call CLEAR_AREA
+	ld bc,PLAYGROUND_SIZE
+	call CLEAR_SCREEN_AREA
 
-	; ??
 	call CURTAIN_DOWN
 
 	; Disable sound
@@ -1116,7 +1146,7 @@ PLAYER1:
 
 	ld hl,(P1_LEVEL_PTR)
 	ld (CUR_LEVEL_PTR),hl
-	ld de,#7282
+	ld de,P1_NAME
 	
 	call PLAY
 	
@@ -1162,7 +1192,7 @@ PLAYER2:
 	ld hl,(P2_LEVEL_PTR)
 	ld (CUR_LEVEL_PTR),hl
 
-	ld de,#7297
+	ld de,P2_NAME
 	call PLAY
 
 	ld hl,(CUR_LEVEL_PTR)
@@ -1192,8 +1222,8 @@ PLAY:
 	push de
 	call CLEAR_PLAYGROUND_BMP
 	ld hl,PLAYGROUND_SCR
-	ld bc,#d014
-	call CLEAR_AREA
+	ld bc,PLAYGROUND_SIZE
+	call CLEAR_SCREEN_AREA
 	call DRAW_POPUP_BOX
 	pop de
 	; Draw "SOUPIRANT"
@@ -1215,8 +1245,8 @@ PLAY:
 	call DELAY
 	
 	ld hl,PLAYGROUND_SCR
-	ld bc,#d014
-	call CLEAR_AREA
+	ld bc,PLAYGROUND_SIZE
+	call CLEAR_SCREEN_AREA
 
 	ld hl,(CUR_LEVEL_PTR)		; load ptr = &level[0]
 	ld de,CUR_LIGNES_X10
@@ -1289,7 +1319,7 @@ PLAY:
 
 	call DELAY
 
-	ld hl,(CUR_LEVEL_PTR)	; load ptr = &level[2]
+	ld hl,(CUR_LEVEL_PTR)	; load ptr = &level[2] = speed ?
 	ld a,(hl)
 	ld (l88f6),a		; ??
 
@@ -1333,22 +1363,27 @@ PLAY:
 
 	ld hl,PLAYGROUND_SCR
 	ld de,PLAYGROUND_BMP
-	ld bc,#d014
+	ld bc,PLAYGROUND_SIZE
 	call DRAW_BMP
-	call l97f3
-	ld hl,(#7598)
-	ld de,(#759c)
-	ld bc,(#759e)
+	call GET_RNDM_PIECE
+	ld hl,(NXT_PIECE_SCR)
+	ld de,(NXT_PIECE_BMP)
+	ld bc,(NXT_PIECE_SIZE)
 	call DRAW_BMP
 	call DELAY
+
 	call l8839
+
 	call DELAY
+	
 	ld hl,#c34a
 	ld bc,#0812
-	call CLEAR_AREA
+	call CLEAR_SCREEN_AREA
+	
 	ld hl,#e15a
 	ld bc,#200a
-	call CLEAR_AREA
+	call CLEAR_SCREEN_AREA
+	
 	call DRAW_POPUP_BOX
 	; Draw "DAMNED !!"
 	ld hl,#c3eb
@@ -1386,7 +1421,7 @@ PLAY:
 COUNT_BONUS:
 	ld hl,PLAYGROUND_SCR
 	ld de,PLAYGROUND_BMP
-	ld bc,#d014
+	ld bc,PLAYGROUND_SIZE
 	call DRAW_BMP
 	ld a,#05
 	ld (CUR_BONUS_X100),a
@@ -1395,7 +1430,7 @@ COUNT_BONUS:
 	ld (CUR_BONUS_X001),a
 	ld hl,#c1aa
 	ld bc,#1014
-	call CLEAR_AREA
+	call CLEAR_SCREEN_AREA
 	jp l87a2
 l8702:
 	ld hl,#c20e
@@ -1430,7 +1465,7 @@ l873c:
 	djnz l873a
 	ld hl,#e7aa
 	ld bc,#0814
-	call CLEAR_AREA
+	call CLEAR_SCREEN_AREA
 	call DELAY
 l874d:
 	ld a,(CUR_BONUS_X001)
@@ -1544,11 +1579,13 @@ l8810:
 	ld (CUR_BONUS_X010),a
 l8836:
 	jp l8702
+
 l8839:
-	ld a,(key_down)
-	call GET_KEY_CODE
-	ld b,#ff
-	call #bb39
+	ld a,(key_down)		;
+	call GET_KEY_CODE	;
+	ld b,#ff		;
+	call #bb39		; Set down key repeat allowed
+
 	ld hl,#7125
 	ld (l8d60),hl
 	ld a,#01
@@ -1563,38 +1600,49 @@ l8839:
 	call CFG_AY_SND
 	xor a
 	ld (#7582),a
+
 l8867:
-	ld hl,#75b6
-	ld de,#759a
+
+	; Move next piece to current piece
+	ld hl,CUR_PIECE_XXX
+	ld de,NXT_PIECE_XXX
 	ld b,#1c
-l886f:
+.copy:
 	ld a,(de)
 	inc de
 	ld (hl),a
 	inc hl
-	djnz l886f
-	call l97f3
-	ld hl,#2ef9
+	djnz .copy
+
+	; Get the next piece
+	call GET_RNDM_PIECE
+
+	ld hl,#2ef9			; reset offscreen1 start address ??
 	ld (#758e),hl
-	ld de,(#75b8)
-	ld bc,(#75ba)
-	call DRAW_BMP2
-	ld hl,(#75b6)
+	ld de,(CUR_PIECE_BMP)
+	ld bc,(CUR_PIECE_SIZE)
+	call DRAW_MASK_BMP_OFFSCREEN1
+
+	ld hl,(CUR_PIECE_XXX)
 	ld de,(#758e)
-	ld bc,(#75ba)
-	call l9621
-	ld hl,(#7598)
-	ld de,(#759c)
-	ld bc,(#759e)
+	ld bc,(CUR_PIECE_SIZE)
+	call DRAW_BMP_SYNC
+
+	ld hl,(NXT_PIECE_SCR)
+	ld de,(NXT_PIECE_BMP)
+	ld bc,(NXT_PIECE_SIZE)
 	call DRAW_BMP
+	
 	ld b,#03
 	call l96c6
-	ld bc,#61a8
-l88ad:
-	dec bc
-	ld a,b
-	or c
-	jr nz,l88ad
+
+	ld bc,#61a8	; delay loop
+l88ad:			; |
+	dec bc		; |
+	ld a,b		; |
+	or c		; |
+	jr nz,l88ad	; -
+
 	ld hl,#3ebf
 	ld (#757e),hl
 	ld a,#01
@@ -1689,30 +1737,30 @@ l8933:
 	jp nz,l89ec
 	ld hl,(#7580)
 	ld (#757e),hl
-	ld hl,(#75b6)
+	ld hl,(CUR_PIECE_XXX)
 	ld (#7590),hl
 	ld bc,#0040
 	add hl,bc
-	ld (#75b6),hl
+	ld (CUR_PIECE_XXX),hl
 	ld hl,(#758e)
 	ld (#7592),hl
-	ld de,(#75b8)
-	ld bc,(#75ba)
-	call CLEAR_BMP2
+	ld de,(CUR_PIECE_BMP)
+	ld bc,(CUR_PIECE_SIZE)
+	call CLEAR_MASK_BMP_OFFSCREEN1
 	ld hl,(#758e)
 	ld bc,#00a0
 	add hl,bc
 	ld (#758e),hl
-	ld de,(#75b8)
-	ld bc,(#75ba)
-	call DRAW_BMP2
+	ld de,(CUR_PIECE_BMP)
+	ld bc,(CUR_PIECE_SIZE)
+	call DRAW_MASK_BMP_OFFSCREEN1
 	ld hl,(#7590)
 	ld de,(#7592)
-	ld bc,(#75ba)
+	ld bc,(CUR_PIECE_SIZE)
 	ld a,#08
 	add b
 	ld b,a
-	call l9621
+	call DRAW_BMP_SYNC
 	ld a,(#7583)
 	dec a
 	ld (#7583),a
@@ -1919,7 +1967,7 @@ l8b1e:
 	djnz l8b1c
 	ld hl,PLAYGROUND_SCR
 	ld de,PLAYGROUND_BMP
-	ld bc,#d014
+	ld bc,PLAYGROUND_SIZE
 	call DRAW_BMP
 	ld d,#03
 l8b31:
@@ -2056,7 +2104,7 @@ l8c2c:
 	call z,l9afd
 	ld a,(FLBK_l9b68_CNT)
 	dec a
-	call z,l9b9d
+	call z,PLAYGROUND_MOVE_UP
 	jp l8867
 l8c44:
 	ld hl,(#7586)
@@ -2167,7 +2215,7 @@ l8cf3:
 	call DRAW_POPUP_BOX
 	; Draw "SOUPIRANT"
 	ld hl,#c3eb
-	ld de,#7282
+	ld de,P1_NAME
 	ld b,#09
 	call DRW_TXT
 	; Draw "<current player>"
@@ -2209,11 +2257,11 @@ l8cf3:
 	pop hl
 	ld hl,#e15a
 	ld bc,#200a
-	call CLEAR_AREA
+	call CLEAR_SCREEN_AREA
 	call CLEAR_PLAYGROUND_BMP
 	ld hl,PLAYGROUND_SCR
-	ld bc,#d014
-	call CLEAR_AREA
+	ld bc,PLAYGROUND_SIZE
+	call CLEAR_SCREEN_AREA
 	call CURTAIN_UP
 	jp MAIN_START
 l8d60:
@@ -2323,7 +2371,7 @@ l8ddf:
 	jr nz,l8dfc
 	ld hl,#c349
 	ld bc,#0814
-	call CLEAR_AREA
+	call CLEAR_SCREEN_AREA
 	ld hl,l8dd0
 	call #bcdd
 l8dfc:
@@ -2336,11 +2384,11 @@ l8dfc:
 l8e02:
 	ld hl,(#758e)
 	ld (#7592),hl
-	ld hl,(#75b6)
+	ld hl,(CUR_PIECE_XXX)
 	ld (#7590),hl
-	ld hl,(#75ba)
+	ld hl,(CUR_PIECE_SIZE)
 	ld (#7596),hl
-	ld hl,(#75b8)
+	ld hl,(CUR_PIECE_BMP)
 	ld (#7594),hl
 	ld hl,(#757e)
 	ld (#7580),hl
@@ -2394,10 +2442,10 @@ l8e4b:
 	dec hl
 	dec hl
 	ld (#758e),hl
-	ld hl,(#75b6)
+	ld hl,(CUR_PIECE_XXX)
 	dec hl
 	dec hl
-	ld (#75b6),hl
+	ld (CUR_PIECE_XXX),hl
 	jp l8f1a
 l8e92:
 	ld hl,(#757e)
@@ -2427,10 +2475,10 @@ l8e92:
 	inc hl
 	inc hl
 	ld (#758e),hl
-	ld hl,(#75b6)
+	ld hl,(CUR_PIECE_XXX)
 	inc hl
 	inc hl
-	ld (#75b6),hl
+	ld (CUR_PIECE_XXX),hl
 	jp l8f1a
 l8ed5:
 	ld hl,(#757e)
@@ -2464,21 +2512,21 @@ l8ed5:
 	dec hl
 	dec hl
 	ld (#758e),hl
-	ld hl,(#75b6)
+	ld hl,(CUR_PIECE_XXX)
 	dec hl
 	dec hl
 	dec hl
 	dec hl
-	ld (#75b6),hl
+	ld (CUR_PIECE_XXX),hl
 l8f1a:
 	ld hl,(#7580)
 	ld (#757e),hl
 	ld hl,(#7592)
 	ld de,(#7594)
 	ld bc,(#7596)
-	call CLEAR_BMP2
+	call CLEAR_MASK_BMP_OFFSCREEN1
 	ld hl,(#75c8)
-	ld de,#75b8
+	ld de,CUR_PIECE_BMP
 	ld b,#1a
 l8f36:
 	ld a,(hl)
@@ -2490,20 +2538,20 @@ l8f36:
 	ld hl,(#758e)
 	add hl,de
 	ld (#758e),hl
-	ld de,(#75b8)
-	ld bc,(#75ba)
-	call DRAW_BMP2
+	ld de,(CUR_PIECE_BMP)
+	ld bc,(CUR_PIECE_SIZE)
+	call DRAW_MASK_BMP_OFFSCREEN1
 	ld hl,(#7590)
 	ld de,(#7594)
 	ld bc,(#7596)
-	call CLEAR_BMP
-	ld hl,(#75b6)
+	call DRAW_MASK_BMP
+	ld hl,(CUR_PIECE_XXX)
 	ld de,(#75c6)
 	add hl,de
-	ld (#75b6),hl
+	ld (CUR_PIECE_XXX),hl
 	ld de,(#758e)
-	ld bc,(#75ba)
-	jp l9621
+	ld bc,(CUR_PIECE_SIZE)
+	jp DRAW_BMP_SYNC
 l8f76:
 	ld hl,(#757e)
 	dec hl
@@ -2531,25 +2579,25 @@ l8f76:
 	ld hl,(#7580)
 	ld (#757e),hl
 	ld hl,(#758e)
-	ld de,(#75b8)
-	ld bc,(#75ba)
-	call CLEAR_BMP2
+	ld de,(CUR_PIECE_BMP)
+	ld bc,(CUR_PIECE_SIZE)
+	call CLEAR_MASK_BMP_OFFSCREEN1
 	ld hl,(#758e)
 	dec hl
 	dec hl
 	ld (#758e),hl
-	ld de,(#75b8)
-	ld bc,(#75ba)
-	call DRAW_BMP2
-	ld hl,(#75b6)
+	ld de,(CUR_PIECE_BMP)
+	ld bc,(CUR_PIECE_SIZE)
+	call DRAW_MASK_BMP_OFFSCREEN1
+	ld hl,(CUR_PIECE_XXX)
 	dec hl
 	dec hl
-	ld (#75b6),hl
+	ld (CUR_PIECE_XXX),hl
 	ld de,(#758e)
-	ld bc,(#75ba)
+	ld bc,(CUR_PIECE_SIZE)
 	inc c
 	inc c
-	call l9621
+	call DRAW_BMP_SYNC
 	jp l8920
 l8fe8:
 	ld hl,(#757e)
@@ -2579,27 +2627,27 @@ l8fe8:
 	ld (#757e),hl
 	ld hl,(#758e)
 	ld (#7592),hl
-	ld de,(#75b8)
-	ld bc,(#75ba)
-	call CLEAR_BMP2
+	ld de,(CUR_PIECE_BMP)
+	ld bc,(CUR_PIECE_SIZE)
+	call CLEAR_MASK_BMP_OFFSCREEN1
 	ld hl,(#7592)
 	inc hl
 	inc hl
 	ld (#758e),hl
-	ld de,(#75b8)
-	ld bc,(#75ba)
-	call DRAW_BMP2
-	ld hl,(#75b6)
+	ld de,(CUR_PIECE_BMP)
+	ld bc,(CUR_PIECE_SIZE)
+	call DRAW_MASK_BMP_OFFSCREEN1
+	ld hl,(CUR_PIECE_XXX)
 	ld (#7590),hl
 	inc hl
 	inc hl
-	ld (#75b6),hl
+	ld (CUR_PIECE_XXX),hl
 	ld hl,(#7590)
 	ld de,(#7592)
-	ld bc,(#75ba)
+	ld bc,(CUR_PIECE_SIZE)
 	inc c
 	inc c
-	call l9621
+	call DRAW_BMP_SYNC
 	jp l8920
 
 l9063:
@@ -2727,7 +2775,7 @@ NEW_AMANT_MISSED:
 	call DRAW_POPUP_BOX
 	; Draw "SOUPIRANT"
 	ld hl,#c3eb
-	ld de,#7282
+	ld de,P1_NAME
 	ld b,#09
 	call DRW_TXT
 
@@ -2795,8 +2843,8 @@ GAME_FINISHED:
 	call #bb39		; Disable CHAR repeat
 	
 	ld hl,PLAYGROUND_SCR
-	ld bc,#d014
-	call CLEAR_AREA
+	ld bc,PLAYGROUND_SIZE
+	call CLEAR_SCREEN_AREA
 	
 	call l9943
 	
@@ -2915,7 +2963,7 @@ NEW_AMANT_WIN:
 	ld b,#05
 	call DRW_TXT
 	; Draw "SOUPIRANT"
-	ld de,#7282
+	ld de,P1_NAME
 	ld hl,#c42b
 	ld b,#09
 	call DRW_TXT
@@ -3050,8 +3098,8 @@ NEW_AMANT_WIN:
 	djnz .check_soupirants
 .finished:
 	ld hl,PLAYGROUND_SCR
-	ld bc,#d014
-	call CLEAR_AREA
+	ld bc,PLAYGROUND_SIZE
+	call CLEAR_SCREEN_AREA
 	call CLEAR_PLAYGROUND_BMP
 	call CURTAIN_UP
 	jp MAIN_START
@@ -3511,132 +3559,168 @@ GET_KEY_CODE:
 
 
 
-l9621:
+DRAW_BMP_SYNC:
 	push bc
+	; Wait flyback signal
+	; by reading μPD8255 port B
 	ld b,#f5
-l9624:
+.wait:
 	in a,(c)
 	rra
-	jr nc,l9624
+	jr nc,.wait
+	; Got flyback signal...
+	; Draw bitmap.
 	pop bc
-l962a:
+.height:
 	push bc
 	push hl
 	push de
-l962d:
+.width:
 	ld a,(de)
 	inc de
 	ld (hl),a
 	inc hl
 	dec c
-	jr nz,l962d
+	jr nz,.width
 	pop de
-	ld hl,#0014
+	ld hl,#0014	; <- bmp width seems to be #14 bytes larges
 	add hl,de
-	ex de,hl
+	ex de,hl	; de = de + #14
 	pop hl
 	call NXT_SCR_LINE
 	pop bc
-	djnz l962a
+	djnz .height
 	ret
 
-; Draw bitmap
-; B: height
-; C: width
+; ----------------------------------
+; Draw bitmap on screen
 ; DE: src address
 ; HL: dst address
+; B : height
+; C : width
+; ----------------------------------
 ;#9642
 DRAW_BMP:
 	push bc
 	push hl
-.loop:
+.width:
 	ld a,(de)
 	inc de
 	ld (hl),a
 	inc hl
 	dec c
-	jr nz,.loop
+	jr nz,.width
 	pop hl
 	call NXT_SCR_LINE
 	pop bc
 	djnz DRAW_BMP
 	ret
 
-DRAW_BMP2:
+; ----------------------------------
+; Draw bitmap to a 20 (#14) bytes wide offscreen buffer 
+; Only draw non null bytes.
+; HL: dst address
+; DE: src address
+; B : height
+; C : width
+; ----------------------------------
+;#9653
+DRAW_MASK_BMP_OFFSCREEN1:
 	push bc
 	push hl
-l9655:
+.width:
 	ld a,(de)
 	inc de
 	cp #00
-	jr z,l965c
+	jr z,.skip
 	ld (hl),a
-l965c:
+.skip:
 	inc hl
 	dec c
-	jr nz,l9655
+	jr nz,.width
 	pop hl
 	ld bc,#0014
 	add hl,bc
 	pop bc
-	djnz DRAW_BMP2
+	djnz DRAW_MASK_BMP_OFFSCREEN1
 	ret
 
-
-DRAW_BMP3:
+; ----------------------------------
+; Draw bitmap to a 34 (#22) bytes wide offscreen buffer 
+; HL: dst address
+; DE: src address
+; B : height
+; C : width
+; ----------------------------------
+DRAW_BMP_OFFSCREEN2:
 	push bc
 	push hl
-l966b:
+.width:
 	ld a,(de)
 	inc de
 	ld (hl),a
 	inc hl
 	dec c
-	jr nz,l966b
+	jr nz,.width
 	pop hl
 	ld bc,#0022
 	add hl,bc
 	pop bc
-	djnz DRAW_BMP3
+	djnz DRAW_BMP_OFFSCREEN2
 	ret
 
-CLEAR_BMP:
+; ----------------------------------
+; Draw masked bitmap on screen (only non null bytes)
+; DE: src address
+; HL: dst address
+; B : height
+; C : width
+; ----------------------------------
+DRAW_MASK_BMP:
 	push bc
 	push hl
-l967d:
+.width:
 	ld a,(de)
 	inc de
 	cp #00
-	jr z,l9685
+	jr z,.skip
 	ld (hl),#00
-l9685:
+.skip:
 	inc hl
 	dec c
-	jr nz,l967d
+	jr nz,.width
 	pop hl
 	call NXT_SCR_LINE
 	pop bc
-	djnz CLEAR_BMP
+	djnz DRAW_MASK_BMP
 	ret
 
-CLEAR_BMP2:
+; ----------------------------------
+; Clear bitmap from a 20 (#14) bytes wide offscreen buffer 
+; Only clear non null bytes.
+; HL: dst address
+; DE: src address
+; B : height
+; C : width
+; ----------------------------------
+CLEAR_MASK_BMP_OFFSCREEN1:
 	push bc
 	push hl
-l9693:
+.width:
 	ld a,(de)
 	inc de
 	cp #00
-	jr z,l969b
+	jr z,.skip
 	ld (hl),#00
-l969b:
+.skip:
 	inc hl
 	dec c
-	jr nz,l9693
+	jr nz,.width
 	pop hl
 	ld bc,#0014
 	add hl,bc
 	pop bc
-	djnz CLEAR_BMP2
+	djnz CLEAR_MASK_BMP_OFFSCREEN1
 	ret
 
 
@@ -3646,7 +3730,7 @@ l969b:
 ; B : height
 ; C : width
 ; ----------------------------
-CLEAR_AREA:
+CLEAR_SCREEN_AREA:
 	push bc
 	push hl
 .loop_width:
@@ -3657,7 +3741,7 @@ CLEAR_AREA:
 	pop hl
 	call NXT_SCR_LINE
 	pop bc
-	djnz CLEAR_AREA
+	djnz CLEAR_SCREEN_AREA
 	ret
 
 
@@ -3886,70 +3970,68 @@ DRW_WCHAR:
 	ret
 
 ; ------------------------
-; Random ??? seed ?
+; Get Random piece and clear 'next piece' area
 ; ------------------------
-l97f3:
+;#97f3:
+GET_RNDM_PIECE:
 	ld a,r
 	ld c,a
-	ld a,(l9838)
+	ld a,(random)
 	add c
 	sla a
 	sla a
 	add c
 	inc a
-	ld (l9838),a
-	and #07
-	cp #07
-	jp nc,l97f3
-	sla a
+	ld (random),a
+	and #07			; mod 7
+	cp #07		
+	jp nc,GET_RNDM_PIECE	; if random >= 7 then retry
+	sla a			; x2
 	ld c,a
 	ld b,#00
-	ld hl,l9839
-	add hl,bc
-	ld e,(hl)
-	inc hl
-	ld d,(hl)
-	ld hl,#7598
-	ld b,#1e
-l981b:
+	ld hl,piece_table
+	add hl,bc		; HL = &piece_table[random]
+	ld e,(hl)		; 
+	inc hl			;
+	ld d,(hl)		; DE = piece_table[random]
+	ld hl,NXT_PIECE_SCR	; Copy piece data into current piece buffer
+	ld b,#1e		; piece data is #1E long
+				; 
+
+.copy:			
 	ld a,(de)
 	inc de
 	ld (hl),a
 	inc hl
-	djnz l981b
+	djnz .copy
+
 	ld hl,#e15a
 	ld b,#20
-l9826:
+.clear1:
 	push bc
 	push hl
 	ld c,#0a
-l982a:
+.clear2:
 	ld (hl),#00
 	inc hl
 	dec c
-	jr nz,l982a
+	jr nz,.clear2
 	pop hl
 	call NXT_SCR_LINE
 	pop bc
-	djnz l9826
+	djnz .clear1
 	ret
-l9838:
+;l9838:
+random:
 	DB #00
-l9839:
-	rst #10
-	ld a,l
-	inc sp
-	ld a,l
-	rst #00
-	ld a,h
-	sbc a
-	ld a,l
-	rrca
-	ld a,(hl)
-	ld b,a
-	ld a,(hl)
-	ld e,e
-	ld a,h
+piece_table:
+	DW #7dd7
+	DW #7d33
+	DW #7cc7
+	DW #7d9f
+	DW #7e0f
+	DW #7e47
+	DW #7c5b
 
 l9847:
 	ld hl,#fc82
@@ -4155,11 +4237,11 @@ l996f:
 	ld hl,#2fc9
 	ld de,#5f77
 	ld bc,#6405
-	call DRAW_BMP3
+	call DRAW_BMP_OFFSCREEN2
 	ld hl,#2fe1
 	ld de,#616b
 	ld bc,#640a
-	call DRAW_BMP3
+	call DRAW_BMP_OFFSCREEN2
 	call CURTAIN_UP
 	ld hl,#d605
 	ld de,#4a9b
@@ -4416,7 +4498,7 @@ FLBK_l9ac9_DISABLE:
 
 
 l9afd:
-	ld a,(l9838)
+	ld a,(random)
 	and #03
 	inc a
 	ld (l9b2f),a
@@ -4459,12 +4541,12 @@ l9b2f equ $ + 1
 	dec a
 	jr z,l9b19
 	ld (ix+#00),#01
-	ld de,#65d3
+	ld de,DBLUE_BLOCK_BMP
 	ld bc,#0802
-	call DRAW_BMP2
+	call DRAW_MASK_BMP_OFFSCREEN1
 	ld hl,PLAYGROUND_SCR
 	ld de,PLAYGROUND_BMP
-	ld bc,#d014
+	ld bc,PLAYGROUND_SIZE
 	call DRAW_BMP
 
 	ld a,#c8
@@ -4522,56 +4604,61 @@ FLBK_l9b68_DISABLE:
 	ld hl,FLBK_l9b68_BLOCK
 	jp #bcdd
 
-
-l9b9d:
+; ---------------------------------
+; Move playground 1 line up !!!
+; ---------------------------------
+PLAYGROUND_MOVE_UP:
 	ld a,(#7582)
 	cp #0f
 	ret nc
 	inc a
 	ld (#7582),a
-	ld hl,#3ebb
-	ld de,#3ec7
+	ld hl,PLAYGROUND_BUF
+	ld de,PLAYGROUND_BUF+#C
 	ld b,#19
-l9baf:
+.buf_h:
 	ld c,#0c
-l9bb1:
+.buf_w:
 	ld a,(de)
 	inc de
 	ld (hl),a
 	inc hl
 	dec c
-	jr nz,l9bb1
-	djnz l9baf
+	jr nz,.buf_w
+	djnz .buf_h
 
 	ld hl,PLAYGROUND_BMP
-	ld de,#2ef3
+	ld de,PLAYGROUND_BMP+#A0
 	ld b,#c8
-l9bc2:
+.bmp_h:
 	ld c,#14
-l9bc4:
+.bmp_w:
 	ld a,(de)
 	inc de
 	ld (hl),a
 	inc hl
 	dec c
-	jr nz,l9bc4
-	djnz l9bc2
+	jr nz,.bmp_w
+	djnz .bmp_h
 
 	ld ix,#3fe8
+
+	; Randomly choose empty block position on the new line.
 	ld a,r
 	ld c,a
-	ld a,(l9838)
+	ld a,(random)
 	add c
 	sla a
 	sla a
 	add c
 	inc a
-	ld (l9838),a
+	ld (random),a
 	and #1f
 	add #07
 	sra a
 	sra a
-	ld (l9b73),a
+	ld (l9b73),a	; <- store position
+
 	ld b,#09
 l9bee:
 	push bc
@@ -4581,9 +4668,9 @@ l9bee:
 l9bf5:
 	ld (l9b73),a
 	push hl
-	ld de,#6583
+	ld de,ORANGE_BLOCK_BMP
 	ld bc,#0802
-	call DRAW_BMP2
+	call DRAW_MASK_BMP_OFFSCREEN1
 	pop hl
 	inc hl
 	inc hl
@@ -4593,7 +4680,7 @@ l9bf5:
 	djnz l9bee
 	ld hl,PLAYGROUND_SCR
 	ld de,PLAYGROUND_BMP
-	ld bc,#d014
+	ld bc,PLAYGROUND_SIZE
 	call DRAW_BMP
 	ld a,#fa
 	ld (FLBK_l9b68_CNT),a
@@ -4601,7 +4688,7 @@ l9bf5:
 	jp #bcda
 l9c25:
 	push hl
-	ld de,#6553
+	ld de,EMPTY_BLOCK_BMP
 	ld b,#08
 l9c2b:
 	push bc
@@ -4661,7 +4748,7 @@ l9c40 equ $ + 2
 ;#9c48
 SETUP_PLAYGROUND_MASK:
 	ld b,#14		
-	ld hl,#3ebb		; <- probably playing area mask array address
+	ld hl,PLAYGROUND_BUF		; <- probably playing area mask array address
 .fill1:
 	ld (hl),#01		; left border
 	inc hl
@@ -4757,31 +4844,31 @@ SETUP_PLAYGROUND_BMP:
 	jr z,.block6
 	cp #07
 	jr z,.block7
-	ld de,#65d3	; <- single block 8
+	ld de,DBLUE_BLOCK_BMP	; <- single block 8
 	jr .copy_block
 .empty:
-	ld de,#6553	; empty block
+	ld de,EMPTY_BLOCK_BMP	; empty block
 	jr .copy_block
 .block1:
-	ld de,#6563	; single block color 1
+	ld de,PURPLE_BLOCK_BMP	; single block color 1
 	jr .copy_block
 .block2:
-	ld de,#6573	; single block color 2
+	ld de,RED_BLOCK_BMP	; single block color 2
 	jr .copy_block
 .block3:
-	ld de,#6583	; single block color 3
+	ld de,ORANGE_BLOCK_BMP	; single block color 3
 	jr .copy_block
 .block4:
-	ld de,#6593	; single block color 4
+	ld de,YELLOW_BLOCK_BMP	; single block color 4
 	jr .copy_block
 .block5:
-	ld de,#65a3	; single block color 5
+	ld de,GREEN_BLOCK_BMP	; single block color 5
 	jr .copy_block
 .block6:
-	ld de,#65b3	; single block color 6
+	ld de,BLUE_BLOCK_BMP	; single block color 6
 	jr .copy_block
 .block7:
-	ld de,#65c3	; single block color 7
+	ld de,LBLUE_BLOCK_BMP	; single block color 7
 .copy_block:
 	push bc
 	ld a,(de)
