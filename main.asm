@@ -12,8 +12,8 @@ PLAYGND_OFSCR	 equ #2e53	; playground offscreen bitmap
 ; Dance floor and curtain offscreen buffers 
 ; are overlapping with playground offscreen buffer.
 ; They are not used simultaneously.
-DANCE_FLR_OFSCR	 equ #2fc9	; Dance floor with columns and Alinka 34x100
-CURTAIN_OFSCR 	 equ #3d55	; Curtain 34x8 (with did I use a copy of CURTAIN???) 
+DANCEFLR_OFSCR	 equ #2fc9	; Dance floor with columns and Alinka 34x100
+CURTAIN_OFSCR 	 equ #3d55	; Curtain 34x8  
 
 
 PLAYGND_MSK_BUF equ #3ebb	; Playground mask buffer
@@ -49,6 +49,7 @@ BLUE_BLOCK_BMP   equ #65b3	; id = #06
 LBLUE_BLOCK_BMP  equ #65c3	; id = #07
 BLINK_BLOCK_BMP  equ #65d3	; id = #08
 
+KAZATCHOK_MELODY equ #6fe3	; Kazatchock melody data [duration,note]...[#FF] 
 
 HSCORE_CHANGED	 equ #71e8	; High score changed
 
@@ -475,11 +476,11 @@ CONFIGURATION:
 	; ----------------------------------------
 	; Configure flyback callbacks
 	; ----------------------------------------
-	ld hl,FLBK_l8d63_BLOCK	; frame flyback block - Usage to be determined
-	ld de,FLBK_l8d63_ISR	; event routine address
+	ld hl,FLBK_GAME_MELODY_BLOCK	; frame flyback block - Usage to be determined
+	ld de,FLBK_GAME_MELODY_ISR	; event routine address
 	ld bc,#8100	; B: evt class | C: ROM select address of the routine
 	call #bcd7	; init block
-	ld hl,FLBK_l8d63_BLOCK
+	ld hl,FLBK_GAME_MELODY_BLOCK
 	call #bcdd	; remove/disable block;
 
 	ld hl,FLBK_l8dd0_BLOCK	; frame flyback block - Usage to be determined
@@ -489,35 +490,35 @@ CONFIGURATION:
 	ld hl,FLBK_l8dd0_BLOCK
 	call #bcdd	; remove/disable block
 
-	ld hl,FLBK_DANCE_BLOCK	; frame flyback block - Usage to be determined
+	ld hl,FLBK_DANCE_BLOCK	; frame flyback block - Kozak Dance
 	ld de,FLBK_DANCE_ISR	; event routine address
 	ld bc,#8100	; B: evt class | C: ROM select address of the routine
 	call #bcd7	; init block
 	ld hl,FLBK_DANCE_BLOCK
 	call #bcdd	; remove/disable block
 
-	ld hl,FLBK_RNDM_BLCK_BLOCK	; frame flyback block - Usage to be determined
+	ld hl,FLBK_RNDM_BLCK_BLOCK	; frame flyback block - Random blocks 
 	ld de,FLBK_RNDM_BLCK_ISR	; event routine address
 	ld bc,#8100	; B: evt class | C: ROM select address of the routine
 	call #bcd7	; init block 
 	ld hl,FLBK_RNDM_BLCK_BLOCK
 	call #bcdd	; remove/disable block
 
-	ld hl,FLBK_MOVE_UP_BLOCK	; frame flyback block	 - Usage to be determined
+	ld hl,FLBK_MOVE_UP_BLOCK	; frame flyback block - Move playground UP
 	ld de,FLBK_MOVE_UP_ISR	; event routine address
 	ld bc,#8100	; B: evt class | C: ROM
 	call #bcd7	; init block 
 	ld hl,FLBK_MOVE_UP_BLOCK
 	call #bcdd	; remove/disable block
 
-	ld hl,FLBK_MELODY_BLOCK	; frame flyback block - Melody manager
-	ld de,FLBK_MELODY_ISR	; event routine address
+	ld hl,FLBK_KAZATCHOK_BLOCK	; frame flyback block - Kazatchok Melody
+	ld de,FLBK_KAZATCHOK_ISR	; event routine address
 	ld bc,#8100	; B: evt class | C: ROM
 	call #bcd7	; init block 
-	ld hl,FLBK_MELODY_BLOCK
+	ld hl,FLBK_KAZATCHOK_BLOCK
 	call #bcdd	; remove/disable block
 
-	ld hl,FLBK_MENU_ANIM_BLOCK ; frame flyback block	- Main screen animation handler
+	ld hl,FLBK_MENU_ANIM_BLOCK ; frame flyback block - Main menu animation
 	ld de,FLBK_MENU_ANIM_ISR  ; event routine address
 	ld bc,#8100	; B: evt class | C: ROM
 	call #bcd7	; init block 
@@ -632,7 +633,7 @@ FILE_TBL:
 
 ;#810f
 MAIN_SCREEN:
-	call ENBL_MELODY
+	call START_KAZATCHOK
 
 	; Display "DEFI  01"
 	ld de,#7269
@@ -735,7 +736,7 @@ MAIN_SCREEN:
 
 	; Enable high scores animation
 	ld a,#03
-	ld (HSCORE_DUR),a
+	ld (menu_dur),a
 	ld hl,FLBK_MENU_ANIM_BLOCK
 	call #bcda
 
@@ -1112,13 +1113,13 @@ START_GAME:
 	ld bc,PLAYGND_DIM
 	call CLEAR_SCREEN_AREA
 
-	call DANCE_FLR_CURTAIN_DOWN
+	call DANCEFLR_CURTAIN_DOWN
 
 	; Disable sound
 	ld a,#0a
 	ld c,#00
 	call CFG_AY_SND
-	call DSBL_MELODY
+	call STOP_KAZATCHOK
 	
 	; Setup level
 	ld a,(start_levelX10)
@@ -1209,7 +1210,7 @@ PLAYER1:
 	ld (P1_LEVEL_PTR),hl
 	dec a
 
-	call z,DANCE_FLR_ANIMATION
+	call z,DANCE_ANIMATION
 
 	ld de,P1_SCORE_X00001
 	ld hl,CUR_SCORE_X00001
@@ -1221,7 +1222,7 @@ PLAYER1:
 	inc de
 	djnz .store_score
 
-	call FLBK_RNDM_BLCK_DISABLE
+	call DISABLE_RNDM_BLCK
 	call FLBK_MOVE_UP_DISABLE
 	call SET_ROT_NORMAL
 	call SET_DIR_NORMAL
@@ -1253,7 +1254,7 @@ PLAYER2:
 	inc hl
 	ld (P2_LEVEL_PTR),hl
 	dec a
-	call z,DANCE_FLR_ANIMATION
+	call z,DANCE_ANIMATION
 
 	ld de,P2_SCORE_X00001
 	ld hl,CUR_SCORE_X00001
@@ -1265,7 +1266,7 @@ PLAYER2:
 	inc de
 	djnz .store_score
 
-	call FLBK_RNDM_BLCK_DISABLE
+	call DISABLE_RNDM_BLCK
 	call FLBK_MOVE_UP_DISABLE
 	call SET_ROT_NORMAL
 	call SET_DIR_NORMAL
@@ -1374,10 +1375,13 @@ PLAY:
 
 	ld hl,(CUR_LEVEL_PTR)	; load ptr = &level[2] = speed ?
 	ld a,(hl)
-	ld (l88f6),a		; set variable (accualy poke the value into instrcution)
+	ld (down_delay),a	; set variable (accualy poke the value into instruction)
 
-	; Update variable l8921 base on l88f6
-	call UPDATE_l8921
+	; Down delay : delay before automatic down move
+	; Move delay : laterral move repeat delay
+
+	; Update move delay based on down delay
+	call ADAPT_MOVE_DELAY
 
 	inc hl			; ptr = &level[3]
 	ld a,(hl)		; 
@@ -1386,7 +1390,7 @@ PLAY:
 
 	push af
 	bit 7,a			; a.7 -> Random blocks
-	call nz,FLBK_RNDM_BLCK_ENABLE
+	call nz,ENABLE_RNDM_BLCK
 	pop af
 	push af
 	bit 6,a			; a.6 -> Playground move up
@@ -1515,13 +1519,13 @@ COUNT_BONUS_MAESTRIA:
 	; to determine if it's empty
 	ld hl,#3ddf
 	ld b,#0a
-.check:
+.check1:
 	ld a,(hl)
 	inc hl
 	inc hl
 	cp #00
 	jp nz,.not_empty
-	djnz .check
+	djnz .check1
 
 	; Line is empty
 	; Bonus computation is finished.
@@ -1687,11 +1691,12 @@ GAME_LOOP:
 	call #bb39		; Set down key repeat allowed
 
 	ld hl,#7125
-	ld (l8d60),hl
+	ld (melody_ptr),hl
 	ld a,#01
-	ld (l8d62),a
-	ld hl,FLBK_l8d63_BLOCK
+	ld (melody_dur),a
+	ld hl,FLBK_GAME_MELODY_BLOCK
 	call #bcda
+
 	ld a,#07
 	ld c,#30
 	call CFG_AY_SND
@@ -1701,7 +1706,7 @@ GAME_LOOP:
 	xor a
 	ld (#7582),a
 
-l8867:
+NEXT_PIECE:
 
 	; Move next piece info to current piece info
 	ld hl,PIECE_CUR_SCR_POS
@@ -1733,49 +1738,62 @@ l8867:
 	ld bc,(NXT_PIECE_CUR_DIM)
 	call DRAW_BMP
 	
+	; Add 3 points
 	ld b,#03
 	call SCORE_ADD_UNITS
 
 	ld bc,#61a8	; delay loop
-l88ad:			; |
+.delay:			; |
 	dec bc		; |
 	ld a,b		; |
 	or c		; |
-	jr nz,l88ad	; -
+	jr nz,.delay	; -
 
 	ld hl,#3ebf
 	ld (PIECE_CUR_MSK_POS),hl
+	
 	ld a,#01
-	ld (l8d71),a
-	ld a,#1a
-	ld (#7583),a
-	ld hl,#3eea
-	ld (#7584),hl
-	ld hl,#e22a
-	ld (#7586),hl
-	ld hl,#30d2
-	ld (#7588),hl
-	ld a,#18
-	ld (#758b),a
-	ld a,#03
-	ld (#758a),a
-l88de:
-	ld a,(l8d71)
-	dec a
-	jr z,l88e9
+	ld (move_cnt),a
+	
+	ld a,#1a	; ???
+	ld (#7583),a	; decreased by 1 every move down
 
-	ld hl,l88fa
-	jr l88ec
-l88e9:
-	ld hl,l890d
-l88ec:
-	ld (l890b),hl
-	ld hl,l88fa
-	ld (l891e),hl
-l88f6 equ $ + 1
+	ld hl,#3eea	; piece mask playground offset
+	ld (#7584),hl	; increased by 12 (#0c) every move down
+
+	ld hl,#e22a	; looks like the flame screen offset ???
+	ld (#7586),hl	; increased by 160 (#40) every move down
+
+	ld hl,#30d2	; piece bitmap playground offset
+	ld (#7588),hl	; increased by 160 (#a0) move down
+
+	ld a,#18	; nb bitmap lines in pixels from the playground's top
+	ld (#758b),a	; increased by 8 every move down
+
+	ld a,#03	; nb mask lines from the playgraound's top
+	ld (#758a),a	; increased by on every move down
+
+
+KEY_LOOP:
+	ld a,(move_cnt)
+	dec a
+	jr z,.allow_move
+
+	ld hl,CHECK_LOOP
+	jr .cont
+.allow_move:
+	ld hl,CHECK_MOVE
+.cont:
+	ld (check1),hl
+
+	ld hl,CHECK_LOOP
+	ld (check2),hl
+
+down_delay equ $ + 1
 	ld a,#32
-	ld (l8d72),a
-l88fa:
+	ld (down_cnt),a
+
+CHECK_LOOP:
 	xor a
 	call #bb1b
 	push af
@@ -1785,34 +1803,39 @@ key_rotate equ $ + 1
 	pop af
 key_down equ $ + 1
 	cp #0a
-	jp z,MOVE_DOWN
-l890b equ $ + 1
-	jp l890d
+	jp z,USER_MOVE_DOWN
+check1 equ $ + 1
+	jp CHECK_MOVE
 
+; Check lateral moves
+CHECK_MOVE:	
 key_left equ $ + 1
-l890d:
 	ld a,#08
 	call #bb1e
 	jp nz,MOVE_LEFT
+
 key_right equ $ + 1
-	ld a,#01		; right key
-	call #bb1e		; is right pressed ?
-	jp nz,MOMVE_RIGHT	; yes
-l891e equ $ + 1
-	jp l88fa		; no
+	ld a,#01		
+	call #bb1e		
+	jp nz,MOVE_RIGHT
 
-l8921 equ $ + 1
-l8920:
+check2 equ $ + 1
+	jp CHECK_LOOP		
+
+
+KEY_CONT:
+move_delay equ $ + 1
 	ld a,#0c
-	ld (l8d71),a
-	ld hl,l88fa
-	ld (l890b),hl
-	jp l88fa
+	ld (move_cnt),a
+	ld hl,CHECK_LOOP
+	ld (check1),hl
+	jp CHECK_LOOP
 
-MOVE_DOWN:
+USER_MOVE_DOWN:
+	; Increase score on explicit user's down move
 	ld b,#01
 	call SCORE_ADD_UNITS
-l8933:
+MOVE_DOWN:
 	ld hl,(PIECE_CUR_MSK_POS)
 	ld bc,#000c
 	add hl,bc
@@ -1905,7 +1928,8 @@ l8933:
 	add b
 	ld (#758b),a
 
-	jp l88de
+	jp KEY_LOOP
+
 l89ec:
 	ld d,#08
 	ld hl,#75d3
@@ -2134,11 +2158,11 @@ l8b5c:
 	ld (l8dde),a
 	ld hl,FLBK_l8dd0_BLOCK
 	call #bcda
-	ld a,(l88f6)
+	ld a,(down_delay)
 	dec a
 	jr z,l8b8b
-	ld (l88f6),a
-	call UPDATE_l8921
+	ld (down_delay),a
+	call ADAPT_MOVE_DELAY
 l8b8b:
 	ld b,#0a
 	ld hl,#c349
@@ -2227,7 +2251,7 @@ l8c2c:
 	ld a,(FLBK_MOVE_UP_CNT)
 	dec a
 	call z,PLAYGROUND_MOVE_UP
-	jp l8867
+	jp NEXT_PIECE
 l8c44:
 	ld hl,(#7586)
 	ld bc,#ffc0
@@ -2255,10 +2279,10 @@ l8c75:
 	call GET_KEY_CODE
 	ld b,#00
 	call #bb39	; Disable KEY repeat
-	ld hl,FLBK_l8d63_BLOCK
+	ld hl,FLBK_GAME_MELODY_BLOCK
 	call #bcdd	; Disable Flyback block
 	
-	ld hl,(l8d60)	; Load note address
+	ld hl,(melody_ptr)	; Load note address
 	ld a,(hl)	; load note
 	ld c,a		; c = note
 
@@ -2289,15 +2313,15 @@ GAME_OVER:
 	call GET_KEY_CODE
 	ld b,#00	
 	call #bb39	; Disable KEY repeat
-	ld hl,FLBK_l8d63_BLOCK
+	ld hl,FLBK_GAME_MELODY_BLOCK
 	call #bcdd	; Disable Flyback block
 
-	call FLBK_RNDM_BLCK_DISABLE
+	call DISABLE_RNDM_BLCK
 	call FLBK_MOVE_UP_DISABLE
 	call SET_ROT_NORMAL
 	call SET_DIR_NORMAL
 
-	ld hl,(l8d60)	; Load note address
+	ld hl,(melody_ptr)	; Load note address
 	ld a,(hl)	; load note
 	ld c,a		;
 	ld b,#32	; Loop
@@ -2384,14 +2408,17 @@ l8cf3:
 	ld hl,PLAYGND_SCR
 	ld bc,PLAYGND_DIM
 	call CLEAR_SCREEN_AREA
-	call DANCE_FLR_CURTAIN_UP
+	call DANCEFLR_CURTAIN_UP
 	jp MAIN_START
-l8d60:
+;#8d60
+melody_ptr:
 	DB #00
 	DB #00
-l8d62:
+;#8d62
+melody_dur:
 	DB #00
-FLBK_l8d63_BLOCK:
+;#8d63
+FLBK_GAME_MELODY_BLOCK:
 	DB #00,#00
 	DB #00
 	DB #00
@@ -2399,36 +2426,39 @@ FLBK_l8d63_BLOCK:
 	DB #00
 	DB #00,#00,#00,#00  
 	DB #00,#00,#00
-l8d71:
+;#8d71
+move_cnt:
 	DB #00
-l8d72:
-	DB #00
+;#8d72
+down_cnt:
 	DB #00
 
+	DB #00		; unused
+
 ; ----------------------------
-; Automatic move down ISR
-; need some work...
+; Manage in game melody
+; lateral move repeat delay and automatic move down
 ; ----------------------------
 ; #8d74
-FLBK_l8d63_ISR:
+FLBK_GAME_MELODY_ISR:
 	di
 	push af
 	push hl
 	push bc
-	ld a,(l8d62)
+	ld a,(melody_dur)
 	dec a
-	jr nz,l8da1
-	ld hl,(l8d60)
-l8d81:
+	jr nz,.cont
+	ld hl,(melody_ptr)
+.next:
 	ld a,(hl)
 	inc a
-	jr nz,l8d8d
+	jr nz,.play
 	ld hl,#7125
-	ld (l8d60),hl
-	jr l8d81
-l8d8d:
+	ld (melody_ptr),hl
+	jr .next
+.play:
 	inc hl
-	ld (l8d60),hl
+	ld (melody_ptr),hl
 	dec a
 	ld c,a
 	ld a,#04
@@ -2437,33 +2467,36 @@ l8d8d:
 	ld c,#0a
 	call CFG_AY_SND
 	ld a,#09
-l8da1:
-	ld (l8d62),a
-	ld a,(l8d71)
+.cont:
+	ld (melody_dur),a
+
+	ld a,(move_cnt)
 	dec a
-	jp z,l8dc8
-	ld (l8d71),a
-l8dae:
-	ld a,(l8d72)
+	jp z,.action1
+	ld (move_cnt),a
+
+.cont1:
+	ld a,(down_cnt)
 	dec a
-	jp z,l8dbd
-	ld (l8d72),a
-l8db8:
+	jp z,.action2
+	ld (down_cnt),a
+.cont2:
 	pop bc
 	pop hl
 	pop af
 	ei
 	ret
 
-l8dbd:
-	ld hl,l8933
-	ld (l890b),hl
-	ld (l891e),hl
-	jr l8db8
-l8dc8:
-	ld hl,l890d
-	ld (l890b),hl
-	jr l8dae
+.action2:
+	ld hl,MOVE_DOWN		; Action 2: crazy mode 
+	ld (check1),hl		; force move down 
+	ld (check2),hl		; AND disallows reaming timer -> full speed
+	jr .cont2
+
+.action1:			; Action 1: fair mode
+	ld hl,CHECK_MOVE		; force move down jp 890d force move down	
+	ld (check1),hl		; Allows rearming the timer
+	jr .cont1
 
 FLBK_l8dd0_BLOCK:
 	DB #00,#00
@@ -2501,7 +2534,10 @@ l8dfc:
 	ret
 
 
-
+; --------------------------------------------------------
+; Rotate piece
+; --------------------------------------------------------
+;#
 ROTATE:
 	ld hl,(PIECE_CUR_OFF_POS)
 	ld (PIECE_PRV_OFF_POS),hl
@@ -2517,24 +2553,25 @@ ROTATE:
 	add hl,bc
 	ld a,(hl)
 	cp #00
-	jr nz,l8e4b
+	jr nz,.try_left
 	ld bc,(PIECE_ROT_O2)
 	add hl,bc
 	ld a,(hl)
 	cp #00
-	jr nz,l8e4b
+	jr nz,.try_left
 	ld bc,(PIECE_ROT_O3)
 	add hl,bc
 	ld a,(hl)
 	cp #00
-	jr nz,l8e4b
+	jr nz,.try_left
 	ld bc,(PIECE_ROT_O4)
 	add hl,bc
 	ld a,(hl)
 	cp #00
-	jr nz,l8e4b
-	jp l8f1a
-l8e4b:
+	jr nz,.try_left
+	jp .valid
+.try_left:
+	; Try moving piece one step left
 	ld hl,(PIECE_CUR_MSK_POS)
 	dec hl
 	ld (PIECE_PRV_MSK_POS),hl
@@ -2543,22 +2580,22 @@ l8e4b:
 	add hl,bc
 	ld a,(hl)
 	cp #00
-	jp nz,l8e92
+	jp nz,.try_right
 	ld bc,(PIECE_ROT_O2)
 	add hl,bc
 	ld a,(hl)
 	cp #00
-	jr nz,l8e92
+	jr nz,.try_right
 	ld bc,(PIECE_ROT_O3)
 	add hl,bc
 	ld a,(hl)
 	cp #00
-	jr nz,l8e92
+	jr nz,.try_right
 	ld bc,(PIECE_ROT_O4)
 	add hl,bc
 	ld a,(hl)
 	cp #00
-	jr nz,l8e92
+	jr nz,.try_right
 	ld hl,(PIECE_CUR_OFF_POS)
 	dec hl
 	dec hl
@@ -2567,8 +2604,9 @@ l8e4b:
 	dec hl
 	dec hl
 	ld (PIECE_CUR_SCR_POS),hl
-	jp l8f1a
-l8e92:
+	jp .valid
+.try_right:
+	; Try moving piece one step left
 	ld hl,(PIECE_CUR_MSK_POS)
 	inc hl
 	ld (PIECE_PRV_MSK_POS),hl
@@ -2576,22 +2614,22 @@ l8e92:
 	add hl,bc
 	ld a,(hl)
 	cp #00
-	jp nz,l8ed5
+	jp nz,.cont
 	ld bc,(PIECE_ROT_O2)
 	add hl,bc
 	ld a,(hl)
 	cp #00
-	jr nz,l8ed5
+	jr nz,.cont
 	ld bc,(PIECE_ROT_O3)
 	add hl,bc
 	ld a,(hl)
 	cp #00
-	jr nz,l8ed5
+	jr nz,.cont
 	ld bc,(PIECE_ROT_O4)
 	add hl,bc
 	ld a,(hl)
 	cp #00
-	jr nz,l8ed5
+	jr nz,.cont
 	ld hl,(PIECE_CUR_OFF_POS)
 	inc hl
 	inc hl
@@ -2600,8 +2638,8 @@ l8e92:
 	inc hl
 	inc hl
 	ld (PIECE_CUR_SCR_POS),hl
-	jp l8f1a
-l8ed5:
+	jp .valid
+.cont:
 	ld hl,(PIECE_CUR_MSK_POS)
 	dec hl
 	dec hl
@@ -2626,7 +2664,8 @@ l8ed5:
 	add hl,bc
 	ld a,(hl)
 	cp #00
-	jr nz,l8ed5
+	jr nz,.cont
+
 	ld hl,(PIECE_CUR_OFF_POS)
 	dec hl
 	dec hl
@@ -2639,7 +2678,7 @@ l8ed5:
 	dec hl
 	dec hl
 	ld (PIECE_CUR_SCR_POS),hl
-l8f1a:
+.valid:
 	ld hl,(PIECE_PRV_MSK_POS)
 	ld (PIECE_CUR_MSK_POS),hl
 	ld hl,(PIECE_PRV_OFF_POS)
@@ -2649,12 +2688,12 @@ l8f1a:
 	ld hl,(PIECE_ROT_BMP)
 	ld de,PIECE_CUR_BMP
 	ld b,#1a
-l8f36:
+.loop:
 	ld a,(hl)
 	inc hl
 	ld (de),a
 	inc de
-	djnz l8f36
+	djnz .loop
 	ld de,(PIECE_ROT_OFF_OFST)
 	ld hl,(PIECE_CUR_OFF_POS)
 	add hl,de
@@ -2674,6 +2713,10 @@ l8f36:
 	ld bc,(PIECE_CUR_DIM)
 	jp DRAW_BMP_SYNC
 
+; --------------------------------------------------------
+; Move piece left
+; --------------------------------------------------------
+;#8f76
 MOVE_LEFT:
 	; Check if move is possible
 	ld hl,(PIECE_CUR_MSK_POS)
@@ -2683,22 +2726,22 @@ MOVE_LEFT:
 	add hl,bc			; hits something
 	ld a,(hl)
 	cp #00
-	jp nz,l8920			; Move impossible -> abort
+	jp nz,KEY_CONT			; Move impossible -> abort
 	ld bc,(PIECE_MSK_O2)
 	add hl,bc
 	ld a,(hl)
 	cp #00
-	jp nz,l8920
+	jp nz,KEY_CONT
 	ld bc,(PIECE_MSK_O3)
 	add hl,bc
 	ld a,(hl)
 	cp #00
-	jp nz,l8920
+	jp nz,KEY_CONT
 	ld bc,(PIECE_MSK_O4)
 	add hl,bc
 	ld a,(hl)
 	cp #00
-	jp nz,l8920
+	jp nz,KEY_CONT
 	ld hl,(PIECE_PRV_MSK_POS)
 	ld (PIECE_CUR_MSK_POS),hl
 	ld hl,(PIECE_CUR_OFF_POS)
@@ -2721,9 +2764,13 @@ MOVE_LEFT:
 	inc c
 	inc c
 	call DRAW_BMP_SYNC
-	jp l8920
+	jp KEY_CONT
 
-MOMVE_RIGHT:
+; --------------------------------------------------------
+; Move piece right
+; --------------------------------------------------------
+;#8fe8
+MOVE_RIGHT:
 	ld hl,(PIECE_CUR_MSK_POS)
 	inc hl
 	ld (PIECE_PRV_MSK_POS),hl
@@ -2731,22 +2778,22 @@ MOMVE_RIGHT:
 	add hl,bc
 	ld a,(hl)
 	cp #00
-	jp nz,l8920
+	jp nz,KEY_CONT
 	ld bc,(PIECE_MSK_O2)
 	add hl,bc
 	ld a,(hl)
 	cp #00
-	jp nz,l8920
+	jp nz,KEY_CONT
 	ld bc,(PIECE_MSK_O3)
 	add hl,bc
 	ld a,(hl)
 	cp #00
-	jp nz,l8920
+	jp nz,KEY_CONT
 	ld bc,(PIECE_MSK_O4)
 	add hl,bc
 	ld a,(hl)
 	cp #00
-	jp nz,l8920
+	jp nz,KEY_CONT
 	ld hl,(PIECE_PRV_MSK_POS)
 	ld (PIECE_CUR_MSK_POS),hl
 	ld hl,(PIECE_CUR_OFF_POS)
@@ -2772,51 +2819,58 @@ MOMVE_RIGHT:
 	inc c
 	inc c
 	call DRAW_BMP_SYNC
-	jp l8920
+	jp KEY_CONT
 
+; --------------------------------------------------------
+; Adapt in game move repeat's delay according to fall speed
+; --------------------------------------------------------
 ;#9063
-UPDATE_l8921:
-	ld a,(l88f6)
+ADAPT_MOVE_DELAY:
+	ld a,(down_delay)
 	cp #03
 	jr nc,.nxt1
 	ld a,#04
-	ld (l8921),a
+	ld (move_delay),a
 	ret
 .nxt1:
 	cp #05
 	jr nc,.nxt2
 	ld a,#08
-	ld (l8921),a
+	ld (move_delay),a
 	ret
 .nxt2:
 	cp #07
 	jr nc,.nxt3
 	ld a,#09
-	ld (l8921),a
+	ld (move_delay),a
 	ret
 .nxt3:
 	ld a,#0c
-	ld (l8921),a
+	ld (move_delay),a
 	ret
 
-HSCORE_INFO:
+menu_info:
 	DB #00	; Either <score> or <level>
-HSCORE_DUR:
+menu_dur:
 	DB #00
 FLBK_MENU_ANIM_BLOCK:
 	DB #00,#00,#00,#00,#00
 	DB #00,#00,#00,#00,#00
 
+; -----------------------------------------------
+; Main menu animation Flyback ISR
+; -----------------------------------------------
+;#9096
 FLBK_MENU_ANIM_ISR:
 	push af
 	push bc
 	push de
 	push hl
-	ld a,(HSCORE_DUR)
+	ld a,(menu_dur)
 	dec a
 	jr nz,.hiscore_done
-	ld (HSCORE_DUR),a
-	ld a,(HSCORE_INFO)
+	ld (menu_dur),a
+	ld a,(menu_info)
 	dec a
 	jr nz,.hscore_levels
 	; Display "<score 1>"
@@ -2844,7 +2898,7 @@ FLBK_MENU_ANIM_ISR:
 	ld de,#7247
 	ld b,#05
 	call DRW_TXT
-	ld (HSCORE_INFO),a  ; a!=0
+	ld (menu_info),a  ; a!=0
 	
 	; Display "Kazatchok Dancer"
 	ld hl,#e4ea
@@ -2852,7 +2906,7 @@ FLBK_MENU_ANIM_ISR:
 	call DRAW_ZBMP
 	xor a
 .hiscore_done:
-	ld (HSCORE_DUR),a
+	ld (menu_dur),a
 	pop hl
 	pop de
 	pop bc
@@ -2861,7 +2915,7 @@ FLBK_MENU_ANIM_ISR:
 
 .hscore_levels:
 	ld a,#01
-	ld (HSCORE_INFO),a
+	ld (menu_info),a
 	; Display "<level 1>"
 	ld hl,#c3b3
 	ld de,#7218
@@ -2895,7 +2949,10 @@ FLBK_MENU_ANIM_ISR:
 	xor a
 	jr .hiscore_done
 
-; DRAW MESSAGE GAME FINISHED NO HIGH SCORE ???
+; ------------------------------------------
+; Didn't beat the Amant
+; ------------------------------------------
+; #913d
 NEW_AMANT_MISSED:
 	call DRAW_POPUP_BOX
 	; Draw "SOUPIRANT"
@@ -2959,8 +3016,10 @@ NEW_AMANT_MISSED:
 	call DELAY
 	jp CHECK_HIGH_SCORE
 
-
-
+; ------------------------------------------
+; Game finished. (31 levels)
+; ------------------------------------------
+;#91b2
 GAME_FINISHED:
 	ld a,(key_down)
 	call GET_KEY_CODE
@@ -2971,9 +3030,9 @@ GAME_FINISHED:
 	ld bc,PLAYGND_DIM
 	call CLEAR_SCREEN_AREA
 	
-	call DANCE_FLR_ANIMATION
+	call DANCE_ANIMATION
 	
-	call ENBL_MELODY
+	call START_KAZATCHOK
 	
 	ld a,(P1_GAME_OVER)
 	dec a
@@ -3001,6 +3060,11 @@ GAME_FINISHED:
 .cmp_diff:
 	jr nc,P2_WINS
 
+
+; ------------------------------------------
+; Player 1 beats player 2
+; ------------------------------------------
+;#91ed
 P1_WINS:
 	; Process P2 first
 	ld a,#02
@@ -3015,8 +3079,12 @@ P1_WINS:
 	inc de
 	djnz .cpy_P2_score
 
-	call NEW_AMANT_MISSED		; Game finished but other player wins
+	call NEW_AMANT_MISSED		; Game finished but doesn't beat the Amant
 
+; ------------------------------------------
+; Player 1 finished the game
+; ------------------------------------------
+;#9203
 P1_FINISHED:
 	ld a,#01
 	ld (CUR_PLAYER),a
@@ -3031,6 +3099,10 @@ P1_FINISHED:
 	djnz .cpy_score
 	jp CHECK_NEW_AMANT
 
+; ------------------------------------------
+; Player 2 beats player 1
+; ------------------------------------------
+;#9219
 P2_WINS:
 	; Process P1 first.
 	ld a,#01
@@ -3044,21 +3116,29 @@ P2_WINS:
 	inc de
 	inc hl
 	djnz .cpy_score
-	call NEW_AMANT_MISSED
+	call NEW_AMANT_MISSED 		; Game finished but doesn't beat the Amant
 
+; ------------------------------------------
+; Player 2 finished the game
+; ------------------------------------------
+;#922f
 P2_FINISHED:
 	ld a,#02
 	ld (CUR_PLAYER),a
 	ld hl,CUR_SCORE_X00001
 	ld de,P2_SCORE_X00001
 	ld b,#05
-l923c:
+.copy:
 	ld a,(de)
 	ld (hl),a
 	inc de
 	inc hl
-	djnz l923c
+	djnz .copy
 
+; ------------------------------------------
+; Check if the player beats the Amant's score
+; ------------------------------------------
+;#9242
 CHECK_NEW_AMANT:
 	ld hl,CUR_SCORE_X10000
 	ld de,AMANT_SCORE 	; #720b  -> best score
@@ -3079,7 +3159,10 @@ CHECK_NEW_AMANT:
 	call NEW_AMANT_MISSED
 	jp NEW_AMANT_WIN.finished
 
-	
+; ------------------------------------------
+; Called when a player beats the Amant's score
+; ------------------------------------------
+;#9260
 NEW_AMANT_WIN:
 	call DRAW_POPUP_BOX
 	; Darw "BRAVO"
@@ -3226,7 +3309,7 @@ NEW_AMANT_WIN:
 	ld bc,PLAYGND_DIM
 	call CLEAR_SCREEN_AREA
 	call CLEAR_PLAYGND_OFSCR
-	call DANCE_FLR_CURTAIN_UP
+	call DANCEFLR_CURTAIN_UP
 	jp MAIN_START
 
 .use_custom_name:
@@ -3298,7 +3381,7 @@ NEW_AMANT_WIN:
 ; ---------------------------------------
 ; Check if current player's score is a high score
 ; ---------------------------------------
-;#
+;#93b4
 CHECK_HIGH_SCORE:
 	ld b,#05		; nb of high score table's entry.
 	ld de,SOUPIRANT_1
@@ -3447,6 +3530,10 @@ CHECK_HIGH_SCORE:
 	call DRAW_CUSTOM_NAME
 	jp .insert_score
 
+; -------------------------------------------------
+; Draw the entered name (to be able to choose a start level)
+; -------------------------------------------------
+;#948c
 DRAW_CUSTOM_NAME:
 	push de
 	call DELAY
@@ -3471,7 +3558,13 @@ DRAW_CUSTOM_NAME:
 	pop de
 	jp DELAY
 
-
+; -------------------------------------
+; Display a dot and wait for keyboard input
+; -------------------------------------
+; HL: screen address to display '.'
+; 
+; A : contain the char pressed is any
+;#94ad
 WAIT_KEY:
 	; Display '.'
 	ld a,#2e	
@@ -3480,12 +3573,21 @@ WAIT_KEY:
 	dec hl
 	jp #bb18	; wait key
 
+
+; ----------------------------
+; LEFT - RIGHT key code
+; ----------------------------
+;#94b7
 KEY
 .right:
 	DB #01
 .left:
 	DB #08
 
+; ---------------------------------------
+; Restore direction left-right
+; ---------------------------------------
+;#94b9
 SET_DIR_NORMAL:
 	ld a,(KEY.right)
 	ld (key_right),a
@@ -3493,6 +3595,10 @@ SET_DIR_NORMAL:
 	ld (key_left),a
 	ret
 
+; ---------------------------------------
+; Reverse direction right-left
+; ---------------------------------------
+;#94c6
 SET_DIR_REVERSED:
 	ld a,(KEY.right)
 	ld (key_left),a
@@ -3515,36 +3621,39 @@ SET_ROT_NORMAL:
 	ld a,#00
 	jr SWITCH_ROT_DIRECTION
 
-; -------------------
+; --------------------------------
 ; Set reversed piece's rotation
-; -------------------
+; --------------------------------
 ;#94dd
 SET_ROT_REVERSED:
 	ld a,(is_rot_reversed)
 	dec a
 	ret z
 	ld a,#01
-
+; --------------------------------
+; Swap piece daat to reverse rotation direction
+; --------------------------------
+;#94e4
 SWITCH_ROT_DIRECTION:
 	ld (is_rot_reversed),a
 	ld hl,#7c5b
 	ld de,reversed_rot_buffer
 	ld b,#03
-l94ef:
+.loop1:
 	push bc
 	inc hl
 	inc hl
 	inc hl
 	inc hl
 	ld b,#04
-l94f6:
+.loop2:
 	push bc
 	ld b,#0c
-l94f9:
+.loop3:
 	inc hl
-	djnz l94f9
+	djnz .loop3
 	ld c,#0e
-l94fe:
+.loop4:
 	ld a,(de)
 	ld b,(hl)
 	ld (hl),a
@@ -3553,12 +3662,13 @@ l94fe:
 	inc hl
 	inc de
 	dec c
-	jr nz,l94fe
+	jr nz,.loop4
 	pop bc
-	djnz l94f6
+	djnz .loop2
 	pop bc
-	djnz l94ef
+	djnz .loop1
 	ret
+
 reversed_rot_buffer:
 	db #9e,#00,#3e,#00,#ad,#7c,#00,#00
 	db #01,#00,#0c,#00,#0c,#00,#02,#00
@@ -3607,6 +3717,7 @@ DELAY:
 ; -----------------------------------------------------
 ; Draw text popup in playing area
 ; -----------------------------------------------------
+;#95d0
 DRAW_POPUP_BOX:
 	ld hl,#c3aa
 	ld b,#14
@@ -3649,6 +3760,7 @@ DRAW_POPUP_BOX:
 ; output:
 ; A: key code
 ; ----------------------
+;#9601
 GET_KEY_CODE:
 	push bc
 	push hl
@@ -3683,7 +3795,14 @@ GET_KEY_CODE:
 	ret
 
 
-
+; ----------------------------------
+; Draw bitmap on screen
+; DE: src address
+; HL: dst address
+; B : height
+; C : width
+; ----------------------------------
+;#9621
 DRAW_BMP_SYNC:
 	push bc
 	; Wait flyback signal
@@ -3777,6 +3896,7 @@ DRAW_MASK_BMP_OFFSCREEN1:
 ; B : height
 ; C : width
 ; ----------------------------------
+;#9669
 DRAW_BMP_OFSCR_W22:
 	push bc
 	push hl
@@ -3801,6 +3921,7 @@ DRAW_BMP_OFSCR_W22:
 ; B : height
 ; C : width
 ; ----------------------------------
+;#967b
 DRAW_MASK_BMP:
 	push bc
 	push hl
@@ -3828,6 +3949,7 @@ DRAW_MASK_BMP:
 ; B : height
 ; C : width
 ; ----------------------------------
+;#9691
 CLEAR_MASK_BMP_OFFSCREEN1:
 	push bc
 	push hl
@@ -3850,11 +3972,12 @@ CLEAR_MASK_BMP_OFFSCREEN1:
 
 
 ; ----------------------------
-; Clear AREA
+; Clear screen AREA
 ; HL: Screen address
 ; B : height
 ; C : width
 ; ----------------------------
+;#96a8
 CLEAR_SCREEN_AREA:
 	push bc
 	push hl
@@ -3870,25 +3993,36 @@ CLEAR_SCREEN_AREA:
 	ret
 
 
-;l96b8:
+; -----------------------------------------
+; Add hundreds to score
+; B : the number of hundreds to add
+; -----------------------------------------
+;l96b8
 SCORE_ADD_HDRDS:
 	ld a,(CUR_SCORE_X00100)
 	add b
 	jp HDRDS
-;#96bf:
+; -----------------------------------------
+; Add tens to score
+; B : the number of tens to add
+; -----------------------------------------
+;#96bf
 SCORE_ADD_TENS:
 	ld a,(CUR_SCORE_X00010)
 	add b
 	jp TENS
 
-
-; #96c6:
+; -----------------------------------------
+; Add units to score
+; B : the number of units to add
+; -----------------------------------------
+;#96c6
 SCORE_ADD_UNITS:
 	ld a,(CUR_SCORE_X00001)
 	add b
 	ld (CUR_SCORE_X00001),a
 	cp #0b
-	jr c,SCORE_DISPLAY
+	jr c,DRAW_SCORE
 	or a
 	sbc #0a
 	ld (CUR_SCORE_X00001),a
@@ -3897,7 +4031,7 @@ SCORE_ADD_UNITS:
 TENS:
 	ld (CUR_SCORE_X00010),a
 	sbc #0b
-	jr c,SCORE_DISPLAY
+	jr c,DRAW_SCORE
 	inc a
 	ld (CUR_SCORE_X00010),a
 	or a
@@ -3912,26 +4046,26 @@ HDRDS:
 	ld (CUR_SCORE_X00100),a
 	or a
 	sbc #0b
-	jr c,SCORE_DISPLAY
+	jr c,DRAW_SCORE
 	inc a
 	ld (CUR_SCORE_X00100),a
 	ld a,(CUR_SCORE_X01000)
 	inc a
 	ld (CUR_SCORE_X01000),a
 	cp #0b
-	jr c,SCORE_DISPLAY
+	jr c,DRAW_SCORE
 	ld a,#01
 	ld (CUR_SCORE_X01000),a
 	ld a,(CUR_SCORE_X10000)
 	inc a
 	ld (CUR_SCORE_X10000),a
 	cp #0b
-	jr c,SCORE_DISPLAY
+	jr c,DRAW_SCORE
 	ld a,#01
 	ld (CUR_SCORE_X10000),a
 
 ;#971f:
-SCORE_DISPLAY:
+DRAW_SCORE:
 	ld hl,(CUR_SCORE_SCR)
 	ld a,(CUR_SCORE_X10000)
 	add #2f
@@ -3955,6 +4089,7 @@ SCORE_DISPLAY:
 ; DE: text address
 ; B : text len
 ; -------------------------
+;974a
 DRW_TXT:
 	ld a,(de)
 	inc de
@@ -3968,6 +4103,7 @@ DRW_TXT:
 ; DE: text address
 ; B : text len
 ; -------------------------
+;#9752
 DRW_WTXT:
 	ld a,(de)
 	inc de
@@ -3980,6 +4116,7 @@ DRW_WTXT:
 ; HL: screen address
 ; A : character
 ; -------------------------
+;#975a
 DRW_CHAR:
 	push bc
 	push de
@@ -4165,9 +4302,9 @@ piece_table:
 	DW #7c5b
 
 ANIMATION_END:
-	; Draw empty dance floor
+	; Draw dance floor
 	ld hl,#fc82
-	ld de,DANCE_FLR_OFSCR
+	ld de,DANCEFLR_OFSCR
 	ld bc,#6522
 	call DRAW_BMP
 
@@ -4185,9 +4322,9 @@ ANIMATION_END:
 	or c
 	jr nz,.delay
 
-	; Draw empty dance floor
+	; Draw dance floor
 	ld hl,#fc82
-	ld de,DANCE_FLR_OFSCR
+	ld de,DANCEFLR_OFSCR
 	ld bc,#6522
 	call DRAW_BMP
 	; proceed to curtain moving down.
@@ -4195,9 +4332,9 @@ ANIMATION_END:
 ; ------------------------------------------------
 ; Animate the curtain moving down on the dance floor
 ; ------------------------------------------------
-DANCE_FLR_CURTAIN_DOWN:
+DANCEFLR_CURTAIN_DOWN:
 	ld hl,#fc42		; upper curtain screen origin
-	ld de,DANCE_FLR_OFSCR
+	ld de,DANCEFLR_OFSCR
 	ld b,#65
 
 .loop:
@@ -4206,7 +4343,7 @@ DANCE_FLR_CURTAIN_DOWN:
 	push de
 	push hl
 	; Prepare offscreen bitmap by copying curtain bitmap
-	call PREPARE_OFSCR_BMP
+	call PREPARE_DANCEFLR_OFFSCR
 	; Add dance floor background behind the curtain
 	; Only fill 'empty/black' pixels
 	call ADD_DANCEFLOOR_BKG
@@ -4251,7 +4388,7 @@ DANCE_FLR_CURTAIN_DOWN:
 ; ------------------------------------------------
 ; Animate the curtain moving up on the dance floor
 ; ------------------------------------------------
-DANCE_FLR_CURTAIN_UP:
+DANCEFLR_CURTAIN_UP:
 	ld hl,#e782	; lower curtain screen address.
 	ld de,#3d33	; revealed background line address while curtain is moving up
 	
@@ -4260,7 +4397,7 @@ DANCE_FLR_CURTAIN_UP:
 	push bc
 	push hl
 	push de
-	call PREPARE_OFSCR_BMP
+	call PREPARE_DANCEFLR_OFFSCR
 	call ADD_DANCEFLOOR_BKG
 
 	; Sync - wait flyback
@@ -4304,7 +4441,7 @@ DANCE_FLR_CURTAIN_UP:
 ; Prepare dancefloor offscreen bitmap
 ; ----------------------------
 ; #98f4
-PREPARE_OFSCR_BMP:
+PREPARE_DANCEFLR_OFFSCR:
 	push hl
 	push de
 	push bc
@@ -4383,7 +4520,7 @@ ADD_DANCEFLOOR_BKG:
 ; 
 ; --------------------------------------------
 ;#9943
-DANCE_FLR_ANIMATION:
+DANCE_ANIMATION:
 	; Prepare dance floor offscreen bitmap.
 	; - clear background
 	; - paint background collors
@@ -4431,7 +4568,7 @@ DANCE_FLR_ANIMATION:
 	inc hl
 	djnz .lblue2
 
-	ld hl,DANCE_FLR_OFSCR	
+	ld hl,DANCEFLR_OFSCR	
 	ld de,LFT_COLUMN_BMP
 	ld bc,#6405		; 5x100
 	call DRAW_BMP_OFSCR_W22
@@ -4440,7 +4577,7 @@ DANCE_FLR_ANIMATION:
 	ld bc,#640a		; 10x100
 	call DRAW_BMP_OFSCR_W22
 
-	call DANCE_FLR_CURTAIN_UP
+	call DANCEFLR_CURTAIN_UP
 
 	ld hl,#d605
 	ld de,KOZAK_IN_BMP
@@ -4463,12 +4600,12 @@ DANCE_FLR_ANIMATION:
 	or c
 	jr nz,.delay
 
-	; Enable melody
-	call ENBL_MELODY
+	; Enable kazatchok melody
+	call START_KAZATCHOK
 
 	; Draw empty dance floor
 	ld hl,#fc82
-	ld de,DANCE_FLR_OFSCR
+	ld de,DANCEFLR_OFSCR
 	ld bc,#6522
 	call DRAW_BMP
 
@@ -4486,11 +4623,11 @@ DANCE_FLR_ANIMATION:
 
 .done:
 	call ANIMATION_END
-	jp DSBL_MELODY
+	jp STOP_KAZATCHOK
 
-;
-; Flyback block
-; Which one ???
+; --------------------------------
+; Dance animation's flyback block
+; --------------------------------
 ; #99dd
 FLBK_DANCE_BLOCK:
 	DB #00,#00
@@ -4547,13 +4684,13 @@ FLBK_DANCE_ISR:
 	ret
 
 ; ---------------------------
-; Enable sound melody
+; Enable Kazatchok melody
 ; ---------------------------
-ENBL_MELODY:
-	ld hl,#6fe3
-	ld (NOTE_PTR),hl
+START_KAZATCHOK:
+	ld hl,KAZATCHOK_MELODY
+	ld (kztk_ptr),hl
 	ld a,#01
-	ld (NOTE_DUR),a
+	ld (kztk_dur),a
 	
 	ld a,#04
 	ld c,#00
@@ -4563,7 +4700,7 @@ ENBL_MELODY:
 	ld c,#00
 	call CFG_AY_SND
 
-	ld hl,FLBK_MELODY_BLOCK
+	ld hl,FLBK_KAZATCHOK_BLOCK
 	call #bcda	; add/enable flyback block
 
 	ld a,#07
@@ -4574,9 +4711,9 @@ ENBL_MELODY:
 	jp CFG_AY_SND
 
 ; ---------------------------
-; Disable sound melody
+; Stop Kazatchok melody
 ; ---------------------------
-DSBL_MELODY:
+STOP_KAZATCHOK:
 	ld a,#04
 	ld c,#00
 	call CFG_AY_SND
@@ -4586,17 +4723,17 @@ DSBL_MELODY:
 	ld a,#0a
 	ld c,#00
 	call CFG_AY_SND
-	ld hl,FLBK_MELODY_BLOCK
-	jp #bcdd	; disable/remove SND_FLBK block
+	ld hl,FLBK_KAZATCHOK_BLOCK
+	jp #bcdd	; disable/remove flyback block
 
 
-NOTE_PTR:		; Address  HL=#6fe3  <- beginning of melody notes
+kztk_ptr:		; 
 	DB #00,#00	; Current note address
 
-NOTE_DUR:		; Compteur ?? A=1
-	DB #00		; Music note duration
+kztk_dur:		; 
+	DB #00		; note duration
 
-FLBK_MELODY_BLOCK:		; Music flyback block
+FLBK_KAZATCHOK_BLOCK:		; Music flyback block
 	DB #00,#00	; Chain
 	DB #00		; Count
 	DB #00		; Class
@@ -4605,34 +4742,34 @@ FLBK_MELODY_BLOCK:		; Music flyback block
 	DB #00,#00,#00	; User field
 
 ; ---------------------
-; Sound Flyback routine
+; Kazatchok Flyback routine
 ; ---------------------
 ;#9a84:		
-FLBK_MELODY_ISR:
+FLBK_KAZATCHOK_ISR:
 	di
 	push af
 	push bc
 	push hl
-	ld a,(NOTE_DUR)
+	ld a,(kztk_dur)
 	dec a
-	ld (NOTE_DUR),a
+	ld (kztk_dur),a
 	jr nz,.cont	; if duration!=0 then keep playing same note
 	; else program next note	
 	ld a,#0a
 	ld c,#00
 	call CFG_AY_SND
-	ld hl,(NOTE_PTR)
+	ld hl,(kztk_ptr)
 .next:
 	ld a,(hl)	; new note duration
 	inc a		 
 	jr nz,.play	; if duration != #FF then play note
 	; else start over again
-	ld hl,#6fe3	
-	ld (NOTE_PTR),hl
+	ld hl,KAZATCHOK_MELODY	
+	ld (kztk_ptr),hl
 	jr .next
 .play:
 	dec a
-	ld (NOTE_DUR),a
+	ld (kztk_dur),a
 	inc hl
 	ld c,(hl)
 	inc hl
@@ -4645,7 +4782,7 @@ FLBK_MELODY_ISR:
 	ld a,#0a
 	ld c,#0a
 	call CFG_AY_SND
-	ld (NOTE_PTR),hl
+	ld (kztk_ptr),hl
 .cont:
 	pop hl
 	pop bc
@@ -4695,7 +4832,7 @@ FLBK_RNDM_BLCK_ISR:
 ; Enable random block flyback
 ; ---------------------------
 ;#9ae8
-FLBK_RNDM_BLCK_ENABLE:
+ENABLE_RNDM_BLCK:
 	xor a
 	ld (FLBK_RNDM_BLCK_CNT),a
 	ld hl,FLBK_RNDM_BLCK_BLOCK
@@ -4705,7 +4842,7 @@ FLBK_RNDM_BLCK_ENABLE:
 ; Disable random block flyback
 ; ---------------------------
 ;#9af2
-FLBK_RNDM_BLCK_DISABLE:
+DISABLE_RNDM_BLCK:
 	ld a,#ff
 	ld (FLBK_RNDM_BLCK_CNT),a
 	ld hl,FLBK_RNDM_BLCK_BLOCK
@@ -4720,45 +4857,45 @@ INSERT_RNDM_BLCK:
 	ld a,(random)
 	and #03
 	inc a
-	ld (l9b2f),a
+	ld (.value),a
 	ld ix,#3ff1
 	ld hl,#3e05
 	ld b,#0f
-l9b0f:
+.loop1:
 	ld c,#0a
 	ld d,#00
-l9b13:
+.loop2:
 	ld a,(ix+#00)
 	or a
-	jr z,l9b2c
-l9b19:
+	jr z,.empty
+.cont:
 	dec ix
 	dec hl
 	dec hl
 	dec c
-	jr nz,l9b13
+	jr nz,.loop2
 	dec ix
 	dec ix
 	or a
 	ld de,#ff74
 	add hl,de
-	djnz l9b0f
+	djnz .loop1
 	ret
-l9b2c:
+.empty:
 	ld a,d
 	inc d
-l9b2f equ $ + 1
+.value equ $ + 1
 	cp #03
-	jr nz,l9b19
+	jr nz,.cont
 	ld a,(ix+#0c)
 	dec a
-	jr nz,l9b19
+	jr nz,.cont
 	ld a,(ix-#0c)
 	dec a
-	jr z,l9b19
+	jr z,.cont
 	ld a,(ix-#18)
 	dec a
-	jr z,l9b19
+	jr z,.cont
 	ld (ix+#00),#01
 	ld de,BLINK_BLOCK_BMP
 	ld bc,#0802
