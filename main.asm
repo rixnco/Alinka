@@ -74,14 +74,17 @@ MAIS_SCR 	 equ #c3f0
 EN_TITRE_SCR 	 equ #c46c
 MAESTRIA_SCR 	 equ #c42c
 COMBO_SCR	 equ #c349
+COMBO_DIM	 equ #0814
 DEFI2_SCR	 equ #e36d
 LIGNES_SCR 	 equ #e3eb
 A_SCR		 equ #e473
 COMPLETER_SCR	 equ #e4eb
 
-PLAYGND_SCR	 equ #e16a	; playground screen origin address
-PLAYGND_DIM	 equ #d014	; playground dimensions		20x208
-PLAYGND_OFSCR	 equ #2e53	; playground offscreen bitmap
+PLAYGND_SCR	 equ #e16a	  ; playground screen address
+PLAYGND_BOTTOM_LINE_SCR equ #e7aa ; playground bottom line screen address
+PLAYGND_LINE_DIM equ #0814
+PLAYGND_DIM	 equ #d014	  ; playground dimensions		20x208
+PLAYGND_OFSCR	 equ #2e53	  ; playground offscreen bitmap
 
 ; Dance floor and curtain offscreen buffers 
 ; are overlapping with playground offscreen buffer.
@@ -1468,8 +1471,8 @@ COUNT_BONUS_MAESTRIA:
 	; Bonus computation is finished.
 	; Draw flame ???
 	ld de,FLAME3_BMP
-	ld bc,FLAME3_DIM	;#0814
-	ld hl,#e7aa
+	ld bc,PLAYGND_LINE_DIM
+	ld hl,PLAYGND_BOTTOM_LINE_SCR
 	call DRAW_BMP
 
 	; Delay
@@ -1482,8 +1485,8 @@ COUNT_BONUS_MAESTRIA:
 	djnz .delay11
 
 	; Clear line
-	ld hl,#e7aa
-	ld bc,#0814
+	ld hl,PLAYGND_BOTTOM_LINE_SCR
+	ld bc,PLAYGND_LINE_DIM
 	call CLEAR_SCREEN_AREA
 
 	call DELAY
@@ -1533,9 +1536,9 @@ COUNT_BONUS_MAESTRIA:
 	ret
 
 .not_empty:
-	ld hl,#e7aa
+	ld hl,PLAYGND_BOTTOM_LINE_SCR
 	ld de,FLAME1_BMP
-	ld bc,FLAME1_DIM	
+	ld bc,PLAYGND_LINE_DIM
 	call DRAW_BMP
 
 	ld b,#64
@@ -1547,8 +1550,11 @@ COUNT_BONUS_MAESTRIA:
 	djnz .delay21
 
 	; Move offscreen playground 1 line down
-	ld hl,#3e93
-	ld de,#3df3
+	;ld hl,#3e93	; probably a bug - should be #3e92
+	;ld de,#3df3	; probably a bug - should be #3df2
+	ld hl,PLAYGND_OFSCR+(26*8*20)	; should substract 1 to be at the end of line
+	ld de,PLAYGND_OFSCR+(25*8*20)	; should substract 1 to be at the end of line
+
 	ld b,#c8
 .move_h:
 	ld c,#14
@@ -1581,16 +1587,17 @@ COUNT_BONUS_MAESTRIA:
 	ld c,#09
 	call CFG_AY_SND
 
-	; Draw playground
-	ld hl,#e1ea
-	ld de,#2f93
-	ld bc,#b814
+
+	; Draw playground (starting 2 lines below the top and ending 1 line before the bottom)
+	ld hl,PLAYGND_SCR+(2*64)	;#e1ea	top minus 2 'char' screen lines 
+	ld de,PLAYGND_OFSCR+(2*8*20) 	;#2f93	top minus 2*8 bitmap lines 
+	ld bc,PLAYGND_DIM-(#1800)  	;#b814  height minus 3*8 lines 
 	call DRAW_BMP
 
 	; Draw burning line 
-	ld hl,#e7aa
+	ld hl,PLAYGND_BOTTOM_LINE_SCR; #e7aa
 	ld de,FLAME2_BMP	
-	ld bc,FLAME2_DIM	;#0814
+	ld bc,PLAYGND_LINE_DIM
 	call DRAW_BMP
 
 	; Delay
@@ -1661,6 +1668,7 @@ NEXT_PIECE:
 	; Get the next piece
 	call GET_RNDM_PIECE
 
+	; TODO Clarify
 	ld hl,#2ef9			; reset offscreen1 start address ??
 	ld (piece_cur_bmp_pos),hl
 	ld de,(piece_bmp)
@@ -1707,7 +1715,7 @@ NEXT_PIECE:
 	ld (piece_bmp_bottom),hl	; increased by 160 (#a0) move down
 
 	ld a,NB_BMP_LINES_START		; initial number of lines from the bitmap playgraound's top
-	ld (#758b),a			; increased by 8 every move down
+	ld (nb_bmp_lines),a		; increased by 8 every move down
 
 	ld a,NB_MSK_LINES_START		; initial number of lines from the mask playgraound's top
 	ld (nb_msk_lines),a		; increased by on every move down
@@ -1956,7 +1964,7 @@ check_next_cpltd_line:
 ;#8a61
 	ld de,FLAME1_BMP	; <- flame1 bitmap 20x8 
 	ld hl,(piece_scr_bottom)	; <- must be screen playground line's start address
-	ld bc,FLAME1_DIM	;#0814
+	ld bc,PLAYGND_LINE_DIM
 	call DRAW_BMP	
 
 	; -----------------------------
@@ -2018,7 +2026,7 @@ check_next_cpltd_line:
 ;#8aab
 	ld de,FLAME2_BMP	; flame2 bitmap 20x8
 	ld hl,(piece_scr_bottom)	; <- must be screen playground line's start address
-	ld bc,FLAME2_DIM	;#0814
+	ld bc,PLAYGND_LINE_DIM
 	call DRAW_BMP
 
 	; -----------------------------
@@ -2105,7 +2113,7 @@ check_next_cpltd_line:
 ;#8b0e
 	ld de,FLAME3_BMP
 	ld hl,(piece_scr_bottom)
-	ld bc,FLAME3_DIM	;#0814
+	ld bc,PLAYGND_LINE_DIM
 	call DRAW_BMP
 
 	; ----------------------------
@@ -2598,8 +2606,8 @@ FLBK_CLEAR_COMBO_ISR:
 	dec a
 	ld (clear_combo_cnt),a
 	jr nz,.cont
-	ld hl,#c349
-	ld bc,#0814
+	ld hl,COMBO_SCR
+	ld bc,COMBO_DIM		;#0814
 	call CLEAR_SCREEN_AREA
 	ld hl,FLBK_CLEAR_COMBO_BLOCK
 	call #bcdd
@@ -5068,7 +5076,7 @@ PLAYGROUND_MOVE_UP:
 	djnz .buf_h
 
 	ld hl,PLAYGND_OFSCR
-	ld de,PLAYGND_OFSCR+#A0
+	ld de,PLAYGND_OFSCR+(20*8)	; 1 line below
 	ld b,#c8
 .bmp_h:
 	ld c,#14
