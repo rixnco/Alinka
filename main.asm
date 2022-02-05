@@ -1,9 +1,83 @@
 
+
+
 FILE_BUF 	 equ #1388
 DATA_LEN 	 equ #3b83
 DATA_PTR 	 equ #4268
 
 
+GAME_TITLE_SCR	 equ #c000
+
+L_AMANT_SCR1	 equ #c1ac
+L_AMANT_SCR2	 equ #c3ed
+
+KOZAK_DANCER_SCR equ #e4ea
+ALINKA_HEAD_SCR	 equ #e4ea
+
+HSCORE1_SCR	 equ #c3ab	; Screen address to display the name of soupirant 1
+HSCORE2_SCR	 equ #c3eb	; Screen address to display the name of soupirant 2
+HSCORE3_SCR	 equ #c42b	; Screen address to display the name of soupirant 3
+HSCORE4_SCR	 equ #c46b	; Screen address to display the name of soupirant 4
+HSCORE5_SCR	 equ #c4ab	; Screen address to display the name of soupirant 5
+
+DEFI_CHOICE_SCR	 equ #c645	;
+
+INVALID_SCR	 equ #c68b
+OK_SCR		 equ #c691
+
+INFO_DEFI_SCR	 equ #c183
+INFO_LINES_SCR	 equ #c1c3
+INFO_BONUS_SCR	 equ #c202
+SOUPIRANT_1_SCR	 equ #c2c4
+SCORE1_SCR	 equ #c30a
+SCORE2_SCR	 equ #c392
+SOUPIRANT_2_SCR	 equ #c3cc
+ALINKA_SCR	 equ #c509
+
+MENU1_SCR	 equ #c583	; Screen address to display menu 1
+MENU2_SCR	 equ #c5c3	; Screen address to display menu 2
+MENU3_SCR	 equ #c643	; Screen address to display menu 3
+MENU4_SCR1	 equ #c683	; Screen address to display menu 4
+MENU4_SCR2 	 equ #c6cc	; Screen address to display menu 5
+
+COPYRIGHT1_SCR	 equ #c746
+COPYRIGHT2_SCR	 equ #c786
+
+DROITE_SCR	 equ #c58a
+GAUCHE_SCR	 equ #c5ca
+ACCELERE_SCR	 equ #c608
+ROTATION_SCR	 equ #c648
+
+SOUPIRANT_SCR 	 equ #c3eb
+SOUPIRANT_LEN	 equ 9
+SOUPIRANT_NUM_SCR equ #c433
+SOUPIRANT_NUM_LEN equ 1
+
+PRET_SCR 	 equ #c470
+DOMMAGE_SCR	 equ #c46d
+TU_AS_SCR	 equ #c3ef
+ECHOUE_SCR	 equ #c42e
+DAMNED_SCR	 equ #c3eb
+DEFI_SCR 	 equ #c430
+REMPORTE_SCR	 equ #c46c
+TES_SCR		 equ #c5c6
+INITIALES_SCR	 equ #c5ce
+DOTS_SCR	 equ #c610
+BRAVO_SCR	 equ #c46f
+TU_ES_SCR	 equ #c3ef
+DEVENU_SCR	 equ #c42e
+LE_TITRE_SCR	 equ #c3ec
+D_SCR 		 equ #c42d
+TU_N_AS_SCR 	 equ #c42d
+PAS_SCR 	 equ #c471
+MAIS_SCR 	 equ #c3f0
+EN_TITRE_SCR 	 equ #c46c
+MAESTRIA_SCR 	 equ #c42c
+COMBO_SCR	 equ #c349
+DEFI2_SCR	 equ #e36d
+LIGNES_SCR 	 equ #e3eb
+A_SCR		 equ #e473
+COMPLETER_SCR	 equ #e4eb
 
 PLAYGND_SCR	 equ #e16a	; playground screen origin address
 PLAYGND_DIM	 equ #d014	; playground dimensions		20x208
@@ -19,152 +93,12 @@ CURTAIN_OFSCR 	 equ #3d55	; Curtain 34x8
 PLAYGND_MSK_BUF equ #3ebb	; Playground mask buffer
 				; 22 lignes of 12 cells.
 				; cell: 0 is empty, otherwise occupied
-
-
-KOZAK_IN_BMP	 equ #4a9b	; Kozak coming in 4x25
-KOZAK_OUT_BMP	 equ #4a3f	; Kozak going out 4x22 (or probably 4x23) 
-
-CURTAIN_BMP	 equ #5bbf	; Curtain 34x8
-
-LFT_COLUMN_BMP	 equ #5f77	; Left dance floor's column (5x100)
-RGT_COLUMN_BMP	 equ #616b	; Right danc floor' column with Alinka (10x100)
-
-KOZAK1_BMP	 equ #65e3	; Dancing1 10x32
-KOZAK2_BMP	 equ #6723	; Dancing2 10x32
-KOZAK3_BMP	 equ #6863	; Dancing3 10x32
-KOZAK4_BMP	 equ #69a3	; Dancing4 10x32
-KOZAK5_BMP	 equ #6ae3	; Dancing5 10x32
-KOZAK6_BMP	 equ #6c23	; Dancing6 10x32
-KOZAK7_BMP	 equ #6d63	; Dancing7 10x32
-KOZAK8_BMP	 equ #6ea3	; Dancing8 10x32
-
-
-EMPTY_BLOCK_BMP	 equ #6553	; id = #00
-PURPLE_BLOCK_BMP equ #6563	; id = #01
-RED_BLOCK_BMP	 equ #6573	; id = #02
-ORANGE_BLOCK_BMP equ #6583	; id = #03
-YELLOW_BLOCK_BMP equ #6593	; id = #04
-GREEN_BLOCK_BMP  equ #65a3	; id = #05
-BLUE_BLOCK_BMP   equ #65b3	; id = #06
-LBLUE_BLOCK_BMP  equ #65c3	; id = #07
-BLINK_BLOCK_BMP  equ #65d3	; id = #08
-
-KAZATCHOK_MELODY equ #6fe3	; Kazatchock melody data [duration,note]...[#FF] 
-
-HSCORE_CHANGED	 equ #71e8	; High score changed
-
-AMANT		 equ #7207	; Lover's Score entry
-AMANT_SCORE	 equ #720b	; Lover's score
-SOUPIRANT_1 	 equ #7210	; High Score table entry 1
-SOUPIRANT_2 	 equ #721d	; High Score table entry 2
-SOUPIRANT_3 	 equ #722a	; High Score table entry 3
-SOUPIRANT_4 	 equ #7237	; High Score table entry 4
-SOUPIRANT_5 	 equ #7244	; High Score table entry 5
-
-P1_NAME		 equ #7282	; Player 1 name:"SOUPIRANT 1"
-P2_NAME		 equ #7297	; Player 2 name:"SOUPIRANT 2"
-
-CUR_LEVEL_PTR	 equ #7481	; current player level ptr
-P1_LEVEL_PTR	 equ #7483	; P1 level ptr
-P2_LEVEL_PTR	 equ #7485	; P2 level ptr
-LEVEL_TABLE	 equ #7487	; Level table
-				; 31 Level entries
-				; 1 entry is 7 bytes long
-				;    	0: nb lines ten's
-				;    	1: nb lines unit's
-				;    	2: ???? related to speed
-				;    	3: trick flags, ie reverse rotation, reverse direction, random block, random lines
-				;    	4: initial playground setup ptr LSB
-				;    	5: initial playground setup ptr HSB
-				;    	6: animation at the end: 0 or 1
-
-CUR_SCORE_SCR 	 equ #7561	; Current score screen location
-
-CUR_PLAYER	 equ #7565	; player +1
-
-P1_GAME_OVER	 equ #7566	; True when player 1 is game over
-P2_GAME_OVER	 equ #7567	; True when player 2 is game over
-
-CUR_SCORE_X00001 equ #7568	; score X00001 +1
-CUR_SCORE_X00010 equ #7569	; score X00010 +1
-CUR_SCORE_X00100 equ #756a	; score X00100 +1
-CUR_SCORE_X01000 equ #756b	; score X01000 +1
-CUR_SCORE_X10000 equ #756c	; score X10000 +1
-
-P1_SCORE_X00001  equ #756d	; player 1 score X00001 +1
-P1_SCORE_X00010  equ #756e	; player 1 score X00010 +1
-P1_SCORE_X00100  equ #756f	; player 1 score X00100 +1
-P1_SCORE_X01000  equ #7570	; player 1 score X01000 +1
-P1_SCORE_X10000  equ #7571	; player 1 score X10000 +1
-
-P2_SCORE_X00001  equ #7572	; player 2 score X00001 +1
-P2_SCORE_X00010  equ #7573	; player 2 score X00010 +1
-P2_SCORE_X00100  equ #7574	; player 2 score X00100 +1
-P2_SCORE_X01000  equ #7575	; player 2 score X01000 +1
-P2_SCORE_X10000  equ #7576	; player 2 score X10000 +1
-
-CUR_LEVEL_X10 	 equ #7577	; level X10 +1
-CUR_LEVEL_X01 	 equ #7578	; level X01 +1
-
-CUR_LIGNES_X10	 equ #7579	; current lignes X10 +1
-CUR_LIGNES_X01	 equ #757a	; current lignes X01 +1
-
-
-CUR_BONUS_X100	 equ #757b	; bonus X100 +1
-CUR_BONUS_X010	 equ #757c	; bonus X010 +1
-CUR_BONUS_X001	 equ #757d	; bonus X001 +1
-
-PIECE_CUR_MSK_POS equ #757e	; current piece position in mask playground.
-PIECE_PRV_MSK_POS equ #7580	; current piece next position in mask playground
-
-
-PIECE_CUR_OFF_POS equ #758e	; current piece offscreen position
-PIECE_PRV_SCR_POS equ #7590	; piece pos before rotating
-PIECE_PRV_OFF_POS equ #7592	; previous piece offscreen position
-PIECE_PRV_BMP	  equ #7594	; piece bitmap before rotating
-PIECE_PRV_DIM	  equ #7596	; piece size (w/h) before rotating
-
-				; Next piece definition
-
-; Next piece definition's buffer
-NXT_PIECE_AREA_POS equ #7598	; [0,1]  : piece's area screen addr
-NXT_PIECE_SCR_POS  equ #759a	; [2,3]  : piece screen area
-NXT_PIECE_CUR_BMP  equ #759c	; [4,5]  : memory bmp source addr
-NXT_PIECE_CUR_DIM  equ #759e	; [6,7]  : bmp dimensions: width and height
-NXT_PIECE_MSK_O1   equ #75a0	; [8,9]  : mask offset from piece origin of block 1 of the current piece
-NXT_PIECE_MSK_O2   equ #75a2	; [10,11]: mask offset from piece origin of block 2 of the current piece
-NXT_PIECE_MSK_O3   equ #75a4	; [12,13]: mask offset from piece origin of block 3 of the current piece
-NXT_PIECE_MSK_O4   equ #75a6	; [14,15]: mask offset from piece origin of block 4 of the current piece
-NXT_PIECE_ROT_OFF_OFST equ #75a8; [16,17]: offset to apply to offscreen position when rotating
-NXT_PIECE_ROT_SCR_OFST equ #75aa; [18,19]: offset to apply to screen position when rotating
-NXT_PIECE_ROT_BMP  equ #75ac	; [20,11]: bitmap pointer to the rotated piece
-NXT_PIECE_ROT_O1   equ #75ae	; [22,13]: mask offset of block 1 of the rotated piece
-NXT_PIECE_ROT_O2   equ #75b0	; [24,25]: mask offset of block 2 of the rotated piece
-NXT_PIECE_ROT_O3   equ #75b2	; [26,27]: mask offset of block 3 of the rotated piece
-NXT_PIECE_ROT_O4   equ #75b4	; [28,29]: mask offset of block 4 of the rotated piece
-
-
-
-; Current piece definition's buffer
-PIECE_CUR_SCR_POS  equ #75b6	; piece current screen position
-PIECE_CUR_BMP	   equ #75b8	; piece bitmap
-PIECE_CUR_DIM	   equ #75ba	; piece size (w/h)
-PIECE_MSK_O1 	   equ #75bc	; mask offset from piece origin of block 1 of the current piece
-PIECE_MSK_O2 	   equ #75be	; mask offset from piece origin of block 1 of the current piece
-PIECE_MSK_O3 	   equ #75c0	; mask offset from piece origin of block 1 of the current piece
-PIECE_MSK_O4	   equ #75c2	; mask offset from piece origin of block 1 of the current piece
-PIECE_ROT_OFF_OFST equ #75c4    ; offset to apply to offscreen position when rotating
-PIECE_ROT_SCR_OFST equ #75c6    ; offset to apply to screen position when rotating
-PIECE_ROT_BMP 	   equ #75c8	; bitmap pointer to the rotated piece
-PIECE_ROT_O1	   equ #75ca	; mask offset of block 1 of the rotated piece
-PIECE_ROT_O2	   equ #75cc	; mask offset of block 2 of the rotated piece
-PIECE_ROT_O3	   equ #75ce	; mask offset of block 3 of the rotated piece
-PIECE_ROT_O4	   equ #75d0	; mask offset of block 4 of the rotated piece
-
-
-
+		
+	include 'data.asm'
+		
 
 	org #7E65
+;#7e65
 MAIN:
 	; --------------------
 	; Set border color
@@ -201,6 +135,7 @@ MAIN:
 	; --------------------
 	; Deobfuscate DATA
 	; --------------------
+;#7e86
 	ld hl,DATA_PTR	
 	ld bc,DATA_LEN
 .dobfuscate_loop:
@@ -217,6 +152,7 @@ MAIN:
 	; replace DRAW_BITMAP NXT_LINE function 
 	; by the kernel one (default screen width/height)
 	; --------------------
+;#7e95
 	ld hl,#bc26
 	ld (DRAW_ZBMP.nxt_fct),hl
 	
@@ -226,10 +162,10 @@ MAIN:
 	call DRAW_ZBMP
 
 	; --------------------
-	; move decompressed data to #400b
+	; move decompressed data to DATA_START
 	; --------------------
 	ld hl,#c000		
-	ld de,#400b
+	ld de,DATA_START
 	ld b,#c6
 .move_loop1:
 	push bc
@@ -258,7 +194,7 @@ MAIN:
 	; --------------------
 	; load high socres
 	; --------------------
-;l7EC4
+;#7ec4
 	ld hl,FILE_TBL
 	ld de,FILE_BUF
 	ld b,#0a
@@ -267,8 +203,8 @@ MAIN:
 	call #bc83		; read file
 	call #bc7a		; close file
 
-; l7ED8:
-DISPLAY_LAYOUT:
+;#7ed8:
+LAYOUT_SCREEN:
 	; --------------------
 	; Configure CRTC - change screen width/height 
 	; --------------------
@@ -337,11 +273,12 @@ DISPLAY_LAYOUT:
 	ld sp,(sp_tmp)	; restore stack pointer.
 
 
+;#7f1f
 	; --------------------
 	; Draw game title
 	; --------------------
-	ld hl,#c000
-	ld de,#4aff	
+	ld hl,GAME_TITLE_SCR	;#c000
+	ld de,GAME_TITLE_ZBMP	
 	call DRAW_ZBMP
 
 	; --------------------
@@ -451,7 +388,7 @@ DISPLAY_LAYOUT:
 	call #bc32
 	ld hl,#0303
 	call #bc3e
-	jp CONFIGURATION
+	jp SETUP
 ; Colors
 color_values:	
 	DB #1A,#13,#12,#09,#19,#18,#0F,#06
@@ -472,64 +409,64 @@ box_link_pattern:
 	DB #30,#30,#0C,#30,#30,#0C,#0C,#30
 	DB #0C,#0C
 
-CONFIGURATION:
+SETUP:
 	; ----------------------------------------
 	; Configure flyback callbacks
 	; ----------------------------------------
-	ld hl,FLBK_GAME_MELODY_BLOCK	; frame flyback block - Usage to be determined
+	ld hl,FLBK_GAME_MELODY_BLOCK	; frame flyback block - Manage game melody and speed
 	ld de,FLBK_GAME_MELODY_ISR	; event routine address
-	ld bc,#8100	; B: evt class | C: ROM select address of the routine
-	call #bcd7	; init block
+	ld bc,#8100			; B: evt class | C: ROM select address of the routine
+	call #bcd7			; init block
 	ld hl,FLBK_GAME_MELODY_BLOCK
-	call #bcdd	; remove/disable block;
+	call #bcdd			; remove/disable block;
 
-	ld hl,FLBK_l8dd0_BLOCK	; frame flyback block - Usage to be determined
-	ld de,FLBK_l8dd0_ISR	; event routine address
-	ld bc,#8100	; B: evt class | C: ROM select address of the routine
-	call #bcd7	; init block
-	ld hl,FLBK_l8dd0_BLOCK
-	call #bcdd	; remove/disable block
+	ld hl,FLBK_CLEAR_COMBO_BLOCK	; frame flyback block - Clear combo text on screen
+	ld de,FLBK_CLEAR_COMBO_ISR	; event routine address
+	ld bc,#8100			; B: evt class | C: ROM select address of the routine
+	call #bcd7			; init block
+	ld hl,FLBK_CLEAR_COMBO_BLOCK
+	call #bcdd			; remove/disable block
 
-	ld hl,FLBK_DANCE_BLOCK	; frame flyback block - Kozak Dance
-	ld de,FLBK_DANCE_ISR	; event routine address
-	ld bc,#8100	; B: evt class | C: ROM select address of the routine
-	call #bcd7	; init block
+	ld hl,FLBK_DANCE_BLOCK		; frame flyback block - Kozak Dance
+	ld de,FLBK_DANCE_ISR		; event routine address
+	ld bc,#8100			; B: evt class | C: ROM select address of the routine
+	call #bcd7			; init block
 	ld hl,FLBK_DANCE_BLOCK
-	call #bcdd	; remove/disable block
+	call #bcdd			; remove/disable block
 
 	ld hl,FLBK_RNDM_BLCK_BLOCK	; frame flyback block - Random blocks 
 	ld de,FLBK_RNDM_BLCK_ISR	; event routine address
-	ld bc,#8100	; B: evt class | C: ROM select address of the routine
-	call #bcd7	; init block 
+	ld bc,#8100			; B: evt class | C: ROM select address of the routine
+	call #bcd7			; init block 
 	ld hl,FLBK_RNDM_BLCK_BLOCK
-	call #bcdd	; remove/disable block
+	call #bcdd			; remove/disable block
 
 	ld hl,FLBK_MOVE_UP_BLOCK	; frame flyback block - Move playground UP
-	ld de,FLBK_MOVE_UP_ISR	; event routine address
-	ld bc,#8100	; B: evt class | C: ROM
-	call #bcd7	; init block 
+	ld de,FLBK_MOVE_UP_ISR		; event routine address
+	ld bc,#8100			; B: evt class | C: ROM
+	call #bcd7			; init block 
 	ld hl,FLBK_MOVE_UP_BLOCK
-	call #bcdd	; remove/disable block
+	call #bcdd			; remove/disable block
 
 	ld hl,FLBK_KAZATCHOK_BLOCK	; frame flyback block - Kazatchok Melody
 	ld de,FLBK_KAZATCHOK_ISR	; event routine address
-	ld bc,#8100	; B: evt class | C: ROM
-	call #bcd7	; init block 
+	ld bc,#8100			; B: evt class | C: ROM
+	call #bcd7			; init block 
 	ld hl,FLBK_KAZATCHOK_BLOCK
-	call #bcdd	; remove/disable block
+	call #bcdd			; remove/disable block
 
-	ld hl,FLBK_MENU_ANIM_BLOCK ; frame flyback block - Main menu animation
-	ld de,FLBK_MENU_ANIM_ISR  ; event routine address
-	ld bc,#8100	; B: evt class | C: ROM
-	call #bcd7	; init block 
+	ld hl,FLBK_MENU_ANIM_BLOCK 	; frame flyback block - Main menu animation
+	ld de,FLBK_MENU_ANIM_ISR  	; event routine address
+	ld bc,#8100			; B: evt class | C: ROM
+	call #bcd7			; init block 
 	ld hl,FLBK_MENU_ANIM_BLOCK
-	call #bcdd	; remove/disable block
+	call #bcdd			; remove/disable block
 
 	; ----------------------------------------
-	; Reset rotation direction
+	; Default rotation direction
 	; ----------------------------------------
 	xor a
-	ld (is_rot_reversed),a
+	ld (rot_reversed),a
 
 	; ----------------------------------------
 	; Disable KBD key repeat 
@@ -552,8 +489,8 @@ CONFIGURATION:
 	; ----------------------------------------
 	; Set KBD key mapping (normal and shift)
 	; ----------------------------------------
-	ld hl,#73e3
-	ld a,#4e
+	ld hl,KBD_MAP	;#73e3
+	ld a,KBD_MAP_LEN 	;#4e
 .kbd_map:
 	ld b,(hl)
 	inc hl
@@ -595,7 +532,7 @@ CONFIGURATION:
 	; Draw Player 1's head
 	; ----------------------------------------
 	ld hl,#e303
-	ld de,#5eaf
+	ld de,P1_HEAD_BMP
 	ld bc,#1405
 	call DRAW_BMP
 
@@ -603,15 +540,15 @@ CONFIGURATION:
 	; Draw Player 2's head
 	; ----------------------------------------
 	ld hl,#c31e
-	ld de,#5f13
+	ld de,P2_HEAD_BMP
 	ld bc,#1405
 	call DRAW_BMP
 ;#80de
-MAIN_START:
-	ld a,(HSCORE_CHANGED)
+START:
+	ld a,(hscore_changed)
 	dec a
 	jr nz,MAIN_SCREEN
-	ld (HSCORE_CHANGED),a
+	ld (hscore_changed),a
 
 	; ----------------------------------------
 	; Save High Score file	
@@ -620,9 +557,9 @@ MAIN_START:
 	ld hl,FILE_TBL
 	ld de,#1388
 	call #bc8c
-	ld hl,AMANT
+	ld hl,HSCORE_TABLE
 	ld de,#004a
-	ld bc,AMANT
+	ld bc,HSCORE_TABLE
 	ld a,#05
 	call #bc98
 	call #bc8f
@@ -636,50 +573,50 @@ MAIN_SCREEN:
 	call START_KAZATCHOK
 
 	; Display "DEFI  01"
-	ld de,#7269
-	ld hl,#c183
-	ld b,#08
+	ld de,INFO_DEFI_STR	;#7269
+	ld hl,INFO_DEFI_SCR	;#c183
+	ld b,INFO_DEFI_LEN 	;#08
 	call DRW_TXT
 
 	; Display "LIGNE 00"
-	ld hl,#c1c3
-	ld b,#08
+	ld hl,INFO_LINES_SCR;	#c1c3
+	ld b,INFO_LINES_LEN;	#08
 	call DRW_TXT
 
 	; Display "BONUS 000"
-	ld hl,#c202
-	ld b,#09
+	ld hl,INFO_BONUS_SCR	;#c202
+	ld b,INFO_BONUS_LEN 	;#09
 	call DRW_TXT
 
 	; Display "SOUPIRANT 1"
-	ld hl,#c2c4
-	ld b,#0b
+	ld hl,SOUPIRANT_1_SCR	;#c2c4
+	ld b,SOUPIRANT1_LEN	;#0b
 	call DRW_TXT
 
 	; Display "00000"
-	ld hl,#c30a
-	ld b,#05
+	ld hl,SCORE1_SCR	;#c30a
+	ld b,SCORE1_LEN	;#05
 	call DRW_TXT
 
 	; Display "00000"
-	ld hl,#c392
-	ld b,#05
+	ld hl,SCORE2_SCR	;#c392
+	ld b,SCORE2_LEN	;#05
 	call DRW_TXT
 
 	; Display "SOUPIRANT 2"
-	ld hl,#c3cc
-	ld b,#0b
+	ld hl,SOUPIRANT_2_SCR	;#c3cc
+	ld b,SOUPIRANT2_LEN	;#0b
 	call DRW_TXT
 
 	; Display "< ALINKA >"
-	ld hl,#c509
-	ld b,#0a
+	ld hl,ALINKA_SCR	;#c509
+	ld b,ALINKA_LEN		;#0a
 	call DRW_TXT
 
 	; Display "L'AMANT:"
-	ld hl,#c1ac
-	ld de,#71e9
-	ld b,#08
+	ld hl,L_AMANT_SCR1
+	ld de,L_AMANT_STR
+	ld b,L_AMANT_LEN
 	call DRW_TXT
 
 	; Display "<best player initiales and score>"
@@ -705,32 +642,32 @@ MAIN_SCREEN:
 	call DRW_TXT
 
 	; Display "<initiales 1>"
-	ld hl,#c3ab
-	ld de,SOUPIRANT_1
+	ld hl,HSCORE1_SCR	;#c3ab
+	ld de,HSCORE1	;#7210
 	ld b,#03
 	call DRW_TXT
 
 	; Display "<initiales 2>" 
-	ld hl,#c3eb
-	ld de,SOUPIRANT_2
+	ld hl,HSCORE2_SCR	;#c3eb
+	ld de,HSCORE2
 	ld b,#03
 	call DRW_TXT
 
 	; Display "<initiales 3>" 
-	ld hl,#c42b
-	ld de,SOUPIRANT_3
+	ld hl,HSCORE3_SCR	;#c42b
+	ld de,HSCORE3
 	ld b,#03
 	call DRW_TXT
 
 	; Display "<initiales 4>" 
-	ld hl,#c46b
-	ld de,SOUPIRANT_4
+	ld hl,HSCORE4_SCR	;#c46b
+	ld de,HSCORE4
 	ld b,#03
 	call DRW_TXT
 
 	; Display "<initiales 5>" 
-	ld hl,#c4ab
-	ld de,SOUPIRANT_5
+	ld hl,HSCORE5_SCR	;#c4ab
+	ld de,HSCORE5
 	ld b,#03
 	call DRW_TXT
 
@@ -741,41 +678,41 @@ MAIN_SCREEN:
 	call #bcda
 
 ; Display main menu
-MAIN_MENU:	
+MENU:	
 	; Display "1-  1 SOUPIRANT"
-	ld de,#72ac
-	ld hl,#c583
-	ld b,#10
+	ld de,MENU1_STR	;#72ac
+	ld hl,MENU1_SCR	;#c583
+	ld b, MENU1_LEN	;#10
 	call DRW_TXT
 	; Display "2- 2 SOUPIRANTS"
-	ld hl,#c5c3
-	ld b,#10
+	ld hl,MENU2_SCR	;#c5c3
+	ld b, MENU2_LEN	;#10
 	call DRW_TXT
 	; Display "3- CHOIX DU DEFI"
-	ld hl,#c643
-	ld b,#10
+	ld hl,MENU3_SCR	;#c643
+	ld b, MENU3_LEN	;#10
 	call DRW_TXT
 	; Display "4- REDEFINIR LES"
-	ld hl,#c683
-	ld b,#10
+	ld hl,MENU4_SCR1	;#c683
+	ld b, MENU4_LEN1	;#10
 	call DRW_TXT
 	; Display "TOUCHES"
-	ld hl,#c6cc
-	ld b,#07
+	ld hl,MENU4_SCR2 	;#c6cc
+	ld b, MENU4_LEN2	;#07
 	call DRW_TXT
 	; Display "PROGRAMME  DE"
-	ld hl,#c746
-	ld b,#0d
+	ld hl,COPYRIGHT1_SCR	;#c746
+	ld b,COPYRIGHT1_LEN	;#0d
 	call DRW_TXT
 	; Display "ERIC BOUCHER"
-	ld hl,#c786
-	ld b,#0d
+	ld hl,COPYRIGHT2_SCR	;#c786
+	ld b,COPYRIGHT2_LEN 	;#0d
 	call DRW_TXT
 
-MAIN_CHOICE:	
+MENU_LOOP:	
 	; Read keyboard
 	call #bb09
-	jr nc,MAIN_CHOICE
+	jr nc,MENU_LOOP
 	cp #31
 	jp z,MENU_1
 	cp #32
@@ -784,7 +721,7 @@ MAIN_CHOICE:
 	jr z,MENU_3
 	cp #34
 	jp z,MENU_4
-	jr MAIN_CHOICE
+	jr MENU_LOOP
 
 ; -------------------
 ; Menu 3 - Choix du defi
@@ -794,18 +731,18 @@ MENU_3:
 	ld bc,#3822
 	call CLEAR_SCREEN_AREA
 	; Display "TES"
-	ld hl,#c5c6
-	ld de,#7358
-	ld b,#03
+	ld hl,TES_SCR	;#c5c6
+	ld de,TES_STR	;#7358
+	ld b,TES_LEN	;#03
 	call DRW_TXT
 	; Display "INITIALES"
 	inc hl
 	inc hl
-	ld b,#09
+	ld b,INITIALES_LEN	;#09
 	call DRW_TXT
 	; Display "..."
-	ld hl,#c610
-	ld b,#03
+	ld hl,DOTS_SCR		;#c610
+	ld b,DOTS_LEN		;#03
 	call DRW_TXT
 .letter1:
 	ld de,custom_name
@@ -833,9 +770,9 @@ MENU_3:
 	call DRW_CHAR
 
 	; Display "DEFI NUMERO .."
-	ld hl,#c645
-	ld de,#7251
-	ld b,#0e
+	ld hl,DEFI_CHOICE_SCR	;#c645
+	ld de,DEFI_CHOICE_STR	;#7251
+	ld b,DEFI_CHOICE_LEN	;#0e
 	call DRW_TXT
 .defi1:
 	ld de,start_levelX10	; Current defi ten's digit
@@ -871,7 +808,7 @@ MENU_3:
 	ld (de),a	; Store 
 	
 	; Lookup name in high score table
-	ld hl,SOUPIRANT_1
+	ld hl,HSCORE1
 	ld b,#05
 .check_custom_name:
 	push bc
@@ -908,9 +845,9 @@ MENU_3:
 	pop hl
 	pop bc
 	; Display "OK"
-	ld hl,#c691
-	ld de,#725f
-	ld b,#02
+	ld hl,OK_SCR	;#c691
+	ld de,OK_STR	;#725f
+	ld b,OK_LEN	;#02
 	call DRW_TXT
 
 	call DELAY
@@ -957,7 +894,7 @@ MENU_3:
 	ld a,(start_levelX01)
 	add #2f
 	call DRW_CHAR
-	jp MAIN_MENU
+	jp MENU
 
 .level_reset:	; revert to level 01
 	ld a,#01
@@ -976,7 +913,7 @@ MENU_3:
 	ld a,(start_levelX01)
 	add #2f
 	call DRW_CHAR
-	jp MAIN_MENU
+	jp MENU
 
 .invalid:
 	pop hl
@@ -985,9 +922,9 @@ MENU_3:
 	pop bc
 	dec b
 	jp nz,.check_custom_name
-	ld hl,#c68b
-	ld de,#7261
-	ld b,#08
+	ld hl,INVALID_SCR	;#c68b
+	ld de,INVALID_STR	;#7261
+	ld b,INVALID_LEN	;#08
 	call DRW_TXT
 	call DELAY
 	jr .level_reset
@@ -1005,9 +942,9 @@ MENU_4:
 	call CLEAR_SCREEN_AREA
 	
 	; Display "DROITE:"
-	ld hl,#c58a
-	ld de,#730d
-	ld b,#07
+	ld hl,DROITE_SCR	;#c58a
+	ld de,DROITE_STR	;#730d
+	ld b,DROITE_LEN		;#07
 	call DRW_TXT
 	; Read CHAR
 	call #bb18
@@ -1023,8 +960,8 @@ MENU_4:
 	ld (KEY.right),a
 
 	; Display "GAUCHE:"
-	ld hl,#c5ca
-	ld b,#07
+	ld hl,GAUCHE_SCR	;#c5ca
+	ld b,GAUCHE_LEN		;#07
 	call DRW_TXT
 	; Read CHAR
 	call #bb18
@@ -1039,8 +976,8 @@ MENU_4:
 	ld (KEY.left),a
 
 	; Display "ACCELERE:"
-	ld hl,#c608
-	ld b,#09
+	ld hl,ACCELERE_SCR	;#c608
+	ld b,ACCELERE_LEN	;#09
 	call DRW_TXT
 	; Read CHAR
 	call #bb18
@@ -1050,8 +987,8 @@ MENU_4:
 	call DRW_CHAR
 
 	; Display "ROTATION:"
-	ld hl,#c648
-	ld b,#09
+	ld hl,ROTATION_SCR	;#c648
+	ld b,ROTATION_LEN	;#09
 	call DRW_TXT
 	; Read CHAR
 	call #bb18
@@ -1064,13 +1001,13 @@ MENU_4:
 	ld hl,#c582
 	ld bc,#3822
 	call CLEAR_SCREEN_AREA
-	jp MAIN_MENU
+	jp MENU
 
 MENU_1:
 	xor a
-	ld (P1_GAME_OVER),a
+	ld (p1_game_over),a
 	inc a
-	ld (P2_GAME_OVER),a
+	ld (p2_game_over),a
 	ld a,(start_levelX10)
 	cp #01
 	jr nz,.set_flag
@@ -1093,8 +1030,8 @@ MENU_2:
 	ld hl,#7487
 	ld (start_level_ptr),hl
 	xor a
-	ld (P1_GAME_OVER),a
-	ld (P2_GAME_OVER),a
+	ld (p1_game_over),a
+	ld (p2_game_over),a
 
 ; -----------------------------------------
 ; Start game
@@ -1129,67 +1066,67 @@ START_GAME:
 	add #2f
 	ld (#7270),a
 	ld a,#01
-	ld (P1_SCORE_X00001),a
-	ld (P2_SCORE_X00001),a
-	ld (P1_SCORE_X00010),a
-	ld (P2_SCORE_X00010),a
-	ld (P1_SCORE_X00100),a
-	ld (P2_SCORE_X00100),a
-	ld (P1_SCORE_X01000),a
-	ld (P2_SCORE_X01000),a
-	ld (P1_SCORE_X10000),a
-	ld (P2_SCORE_X10000),a
+	ld (p1_score_X00001),a
+	ld (p2_score_X00001),a
+	ld (p1_score_X00010),a
+	ld (p2_score_X00010),a
+	ld (p1_score_X00100),a
+	ld (p2_score_X00100),a
+	ld (p1_score_X01000),a
+	ld (p2_score_X01000),a
+	ld (p1_score_X10000),a
+	ld (p2_score_X10000),a
 start_level_ptr equ $ + 1
 	ld hl,LEVEL_TABLE
-	ld (P1_LEVEL_PTR),hl
-	ld (P2_LEVEL_PTR),hl
+	ld (p1_level_ptr),hl
+	ld (p2_level_ptr),hl
 start_levelX10 equ $ + 1
 	ld a,#01
-	ld (CUR_LEVEL_X10),a
+	ld (cur_level_X10),a
 start_levelX01 equ $ + 1
 	ld a,#02
-	ld (CUR_LEVEL_X01),a
+	ld (cur_level_X01),a
 	jr START_LEVEL
 
 NEXT_LEVEL:
-	ld a,(CUR_LEVEL_X01)
+	ld a,(cur_level_X01)
 	inc a
-	ld (CUR_LEVEL_X01),a
+	ld (cur_level_X01),a
 	cp #0b
 	jr nz,START_LEVEL
 	ld a,#01
-	ld (CUR_LEVEL_X01),a
-	ld a,(CUR_LEVEL_X10)
+	ld (cur_level_X01),a
+	ld a,(cur_level_X10)
 	inc a
-	ld (CUR_LEVEL_X10),a
+	ld (cur_level_X10),a
 
 START_LEVEL:
-	ld a,(CUR_LEVEL_X10)
+	ld a,(cur_level_X10)
 	cp #04
 	jr nz,.player1
-	ld a,(CUR_LEVEL_X01)
+	ld a,(cur_level_X01)
 	cp #03
 	; Last level ?? 31
 	jp z,GAME_FINISHED
 
 .player1:
-	ld a,(P1_GAME_OVER)
+	ld a,(p1_game_over)
 	dec a
 	jr z,.player2
 	jp PLAYER1
 .player2:
-	ld a,(P2_GAME_OVER)
+	ld a,(p2_game_over)
 	dec a
 	jr z,NEXT_LEVEL
 	jp PLAYER2
 
 PLAYER1:
 	ld a,#01
-	ld (CUR_PLAYER),a
+	ld (cur_player),a
 	ld hl,#c30a
-	ld (CUR_SCORE_SCR),hl
-	ld hl,P1_SCORE_X00001
-	ld de,CUR_SCORE_X00001
+	ld (cur_score_scr),hl
+	ld hl,p1_score_X00001
+	ld de,cur_score_X00001
 	ld b,#05
 .init_score:
 	ld a,(hl)
@@ -1198,22 +1135,22 @@ PLAYER1:
 	inc de
 	djnz .init_score
 
-	ld hl,(P1_LEVEL_PTR)
-	ld (CUR_LEVEL_PTR),hl
-	ld de,P1_NAME
+	ld hl,(p1_level_ptr)
+	ld (cur_level_ptr),hl
+	ld de,SOUPIRANT1_STR
 	
 	call PLAY
 	
-	ld hl,(CUR_LEVEL_PTR)
+	ld hl,(cur_level_ptr)
 	ld a,(hl)
 	inc hl
-	ld (P1_LEVEL_PTR),hl
+	ld (p1_level_ptr),hl
 	dec a
 
 	call z,DANCE_ANIMATION
 
-	ld de,P1_SCORE_X00001
-	ld hl,CUR_SCORE_X00001
+	ld de,p1_score_X00001
+	ld hl,cur_score_X00001
 	ld b,#05
 .store_score:
 	ld a,(hl)
@@ -1230,11 +1167,11 @@ PLAYER1:
 
 PLAYER2:
 	ld a,#02
-	ld (CUR_PLAYER),a
+	ld (cur_player),a
 	ld hl,#c392
-	ld (CUR_SCORE_SCR),hl
-	ld hl,CUR_SCORE_X00001
-	ld de,P2_SCORE_X00001
+	ld (cur_score_scr),hl
+	ld hl,cur_score_X00001
+	ld de,p2_score_X00001
 	ld b,#05
 .init_score:
 	ld a,(de)
@@ -1243,21 +1180,21 @@ PLAYER2:
 	inc hl
 	djnz .init_score
 
-	ld hl,(P2_LEVEL_PTR)
-	ld (CUR_LEVEL_PTR),hl
+	ld hl,(p2_level_ptr)
+	ld (cur_level_ptr),hl
 
-	ld de,P2_NAME
+	ld de,SOUPIRANT2_STR
 	call PLAY
 
-	ld hl,(CUR_LEVEL_PTR)
+	ld hl,(cur_level_ptr)
 	ld a,(hl)
 	inc hl
-	ld (P2_LEVEL_PTR),hl
+	ld (p2_level_ptr),hl
 	dec a
 	call z,DANCE_ANIMATION
 
-	ld de,P2_SCORE_X00001
-	ld hl,CUR_SCORE_X00001
+	ld de,p2_score_X00001
+	ld hl,cur_score_X00001
 	ld b,#05
 .store_score:
 	ld a,(hl)
@@ -1281,19 +1218,19 @@ PLAY:
 	call DRAW_POPUP_BOX
 	pop de
 	; Draw "SOUPIRANT"
-	ld hl,#c3eb
-	ld b,#09
+	ld hl,SOUPIRANT_SCR	;#c3eb
+	ld b,SOUPIRANT_LEN	;#09
 	call DRW_TXT
 	; Skip space
 	inc de
 	; Draw "1/2" depending on value of reg DE
-	ld hl,#c433
-	ld b,#01
+	ld hl,SOUPIRANT_NUM_SCR	;#c433
+	ld b,SOUPIRANT_NUM_LEN  ;#01
 	call DRW_TXT
 	; Draw "PRET"
-	ld hl,#c470
-	ld de,#732d
-	ld b,#04
+	ld hl,PRET_SCR 		;#c470
+	ld de,PRET_STR		;#732d
+	ld b,PRET_LEN		;#04
 	call DRW_TXT
 
 	call DELAY
@@ -1302,8 +1239,8 @@ PLAY:
 	ld bc,PLAYGND_DIM
 	call CLEAR_SCREEN_AREA
 
-	ld hl,(CUR_LEVEL_PTR)		; ptr = &level[0]
-	ld de,CUR_LIGNES_X10
+	ld hl,(cur_level_ptr)		; ptr = &level[0]
+	ld de,cur_lignes_X10
 	ld b,#02
 .copy_lignes:
 	ld a,(hl)
@@ -1312,68 +1249,68 @@ PLAY:
 	inc de
 	djnz .copy_lignes
 
-	ld (CUR_LEVEL_PTR),hl		; store ptr = &level[2]
+	ld (cur_level_ptr),hl		; store ptr = &level[2]
 	; Draw "DEFI"
-	ld de,#73cf
-	ld hl,#e36d
-	ld b,#04
+	ld de,DEFI2_STR		;#73cf
+	ld hl,DEFI2_SCR		;#e36d
+	ld b,DEFI2_LEN		;#04
 	call DRW_WTXT
 
 	; Draw Current LEVEL
 	inc hl
 	inc hl
-	ld a,(CUR_LEVEL_X10)
+	ld a,(cur_level_X10)
 	add #2f
 	call DRW_WCHAR
-	ld a,(CUR_LEVEL_X01)
+	ld a,(cur_level_X01)
 	add #2f
 	call DRW_WCHAR
 
 	; Draw NB LIGNES
-	ld hl,#e3eb
-	ld a,(CUR_LIGNES_X10)
+	ld hl,LIGNES_SCR 	;#e3eb
+	ld a,(cur_lignes_X10)
 	add #2f
 	call DRW_WCHAR
-	ld a,(CUR_LIGNES_X01)
+	ld a,(cur_lignes_X01)
 	add #2f
 	call DRW_WCHAR
 
 	; Draw "LIGNES"
 	inc hl
 	inc hl
-	ld b,#06
+	ld b,LIGNES_LEN		;#06
 	call DRW_WTXT
 
 	; Draw "A"
-	ld hl,#e473
-	ld b,#01
+	ld hl,A_SCR		;#e473
+	ld b,A_LEN 		;#01
 	call DRW_WTXT
 
 	; Draw "COMPLETER"
-	ld hl,#e4eb
-	ld b,#09
+	ld hl,COMPLETER_SCR	;#e4eb
+	ld b,COMPLETER_LEN	;#09
 	call DRW_WTXT
 
 	; Display level info
 	ld hl,#c18f
-	ld a,(CUR_LEVEL_X10)
+	ld a,(cur_level_X10)
 	add #2f
 	call DRW_CHAR
-	ld a,(CUR_LEVEL_X01)
+	ld a,(cur_level_X01)
 	add #2f
 	call DRW_CHAR
 
 	ld hl,#c1cf
-	ld a,(CUR_LIGNES_X10)
+	ld a,(cur_lignes_X10)
 	add #2f
 	call DRW_CHAR
-	ld a,(CUR_LIGNES_X01)
+	ld a,(cur_lignes_X01)
 	add #2f
 	call DRW_CHAR
 
 	call DELAY
 
-	ld hl,(CUR_LEVEL_PTR)	; load ptr = &level[2] = speed ?
+	ld hl,(cur_level_ptr)	; load ptr = &level[2] = speed ?
 	ld a,(hl)
 	ld (down_delay),a	; set variable (accualy poke the value into instruction)
 
@@ -1386,7 +1323,7 @@ PLAY:
 	inc hl			; ptr = &level[3]
 	ld a,(hl)		; 
 	inc hl			; ptr = &level[4]
-	ld (CUR_LEVEL_PTR),hl	; <- store ptr = &level[4]
+	ld (cur_level_ptr),hl	; <- store ptr = &level[4]
 
 	push af
 	bit 7,a			; a.7 -> Random blocks
@@ -1403,7 +1340,7 @@ PLAY:
 	bit 4,a			; a.4 -> direction reversed 
 	call nz,SET_DIR_REVERSED
 
-	ld hl,(CUR_LEVEL_PTR)	; ptr = &level[4]
+	ld hl,(cur_level_ptr)	; ptr = &level[4]
 	push hl
 	ld e,(hl)		; e = level[4]
 	inc hl			
@@ -1416,7 +1353,7 @@ PLAY:
 	inc hl			; 
 	ld d,(hl)		; d = level[5]
 	inc hl			; ptr = &level[6]
-	ld (CUR_LEVEL_PTR),hl 	; store current ptr = &level[6]
+	ld (cur_level_ptr),hl 	; store current ptr = &level[6]
 	call SETUP_PLAYGND_OFSCR
 
 	; Draw playground
@@ -1429,14 +1366,14 @@ PLAY:
 	call GET_RNDM_PIECE
 	
 	; Draw it
-	ld hl,(NXT_PIECE_AREA_POS)
-	ld de,(NXT_PIECE_CUR_BMP)
-	ld bc,(NXT_PIECE_CUR_DIM)
+	ld hl,(nxt_piece_prz_pos)
+	ld de,(nxt_piece_cur_bmp)
+	ld bc,(nxt_piece_cur_dim)
 	call DRAW_BMP
 	
 	call DELAY
 
-	call GAME_LOOP
+	call PLAY_LEVEL
 
 	; Level terminated
 	;
@@ -1453,17 +1390,17 @@ PLAY:
 	
 	call DRAW_POPUP_BOX
 	; Draw "DAMNED !!"
-	ld hl,#c3eb
-	ld de,#7343
-	ld b,#09
+	ld hl,DAMNED_SCR	;#c3eb
+	ld de,DAMNED_STR	;#7343
+	ld b,DAMNED_LEN		;#09
 	call DRW_TXT
 	; Draw "DEFI"
-	ld hl,#c430
-	ld b,#04
+	ld hl,DEFI_SCR 		;#c430
+	ld b,DEFI_LEN		;#04
 	call DRW_TXT
 	; Draw "REMPORTE"
-	ld hl,#c46c
-	ld b,#08
+	ld hl,REMPORTE_SCR	;#c46c
+	ld b,REMPORTE_LEN	;#08
 	call DRW_TXT
 
 	call DELAY
@@ -1475,9 +1412,9 @@ PLAY:
 	ld b,#05
 	call DRW_TXT
 	; Draw "MAESTRIA"
-	ld hl,#c42c
-	ld de,#7397
-	ld b,#08
+	ld hl,MAESTRIA_SCR 	;#c42c
+	ld de,MAESTRIA_STR	;#7397
+	ld b,MAESTRIA_LEN 	;#08
 	call DRW_TXT
 
 	call DELAY
@@ -1493,10 +1430,10 @@ COUNT_BONUS_MAESTRIA:
 
 	; Setup initial bonus value: 400
 	ld a,#05
-	ld (CUR_BONUS_X100),a
+	ld (cur_bonus_X100),a
 	ld a,#01
-	ld (CUR_BONUS_X010),a
-	ld (CUR_BONUS_X001),a
+	ld (cur_bonus_X010),a
+	ld (cur_bonus_X001),a
 	ld hl,#c1aa
 	ld bc,#1014
 	call CLEAR_SCREEN_AREA
@@ -1505,13 +1442,13 @@ COUNT_BONUS_MAESTRIA:
 .next:
 	; Display current bonus value
 	ld hl,#c20e
-	ld a,(CUR_BONUS_X100)
+	ld a,(cur_bonus_X100)
 	add #2f
 	call DRW_CHAR
-	ld a,(CUR_BONUS_X010)
+	ld a,(cur_bonus_X010)
 	add #2f
 	call DRW_CHAR
-	ld a,(CUR_BONUS_X001)
+	ld a,(cur_bonus_X001)
 	add #2f
 	call DRW_CHAR
 	
@@ -1530,8 +1467,8 @@ COUNT_BONUS_MAESTRIA:
 	; Line is empty
 	; Bonus computation is finished.
 	; Draw flame ???
-	ld de,#5e0f
-	ld bc,#0814
+	ld de,FLAME3_BMP
+	ld bc,FLAME3_DIM	;#0814
 	ld hl,#e7aa
 	call DRAW_BMP
 
@@ -1552,39 +1489,39 @@ COUNT_BONUS_MAESTRIA:
 	call DELAY
 
 .decrease:
-	ld a,(CUR_BONUS_X001)
+	ld a,(cur_bonus_X001)
 	dec a
-	ld (CUR_BONUS_X001),a
+	ld (cur_bonus_X001),a
 
 	jr nz,.display
 	ld a,#0a
-	ld (CUR_BONUS_X001),a
-	ld a,(CUR_BONUS_X010)
+	ld (cur_bonus_X001),a
+	ld a,(cur_bonus_X010)
 	dec a
-	ld (CUR_BONUS_X010),a
+	ld (cur_bonus_X010),a
 	jr nz,.display
 	ld a,#0a
-	ld (CUR_BONUS_X010),a
-	ld a,(CUR_BONUS_X100)
+	ld (cur_bonus_X010),a
+	ld a,(cur_bonus_X100)
 	dec a
-	ld (CUR_BONUS_X100),a
+	ld (cur_bonus_X100),a
 	jr nz,.display
 	
 	ld a,#01
-	ld (CUR_BONUS_X100),a
-	ld (CUR_BONUS_X010),a
-	ld (CUR_BONUS_X001),a
+	ld (cur_bonus_X100),a
+	ld (cur_bonus_X010),a
+	ld (cur_bonus_X001),a
 .display:
 
 	push af
 	ld hl,#c20e
-	ld a,(CUR_BONUS_X100)
+	ld a,(cur_bonus_X100)
 	add #2f
 	call DRW_CHAR
-	ld a,(CUR_BONUS_X010)
+	ld a,(cur_bonus_X010)
 	add #2f
 	call DRW_CHAR
-	ld a,(CUR_BONUS_X001)
+	ld a,(cur_bonus_X001)
 	add #2f
 	call DRW_CHAR
 	
@@ -1597,8 +1534,8 @@ COUNT_BONUS_MAESTRIA:
 
 .not_empty:
 	ld hl,#e7aa
-	ld de,#5ccf
-	ld bc,#0814
+	ld de,FLAME1_BMP
+	ld bc,FLAME1_DIM	
 	call DRAW_BMP
 
 	ld b,#64
@@ -1652,8 +1589,8 @@ COUNT_BONUS_MAESTRIA:
 
 	; Draw burning line 
 	ld hl,#e7aa
-	ld de,#5d6f	
-	ld bc,#0814
+	ld de,FLAME2_BMP	
+	ld bc,FLAME2_DIM	;#0814
 	call DRAW_BMP
 
 	; Delay
@@ -1667,30 +1604,30 @@ COUNT_BONUS_MAESTRIA:
 
 	; Decrease maestria bonus
 	or a
-	ld a,(CUR_BONUS_X010)
+	ld a,(cur_bonus_X010)
 	sbc #02
-	ld (CUR_BONUS_X010),a
+	ld (cur_bonus_X010),a
 	jr nc,.cont
 	add #0a
-	ld (CUR_BONUS_X010),a
-	ld a,(CUR_BONUS_X100)
+	ld (cur_bonus_X010),a
+	ld a,(cur_bonus_X100)
 	dec a
-	ld (CUR_BONUS_X100),a
+	ld (cur_bonus_X100),a
 	jr nz,.cont
 	ld a,#01
-	ld (CUR_BONUS_X100),a
-	ld (CUR_BONUS_X010),a
+	ld (cur_bonus_X100),a
+	ld (cur_bonus_X010),a
 .cont:
 	jp .next
 
 
-GAME_LOOP:
+PLAY_LEVEL:
 	ld a,(key_down)		;
 	call GET_KEY_CODE	;
 	ld b,#ff		;
 	call #bb39		; Set down key repeat allowed
 
-	ld hl,#7125
+	ld hl,GAME_MELODY
 	ld (melody_ptr),hl
 	ld a,#01
 	ld (melody_dur),a
@@ -1703,14 +1640,16 @@ GAME_LOOP:
 	ld a,#0a
 	ld c,#0a
 	call CFG_AY_SND
-	xor a
-	ld (#7582),a
+	
+	; highest_line_idx = 0
+	xor a			
+	ld (playgnd_top_idx),a		
 
 NEXT_PIECE:
 
 	; Move next piece info to current piece info
-	ld hl,PIECE_CUR_SCR_POS
-	ld de,NXT_PIECE_SCR_POS
+	ld hl,piece_src_pos
+	ld de,nxt_piece_scr_pos
 	ld b,#1c
 .copy:
 	ld a,(de)
@@ -1723,19 +1662,19 @@ NEXT_PIECE:
 	call GET_RNDM_PIECE
 
 	ld hl,#2ef9			; reset offscreen1 start address ??
-	ld (PIECE_CUR_OFF_POS),hl
-	ld de,(PIECE_CUR_BMP)
-	ld bc,(PIECE_CUR_DIM)
+	ld (piece_cur_bmp_pos),hl
+	ld de,(piece_bmp)
+	ld bc,(piece_dim)
 	call DRAW_MASK_BMP_OFFSCREEN1
 
-	ld hl,(PIECE_CUR_SCR_POS)
-	ld de,(PIECE_CUR_OFF_POS)
-	ld bc,(PIECE_CUR_DIM)
+	ld hl,(piece_src_pos)
+	ld de,(piece_cur_bmp_pos)
+	ld bc,(piece_dim)
 	call DRAW_BMP_SYNC
 
-	ld hl,(NXT_PIECE_AREA_POS)
-	ld de,(NXT_PIECE_CUR_BMP)
-	ld bc,(NXT_PIECE_CUR_DIM)
+	ld hl,(nxt_piece_prz_pos)
+	ld de,(nxt_piece_cur_bmp)
+	ld bc,(nxt_piece_cur_dim)
 	call DRAW_BMP
 	
 	; Add 3 points
@@ -1750,28 +1689,28 @@ NEXT_PIECE:
 	jr nz,.delay	; -
 
 	ld hl,#3ebf
-	ld (PIECE_CUR_MSK_POS),hl
+	ld (piece_cur_msk_pos),hl
 	
 	ld a,#01
 	ld (move_cnt),a
 	
-	ld a,#1a	; ???
-	ld (#7583),a	; decreased by 1 every move down
+	ld a,#1a			; 26
+	ld (piece_top_idx),a		; line idx of the bottom of the piece
 
-	ld hl,#3eea	; piece mask playground offset
-	ld (#7584),hl	; increased by 12 (#0c) every move down
+	ld hl,PIECE_MASK_BOTTOM_START  	; mask playground bottom of piece line address
+	ld (piece_msk_bottom),hl	; increased by 12 (#0c) every move down
 
-	ld hl,#e22a	; looks like the flame screen offset ???
-	ld (#7586),hl	; increased by 160 (#40) every move down
+	ld hl,PIECE_SCR_BOTTOM_START	; scr playground bottom of piece line address
+	ld (piece_scr_bottom),hl	; increased by 64 (#40) every move down
 
-	ld hl,#30d2	; piece bitmap playground offset
-	ld (#7588),hl	; increased by 160 (#a0) move down
+	ld hl,PIECE_BMP_BOTTOM_START	; bmp playground bottom of piece line address
+	ld (piece_bmp_bottom),hl	; increased by 160 (#a0) move down
 
-	ld a,#18	; nb bitmap lines in pixels from the playground's top
-	ld (#758b),a	; increased by 8 every move down
+	ld a,NB_BMP_LINES_START		; initial number of lines from the bitmap playgraound's top
+	ld (#758b),a			; increased by 8 every move down
 
-	ld a,#03	; nb mask lines from the playgraound's top
-	ld (#758a),a	; increased by on every move down
+	ld a,NB_MSK_LINES_START		; initial number of lines from the mask playgraound's top
+	ld (nb_msk_lines),a		; increased by on every move down
 
 
 KEY_LOOP:
@@ -1803,7 +1742,7 @@ key_rotate equ $ + 1
 	pop af
 key_down equ $ + 1
 	cp #0a
-	jp z,USER_MOVE_DOWN
+	jp z,MOVE_DOWN
 check1 equ $ + 1
 	jp CHECK_MOVE
 
@@ -1831,142 +1770,157 @@ move_delay equ $ + 1
 	ld (check1),hl
 	jp CHECK_LOOP
 
-USER_MOVE_DOWN:
+MOVE_DOWN:
 	; Increase score on explicit user's down move
 	ld b,#01
 	call SCORE_ADD_UNITS
-MOVE_DOWN:
-	ld hl,(PIECE_CUR_MSK_POS)
+FALL:
+	ld hl,(piece_cur_msk_pos)
 	ld bc,#000c
 	add hl,bc
-	ld (PIECE_PRV_MSK_POS),hl
-	ld bc,(PIECE_MSK_O1)
+	ld (piece_prv_msk_pos),hl
+	ld bc,(miece_msk_B1)
 	add hl,bc
 	ld a,(hl)
 	cp #00
-	jp nz,l89ec
-	ld bc,(PIECE_MSK_O2)
+	jp nz,LAND
+	ld bc,(piece_msk_B2)
 	add hl,bc
 	ld a,(hl)
 	cp #00
-	jp nz,l89ec
-	ld bc,(PIECE_MSK_O3)
+	jp nz,LAND
+	ld bc,(piece_msk_B3)
 	add hl,bc
 	ld a,(hl)
 	cp #00
-	jp nz,l89ec
-	ld bc,(PIECE_MSK_O4)
+	jp nz,LAND
+	ld bc,(piece_msk_B4)
 	add hl,bc
 	ld a,(hl)
 	cp #00
-	jp nz,l89ec
-	ld hl,(PIECE_PRV_MSK_POS)
-	ld (PIECE_CUR_MSK_POS),hl
+	jp nz,LAND
+	ld hl,(piece_prv_msk_pos)
+	ld (piece_cur_msk_pos),hl
 	
-	ld hl,(PIECE_CUR_SCR_POS)
-	ld (PIECE_PRV_SCR_POS),hl
+	ld hl,(piece_src_pos)
+	ld (piece_prv_scr_pos),hl
 	ld bc,#0040
 	add hl,bc
-	ld (PIECE_CUR_SCR_POS),hl
+	ld (piece_src_pos),hl
 
-	ld hl,(PIECE_CUR_OFF_POS)
-	ld (PIECE_PRV_OFF_POS),hl
-	ld de,(PIECE_CUR_BMP)
-	ld bc,(PIECE_CUR_DIM)
+	ld hl,(piece_cur_bmp_pos)
+	ld (piece_prv_bmp_pos),hl
+	ld de,(piece_bmp)
+	ld bc,(piece_dim)
 	call CLEAR_MASK_BMP_OFFSCREEN1
-	ld hl,(PIECE_CUR_OFF_POS)
+	ld hl,(piece_cur_bmp_pos)
 	ld bc,#00a0
 	add hl,bc
-	ld (PIECE_CUR_OFF_POS),hl
-	ld de,(PIECE_CUR_BMP)
-	ld bc,(PIECE_CUR_DIM)
+	ld (piece_cur_bmp_pos),hl
+	ld de,(piece_bmp)
+	ld bc,(piece_dim)
 	call DRAW_MASK_BMP_OFFSCREEN1
 	
 	; draw offscreen playground
 	; from previous pos to an extended height (one more line)
 	; This will clear the piece from it previous position 
 	; and display it at its new position.
-	ld hl,(PIECE_PRV_SCR_POS)
-	ld de,(PIECE_PRV_OFF_POS)
-	ld bc,(PIECE_CUR_DIM)
+	ld hl,(piece_prv_scr_pos)
+	ld de,(piece_prv_bmp_pos)
+	ld bc,(piece_dim)
 	ld a,#08
 	add b
 	ld b,a
 	call DRAW_BMP_SYNC
 	
-	; (#7583) = (#7583)-1
-	ld a,(#7583)
+	; (piece_top_idx) = (piece_top_idx)-1
+	ld a,(piece_top_idx)
 	dec a
-	ld (#7583),a
+	ld (piece_top_idx),a
 	
-	; (#7586) = (#7586)+#40
-	ld hl,(#7586)
+	; (piece_scr_bottom) = (piece_scr_bottom)+#40
+	ld hl,(piece_scr_bottom)
 	ld bc,#0040
 	add hl,bc
-	ld (#7586),hl
+	ld (piece_scr_bottom),hl
 
-	; (#7584) = (#7584) + #0c
-	ld hl,(#7584)
+	; (piece_msk_bottom) = (piece_msk_bottom) + #0c
+	ld hl,(piece_msk_bottom)
 	ld bc,#000c
 	add hl,bc
-	ld (#7584),hl
+	ld (piece_msk_bottom),hl
 
-	; (#7588) = (#7588) + #a0
-	ld hl,(#7588)
+	; (piece_bmp_bottom) = (piece_bmp_bottom) + #a0
+	ld hl,(piece_bmp_bottom)
 	ld bc,#00a0
 	add hl,bc
-	ld (#7588),hl
+	ld (piece_bmp_bottom),hl
 
-	; (#758a) = (#758a) + 1
-	ld a,(#758a)
+	; (nb_msk_lines) = (nb_msk_lines) + 1
+	ld a,(nb_msk_lines)
 	inc a
-	ld (#758a),a
+	ld (nb_msk_lines),a
 
-	; (#758b) = (#758b) + #08
-	ld a,(#758b)
+	; (nb_bmp_lines) = (nb_bmp_lines) + #08
+	ld a,(nb_bmp_lines)
 	ld b,#08
 	add b
-	ld (#758b),a
+	ld (nb_bmp_lines),a
 
 	jp KEY_LOOP
 
-l89ec:
-	ld d,#08
-	ld hl,#75d3
-l89f1:
+;#89ec
+LAND:
+
+	ld d,LANDUP_SOUND_LEN
+	ld hl,landup_sound
+.sound:
 	ld c,(hl)
 	inc hl
 	ld a,(hl)
 	inc hl
 	call CFG_AY_SND
 	dec d
-	jr nz,l89f1
+	jr nz,.sound
+	
+	; Delay
 	ld b,#00
-l89fd:
+.delay1:
 	ld c,#28
-l89ff:
+.delay2:
 	dec c
-	jr nz,l89ff
-	djnz l89fd
-	ld hl,(PIECE_CUR_MSK_POS)
-	ld bc,(PIECE_MSK_O1)
+	jr nz,.delay2
+	djnz .delay1
+
+	; -----------------------------
+	; Piece landed
+	; Insert piece's blocks into playground mask 
+;#8a04
+	ld hl,(piece_cur_msk_pos)
+	ld bc,(miece_msk_B1)
 	add hl,bc
-	ld (hl),#01
-	ld bc,(PIECE_MSK_O2)
+	ld (hl),#01		; set playground mask value to for piece's block1
+	ld bc,(piece_msk_B2)
 	add hl,bc
-	ld (hl),#01
-	ld bc,(PIECE_MSK_O3)
+	ld (hl),#01		; set playground mask value to for piece's block2
+	ld bc,(piece_msk_B3)
 	add hl,bc
-	ld (hl),#01
-	ld bc,(PIECE_MSK_O4)
+	ld (hl),#01		; set playground mask value to for piece's block3
+	ld bc,(piece_msk_B4)
 	add hl,bc
-	ld (hl),#01
-	ld hl,#73a7
-	ld (#758c),hl
+	ld (hl),#01		; set playground mask value to for piece's block4
+	ld hl,COMBO_STR_TBL		
+	ld (combo_str),hl	; init combo string pointer to "------  50"
+	
 	ld a,#00
-	ld (#7560),a
-	ld a,#d2
-	ld (#75d2),a
+	ld (combo_lines),a
+
+	ld a,#d2		; Initial bliblibliiip pitch
+	ld (blibliblip_pitch),a
+
+	; -----------------------------
+	; Stop land up Sound
+;#8a33
 	ld a,#00
 	ld c,#00
 	call CFG_AY_SND
@@ -1979,306 +1933,430 @@ l89ff:
 	ld a,#08
 	ld c,#00
 	call CFG_AY_SND
-	ld b,#04
-l8a51:
+
+	; -----------------------------
+	; Check for completed lines
+;#8a4f
+	ld b,#04	; <- max number of possible completed lines
+check_next_cpltd_line:
 	push bc
-	ld hl,(#7584)
-	ld c,#0c
-l8a57:
+
+	ld hl,(piece_msk_bottom) ; <- current piece bottom playground mask's line 
+	ld c,#0c	 	 ; line width (1+10+1)
+.nxt_blk:
 	ld a,(hl)
 	cp #01
-	jp nz,l8c44
+	jp nz,uncomplete_line
 	dec hl
 	dec c
-	jr nz,l8a57
-	ld de,#5ccf
-	ld hl,(#7586)
-	ld bc,#0814
-	call DRAW_BMP
+	jr nz,.nxt_blk
+
+	; -----------------------------
+	; Draw burning flame 1
+;#8a61
+	ld de,FLAME1_BMP	; <- flame1 bitmap 20x8 
+	ld hl,(piece_scr_bottom)	; <- must be screen playground line's start address
+	ld bc,FLAME1_DIM	;#0814
+	call DRAW_BMP	
+
+	; -----------------------------
+	; Delay
 	ld b,#64
-l8a6f:
+.delay11:
 	ld c,#64
-l8a71:
+.delay12:
 	dec c
-	jr nz,l8a71
-	djnz l8a6f
+	jr nz,.delay12
+	djnz .delay11
+
+	; -----------------------------
+	; Move playground's bitmap one line down, 
+	; starting at the removed bitmap line address
+;8a76
 	or a
-	ld hl,(#7588)
-	ld de,(#7588)
-	ld bc,#ff60
+	ld hl,(piece_bmp_bottom)
+	ld de,(piece_bmp_bottom)	; Current line bitmap playground start address
+	ld bc,#ff60	; -160
 	add hl,bc
-	ld a,(#758b)
+	ld a,(nb_bmp_lines)	; <- number of pixel lines to top of playground's bitmap 
 	ld b,a
-l8a86:
+.move1_h:
 	ld c,#14
-l8a88:
+.move1_w:
 	ld a,(hl)
 	dec hl
 	ld (de),a
 	dec de
 	dec c
-	jr nz,l8a88
-	djnz l8a86
-	ld hl,(#7584)
-	ld de,(#7584)
-	ld bc,#fff4
+	jr nz,.move1_w
+	djnz .move1_h
+
+	; -----------------------------
+	; Move playground's mask one line down, 
+	; starting at the removed mask line address
+;#8a91
+	ld hl,(piece_msk_bottom)
+	ld de,(piece_msk_bottom)
+	ld bc,#fff4	; -12
 	add hl,bc
-	ld a,(#758a)
+	ld a,(nb_msk_lines)	; <- number of lines to top of playground's mask 
 	ld b,a
-l8aa0:
+.move2_h:
 	ld c,#0c
-l8aa2:
+.move2_w:
 	ld a,(hl)
 	dec hl
 	ld (de),a
 	dec de
 	dec c
-	jr nz,l8aa2
-	djnz l8aa0
-	ld de,#5d6f
-	ld hl,(#7586)
-	ld bc,#0814
+	jr nz,.move2_w
+	djnz .move2_h
+
+
+	; -----------------------------
+	; Draw burning flame 2
+;#8aab
+	ld de,FLAME2_BMP	; flame2 bitmap 20x8
+	ld hl,(piece_scr_bottom)	; <- must be screen playground line's start address
+	ld bc,FLAME2_DIM	;#0814
 	call DRAW_BMP
+
+	; -----------------------------
+	; Delay
 	ld b,#64
-l8ab9:
+.delay21:
 	ld c,#64
-l8abb:
+.delay22:
 	dec c
-	jr nz,l8abb
-	djnz l8ab9
+	jr nz,.delay22
+	djnz .delay21
+
+	; -----------------------------------
+	; Rebuild the top and bottom shadow/lighting of the cutted pieces
+	; -----------------------------------
+	; Top inner lighting of the lower pieces
+;#8ac0
 	or a
-	ld hl,(#7588)
+	ld hl,(piece_bmp_bottom)
 	ld bc,#0028
 	add hl,bc
 	ld b,#14
-l8aca:
+.lgt1:
 	ld a,(hl)
 	cp #00
-	jr z,l8adb
+	jr z,.l1_nxt
 	and #55
 	cp #04
-	jr nz,l8ad9
+	jr nz,.l1_rplc
 	xor #2a
-	jr l8adb
-l8ad9:
+	jr .l1_nxt
+.l1_rplc:
 	ld a,#3f
-l8adb:
+.l1_nxt:
 	ld (hl),a
 	dec hl
-	djnz l8aca
+	djnz .lgt1
+
+	; -----------------------------------
+	; Top outer lighting of the lower pieces
 	ld b,#14
-l8ae1:
+.lgt2:
 	ld a,(hl)
 	cp #00
-	jr z,l8ae8
+	jr z,.l2_nxt
 	ld (hl),#3f
-l8ae8:
+.l2_nxt:
 	dec hl
-	djnz l8ae1
+	djnz .lgt2
+
+	; -----------------------------------
+	; Bottom outer lighting of the upper pieces
 	ld b,#14
-l8aed:
+.shdw1:
 	ld a,(hl)
 	cp #00
-	jr z,l8af4
+	jr z,.s1_nxt
 	ld (hl),#0c
-l8af4:
+.s1_nxt:
 	dec hl
-	djnz l8aed
+	djnz .shdw1
+
+	; -----------------------------------
+	; Bottom inner lighting of the upper pieces
 	ld b,#14
-l8af9:
+.shdw2:
 	ld a,(hl)
 	cp #00
-	jr z,l8b0a
+	jr z,.s2_nxt
 	and #aa
 	cp #2a
-	jr nz,l8b08
+	jr nz,.s2_rplc
 	xor #04
-	jr l8b0a
-l8b08:
+	jr .s2_nxt
+.s2_rplc:
 	ld a,#0c
-l8b0a:
+.s2_nxt:
 	ld (hl),a
 	dec hl
-	djnz l8af9
-	ld de,#5e0f
-	ld hl,(#7586)
-	ld bc,#0814
+	djnz .shdw2
+
+	; -----------------------------
+	; Draw burning flame 3 (which is identical to flame 2 ??? mistake ???)
+;#8b0e
+	ld de,FLAME3_BMP
+	ld hl,(piece_scr_bottom)
+	ld bc,FLAME3_DIM	;#0814
 	call DRAW_BMP
+
+	; ----------------------------
+	; Delay
 	ld b,#64
-l8b1c:
+.delay31:
 	ld c,#64
-l8b1e:
+.delay32:
 	dec c
-	jr nz,l8b1e
-	djnz l8b1c
+	jr nz,.delay32
+	djnz .delay31
+
+
+	; -----------------------------
+	; Fully redraw rebuild playground bitmap
 	ld hl,PLAYGND_SCR
 	ld de,PLAYGND_OFSCR
 	ld bc,PLAYGND_DIM
 	call DRAW_BMP
+
+	; ----------------------------
+	; Play the bliblibliip with increasing pitch
 	ld d,#03
-l8b31:
+.play_blip:
 	or a
-	ld a,(#75d2)
+	ld a,(blibliblip_pitch)
 	ld b,#1e
 	sbc b
-	ld (#75d2),a
+	ld (blibliblip_pitch),a
 	ld c,a
 	ld a,#00
 	call #bd34
 	ld a,#08
 	ld c,#0f
 	call #bd34
+
+	; ----------------------------
+	; Delay
 	ld b,#00
-l8b4a:
+.delay41:
 	ld c,#14
-l8b4c:
+.delay42:
 	dec c
-	jr nz,l8b4c
-	djnz l8b4a
+	jr nz,.delay42
+	djnz .delay41
+
+	; ----------------------------
+	; Cut sound off ??
 	ld a,#08
 	ld c,#00
 	call #bd34
+	
+	; ----------------------------
+	; Delay
 	ld b,#00
-l8b5a:
+.delay51:
 	ld c,#1e
-l8b5c:
+.delay52:
 	dec c
-	jr nz,l8b5c
-	djnz l8b5a
+	jr nz,.delay52
+	djnz .delay51
+
 	dec d
-	jr nz,l8b31
+	jr nz,.play_blip
+
+	; ----------------------------
+	; Cut sound off ??
 	ld a,#08
 	ld c,#00
 	call #bd34
-	ld a,(#75d2)
+
+	; ----------------------------
+	; Decrease pitch a bit for next completed line
+	ld a,(blibliblip_pitch)
 	ld b,#32
 	add b
-	ld (#75d2),a
+	ld (blibliblip_pitch),a
+
+
+	; ----------------------------
+	; Enable XXX flyback
 	ld a,#49
-	ld (l8dde),a
-	ld hl,FLBK_l8dd0_BLOCK
+	ld (clear_combo_cnt),a
+	ld hl,FLBK_CLEAR_COMBO_BLOCK
 	call #bcda
+
+	; ----------------------------
+	; Increase falling speed (decrease delay)
 	ld a,(down_delay)
 	dec a
-	jr z,l8b8b
+	jr z,.cont1
 	ld (down_delay),a
+	; ----------------------------
+	; Adjust left-right move's repeat delay
 	call ADAPT_MOVE_DELAY
-l8b8b:
-	ld b,#0a
-	ld hl,#c349
-	ld de,(#758c)
+.cont1:
+
+	; ----------------------------
+	; Draw current combo string 
+	ld b,COMBO_LEN		;#0a
+	ld hl,COMBO_SCR		;#c349
+	ld de,(combo_str)
 	call DRW_TXT
-	ld (#758c),de
-	ld a,(#7560)
+	ld (combo_str),de
+
+	; ----------------------------
+	; Adjust some game variables ...
+
+	ld a,(combo_lines)
 	inc a
-	ld (#7560),a
-	ld a,(#7583)
+	ld (combo_lines),a
+
+	ld a,(piece_top_idx)
 	dec a
-	ld (#7583),a
-	ld a,(#7582)
+	ld (piece_top_idx),a
+
+	ld a,(playgnd_top_idx)
 	dec a
-	ld (#7582),a
-	ld a,(CUR_LIGNES_X01)
+	ld (playgnd_top_idx),a
+
+	; ----------------------------
+	; Decrease remaining lines
+	ld a,(cur_lignes_X01)
 	dec a
-	ld (CUR_LIGNES_X01),a
-	jr nz,l8bcf
+	ld (cur_lignes_X01),a
+	jr nz,.cont2
 	ld a,#0a
-	ld (CUR_LIGNES_X01),a
-	ld a,(CUR_LIGNES_X10)
+	ld (cur_lignes_X01),a
+
+	ld a,(cur_lignes_X10)
 	dec a
-	ld (CUR_LIGNES_X10),a
-	jr nz,l8bcf
-	ld a,#01
-	ld (CUR_LIGNES_X10),a
-	ld (CUR_LIGNES_X01),a
-l8bcf:
+	ld (cur_lignes_X10),a
+	jr nz,.cont2
+
+	ld a,#01		; (reminder: digits are offseted by 1. Why? I certainly had a good reason :-) )
+	ld (cur_lignes_X10),a	; 0 remaining lines 
+	ld (cur_lignes_X01),a	; 0 remaining lines
+.cont2:
+
+	; ----------------------------
+	; Display remaining lines
 	ld hl,#c1cf
-	ld a,(CUR_LIGNES_X10)
+	ld a,(cur_lignes_X10)
 	add #2f
 	call DRW_CHAR
-	ld a,(CUR_LIGNES_X01)
+	ld a,(cur_lignes_X01)
 	add #2f
 	call DRW_CHAR
-l8be2:
+
+end_check_clptd_line:
 	pop bc
 	dec b
-	jp nz,l8a51
-	ld a,(#7560)
+	jp nz,check_next_cpltd_line
+
+
+	ld a,(combo_lines)
 	cp #00
-	jr z,l8c0e
+	jr z,.cont_combo
+
 	cp #01
-	jr nz,l8bf9
+	jr nz,.combo2
+
+	; One line -> 50 points
 	ld b,#05
 	call SCORE_ADD_TENS
-	jr l8c0e
-l8bf9:
+	jr .cont_combo
+.combo2:
 	cp #02
-	jr nz,l8c01
+	jr nz,.combo3
+
+	; Two lines -> 100 points
 	ld b,#01
-	jr l8c0b
-l8c01:
+	jr .add_combo
+.combo3:
 	cp #03
-	jr nz,l8c09
+	jr nz,.combo4
+	; Three lines -> 200 points
 	ld b,#02
-	jr l8c0b
-l8c09:
+	jr .add_combo
+.combo4:
+	; Four lines -> 400 points
 	ld b,#04
-l8c0b:
+.add_combo:
 	call SCORE_ADD_HDRDS
-l8c0e:
-	ld a,(CUR_LIGNES_X01)
+.cont_combo:
+
+
+	ld a,(cur_lignes_X01)
 	dec a
 	ld b,a
-	ld a,(CUR_LIGNES_X10)
+	ld a,(cur_lignes_X10)
 	dec a
 	or b
-	jr z,l8c75
-	ld a,(#7583)
+	jr z,LEVEL_COMPLETED	; All requested lines completed
+
+	; highest_line_idx = max((highest_line_idx), (piece_top_idx) )
+	ld a,(piece_top_idx)
 	ld b,a
-	ld a,(#7582)
+	ld a,(playgnd_top_idx)
 	sbc b
-	jp nc,l8c2c
+	jp nc,.cont_max
 	or a
-	ld a,(#7583)
-	ld (#7582),a
-l8c2c:
-	ld a,(#7582)
+	ld a,(piece_top_idx)
+	ld (playgnd_top_idx),a
+.cont_max:
+
+	ld a,(playgnd_top_idx)
 	cp #18
 	jr nc,GAME_OVER
+
+	; Insert random block if necessary
 	ld a,(FLBK_RNDM_BLCK_CNT)
 	dec a
 	call z,INSERT_RNDM_BLCK
+
+	; Move playground up if necessary
 	ld a,(FLBK_MOVE_UP_CNT)
 	dec a
 	call z,PLAYGROUND_MOVE_UP
+
 	jp NEXT_PIECE
-l8c44:
-	ld hl,(#7586)
+
+uncomplete_line:
+	; Update variables
+	ld hl,(piece_scr_bottom)
 	ld bc,#ffc0
 	add hl,bc
-	ld (#7586),hl
-	ld hl,(#7588)
+	ld (piece_scr_bottom),hl
+	ld hl,(piece_bmp_bottom)
 	ld bc,#ff60
 	add hl,bc
-	ld (#7588),hl
-	ld hl,(#7584)
+	ld (piece_bmp_bottom),hl
+	ld hl,(piece_msk_bottom)
 	ld bc,#fff4
 	add hl,bc
-	ld (#7584),hl
-	ld a,(#758a)
+	ld (piece_msk_bottom),hl
+	ld a,(nb_msk_lines)
 	dec a
-	ld (#758a),a
-	ld a,(#758b)
+	ld (nb_msk_lines),a
+	ld a,(nb_bmp_lines)
 	ld b,#f8
 	add b
-	ld (#758b),a
-	jp l8be2
+	ld (nb_bmp_lines),a
+	jp end_check_clptd_line
 
-l8c75:
+LEVEL_COMPLETED:
 	ld a,(key_down)
 	call GET_KEY_CODE
 	ld b,#00
-	call #bb39	; Disable KEY repeat
+	call #bb39	; Disable down KEY repeat
+
 	ld hl,FLBK_GAME_MELODY_BLOCK
 	call #bcdd	; Disable Flyback block
 	
@@ -2346,55 +2424,55 @@ l8cd3:			; | |
 	call CFG_AY_SND	; OFF
 
 	pop hl		;
-	ld a,(CUR_PLAYER);|
+	ld a,(cur_player);|
 	dec a		; |
 	jr z,l8cef
 	
-	ld (P2_GAME_OVER),a	; <- PLAYER 2 GAME OVER
+	ld (p2_game_over),a	; <- PLAYER 2 GAME OVER
 	jr l8cf3
 
 l8cef:
 	inc a		
-	ld (P1_GAME_OVER),a	; <- PLAYER 1 GAME OVER
+	ld (p1_game_over),a	; <- PLAYER 1 GAME OVER
 
 l8cf3:
 	call DRAW_POPUP_BOX
 	; Draw "SOUPIRANT"
 	ld hl,#c3eb
-	ld de,P1_NAME
+	ld de,SOUPIRANT1_STR
 	ld b,#09
 	call DRW_TXT
 	; Draw "<current player>"
 	ld hl,#c433
-	ld a,(CUR_PLAYER)
+	ld a,(cur_player)
 	add #30
 	call DRW_CHAR
 	; Draw "Dommage"
-	ld hl,#c46d
-	ld de,#7331
-	ld b,#07
+	ld hl,DOMMAGE_SCR	;#c46d
+	ld de,DOMMAGE_STR	;#7331
+	ld b,DOMMAGE_LEN	;#07
 	call DRW_TXT
 
 	call DELAY
 	call DRAW_POPUP_BOX
 	; Draw "TU AS"
-	ld hl,#c3ef
-	ld de,#7338
-	ld b,#05
+	ld hl,TU_AS_SCR		;#c3ef
+	ld de,TU_AS_STR		;#7338
+	ld b,TU_AS_LEN		;#05
 	call DRW_TXT
 	; Draw "ECHOUE"
-	ld hl,#c42e
-	ld de,#733d
-	ld b,#06
+	ld hl,ECHOUE_SCR	;#c42e
+	ld de,ECHOUE_STR	;#733d
+	ld b,ECHOUE_LEN		;#06
 	call DRW_WTXT
 
 	call DELAY
 	call CHECK_HIGH_SCORE
 
-	ld a,(P1_GAME_OVER)
+	ld a,(p1_game_over)
 	dec a
 	ld b,a
-	ld a,(P2_GAME_OVER)
+	ld a,(p2_game_over)
 	dec a
 	or b
 	ret nz 		; Still 1 player alive
@@ -2409,7 +2487,7 @@ l8cf3:
 	ld bc,PLAYGND_DIM
 	call CLEAR_SCREEN_AREA
 	call DANCEFLR_CURTAIN_UP
-	jp MAIN_START
+	jp START
 ;#8d60
 melody_ptr:
 	DB #00
@@ -2453,7 +2531,7 @@ FLBK_GAME_MELODY_ISR:
 	ld a,(hl)
 	inc a
 	jr nz,.play
-	ld hl,#7125
+	ld hl,GAME_MELODY
 	ld (melody_ptr),hl
 	jr .next
 .play:
@@ -2488,17 +2566,17 @@ FLBK_GAME_MELODY_ISR:
 	ret
 
 .action2:
-	ld hl,MOVE_DOWN		; Action 2: crazy mode 
-	ld (check1),hl		; force move down 
-	ld (check2),hl		; AND disallows reaming timer -> full speed
+	ld hl,FALL		; Action 2
+	ld (check1),hl		; force fall 
+	ld (check2),hl		; force fall 
 	jr .cont2
 
-.action1:			; Action 1: fair mode
-	ld hl,CHECK_MOVE		; force move down jp 890d force move down	
-	ld (check1),hl		; Allows rearming the timer
+.action1:			; Action 1: 
+	ld hl,CHECK_MOVE	; left-right repeat delay
+	ld (check1),hl		; Allow lateral move
 	jr .cont1
 
-FLBK_l8dd0_BLOCK:
+FLBK_CLEAR_COMBO_BLOCK:
 	DB #00,#00
 	DB #00
 	DB #00
@@ -2506,26 +2584,26 @@ FLBK_l8dd0_BLOCK:
 	DB #00
 	DB #00,#00,#00,#00  
 	DB #00,#00,#00
-l8dde:
+clear_combo_cnt:
 	DB #00
 
 ; #8ddf
-FLBK_l8dd0_ISR:
+FLBK_CLEAR_COMBO_ISR:
 	di
 	push hl
 	push af
 	push de
 	push bc
-	ld a,(l8dde)
+	ld a,(clear_combo_cnt)
 	dec a
-	ld (l8dde),a
-	jr nz,l8dfc
+	ld (clear_combo_cnt),a
+	jr nz,.cont
 	ld hl,#c349
 	ld bc,#0814
 	call CLEAR_SCREEN_AREA
-	ld hl,FLBK_l8dd0_BLOCK
+	ld hl,FLBK_CLEAR_COMBO_BLOCK
 	call #bcdd
-l8dfc:
+.cont:
 	pop bc
 	pop de
 	pop af
@@ -2539,32 +2617,32 @@ l8dfc:
 ; --------------------------------------------------------
 ;#
 ROTATE:
-	ld hl,(PIECE_CUR_OFF_POS)
-	ld (PIECE_PRV_OFF_POS),hl
-	ld hl,(PIECE_CUR_SCR_POS)
-	ld (PIECE_PRV_SCR_POS),hl
-	ld hl,(PIECE_CUR_DIM)
-	ld (PIECE_PRV_DIM),hl
-	ld hl,(PIECE_CUR_BMP)
-	ld (PIECE_PRV_BMP),hl
-	ld hl,(PIECE_CUR_MSK_POS)
-	ld (PIECE_PRV_MSK_POS),hl
-	ld bc,(PIECE_ROT_O1)
+	ld hl,(piece_cur_bmp_pos)
+	ld (piece_prv_bmp_pos),hl
+	ld hl,(piece_src_pos)
+	ld (piece_prv_scr_pos),hl
+	ld hl,(piece_dim)
+	ld (piece_prv_dim),hl
+	ld hl,(piece_bmp)
+	ld (piece_prv_bmp),hl
+	ld hl,(piece_cur_msk_pos)
+	ld (piece_prv_msk_pos),hl
+	ld bc,(piece_rot_B1)
 	add hl,bc
 	ld a,(hl)
 	cp #00
 	jr nz,.try_left
-	ld bc,(PIECE_ROT_O2)
+	ld bc,(piece_rot_B2)
 	add hl,bc
 	ld a,(hl)
 	cp #00
 	jr nz,.try_left
-	ld bc,(PIECE_ROT_O3)
+	ld bc,(piece_rot_B3)
 	add hl,bc
 	ld a,(hl)
 	cp #00
 	jr nz,.try_left
-	ld bc,(PIECE_ROT_O4)
+	ld bc,(piece_rot_B4)
 	add hl,bc
 	ld a,(hl)
 	cp #00
@@ -2572,121 +2650,121 @@ ROTATE:
 	jp .valid
 .try_left:
 	; Try moving piece one step left
-	ld hl,(PIECE_CUR_MSK_POS)
+	ld hl,(piece_cur_msk_pos)
 	dec hl
-	ld (PIECE_PRV_MSK_POS),hl
-	ld bc,(PIECE_ROT_O1)
-	ld bc,(PIECE_ROT_O1)
+	ld (piece_prv_msk_pos),hl
+	ld bc,(piece_rot_B1)
+	ld bc,(piece_rot_B1)
 	add hl,bc
 	ld a,(hl)
 	cp #00
 	jp nz,.try_right
-	ld bc,(PIECE_ROT_O2)
+	ld bc,(piece_rot_B2)
 	add hl,bc
 	ld a,(hl)
 	cp #00
 	jr nz,.try_right
-	ld bc,(PIECE_ROT_O3)
+	ld bc,(piece_rot_B3)
 	add hl,bc
 	ld a,(hl)
 	cp #00
 	jr nz,.try_right
-	ld bc,(PIECE_ROT_O4)
+	ld bc,(piece_rot_B4)
 	add hl,bc
 	ld a,(hl)
 	cp #00
 	jr nz,.try_right
-	ld hl,(PIECE_CUR_OFF_POS)
+	ld hl,(piece_cur_bmp_pos)
 	dec hl
 	dec hl
-	ld (PIECE_CUR_OFF_POS),hl
-	ld hl,(PIECE_CUR_SCR_POS)
+	ld (piece_cur_bmp_pos),hl
+	ld hl,(piece_src_pos)
 	dec hl
 	dec hl
-	ld (PIECE_CUR_SCR_POS),hl
+	ld (piece_src_pos),hl
 	jp .valid
 .try_right:
 	; Try moving piece one step left
-	ld hl,(PIECE_CUR_MSK_POS)
+	ld hl,(piece_cur_msk_pos)
 	inc hl
-	ld (PIECE_PRV_MSK_POS),hl
-	ld bc,(PIECE_ROT_O1)
+	ld (piece_prv_msk_pos),hl
+	ld bc,(piece_rot_B1)
 	add hl,bc
 	ld a,(hl)
 	cp #00
 	jp nz,.cont
-	ld bc,(PIECE_ROT_O2)
+	ld bc,(piece_rot_B2)
 	add hl,bc
 	ld a,(hl)
 	cp #00
 	jr nz,.cont
-	ld bc,(PIECE_ROT_O3)
+	ld bc,(piece_rot_B3)
 	add hl,bc
 	ld a,(hl)
 	cp #00
 	jr nz,.cont
-	ld bc,(PIECE_ROT_O4)
+	ld bc,(piece_rot_B4)
 	add hl,bc
 	ld a,(hl)
 	cp #00
 	jr nz,.cont
-	ld hl,(PIECE_CUR_OFF_POS)
+	ld hl,(piece_cur_bmp_pos)
 	inc hl
 	inc hl
-	ld (PIECE_CUR_OFF_POS),hl
-	ld hl,(PIECE_CUR_SCR_POS)
+	ld (piece_cur_bmp_pos),hl
+	ld hl,(piece_src_pos)
 	inc hl
 	inc hl
-	ld (PIECE_CUR_SCR_POS),hl
+	ld (piece_src_pos),hl
 	jp .valid
 .cont:
-	ld hl,(PIECE_CUR_MSK_POS)
+	ld hl,(piece_cur_msk_pos)
 	dec hl
 	dec hl
-	ld (PIECE_PRV_MSK_POS),hl
-	ld bc,(PIECE_ROT_O1)
-	ld bc,(PIECE_ROT_O1)
+	ld (piece_prv_msk_pos),hl
+	ld bc,(piece_rot_B1)
+	ld bc,(piece_rot_B1)
 	add hl,bc
 	ld a,(hl)
 	cp #00
 	ret nz
-	ld bc,(PIECE_ROT_O2)
+	ld bc,(piece_rot_B2)
 	add hl,bc
 	ld a,(hl)
 	cp #00
 	ret nz
-	ld bc,(PIECE_ROT_O3)
+	ld bc,(piece_rot_B3)
 	add hl,bc
 	ld a,(hl)
 	cp #00
 	ret nz
-	ld bc,(PIECE_ROT_O4)
+	ld bc,(piece_rot_B4)
 	add hl,bc
 	ld a,(hl)
 	cp #00
 	jr nz,.cont
 
-	ld hl,(PIECE_CUR_OFF_POS)
+	ld hl,(piece_cur_bmp_pos)
 	dec hl
 	dec hl
 	dec hl
 	dec hl
-	ld (PIECE_CUR_OFF_POS),hl
-	ld hl,(PIECE_CUR_SCR_POS)
+	ld (piece_cur_bmp_pos),hl
+	ld hl,(piece_src_pos)
 	dec hl
 	dec hl
 	dec hl
 	dec hl
-	ld (PIECE_CUR_SCR_POS),hl
+	ld (piece_src_pos),hl
 .valid:
-	ld hl,(PIECE_PRV_MSK_POS)
-	ld (PIECE_CUR_MSK_POS),hl
-	ld hl,(PIECE_PRV_OFF_POS)
-	ld de,(PIECE_PRV_BMP)
-	ld bc,(PIECE_PRV_DIM)
+	ld hl,(piece_prv_msk_pos)
+	ld (piece_cur_msk_pos),hl
+	ld hl,(piece_prv_bmp_pos)
+	ld de,(piece_prv_bmp)
+	ld bc,(piece_prv_dim)
 	call CLEAR_MASK_BMP_OFFSCREEN1
-	ld hl,(PIECE_ROT_BMP)
-	ld de,PIECE_CUR_BMP
+	ld hl,(piece_rot_bmp)
+	ld de,piece_bmp
 	ld b,#1a
 .loop:
 	ld a,(hl)
@@ -2694,23 +2772,23 @@ ROTATE:
 	ld (de),a
 	inc de
 	djnz .loop
-	ld de,(PIECE_ROT_OFF_OFST)
-	ld hl,(PIECE_CUR_OFF_POS)
+	ld de,(piece_rot_bmp_ofst)
+	ld hl,(piece_cur_bmp_pos)
 	add hl,de
-	ld (PIECE_CUR_OFF_POS),hl
-	ld de,(PIECE_CUR_BMP)
-	ld bc,(PIECE_CUR_DIM)
+	ld (piece_cur_bmp_pos),hl
+	ld de,(piece_bmp)
+	ld bc,(piece_dim)
 	call DRAW_MASK_BMP_OFFSCREEN1
-	ld hl,(PIECE_PRV_SCR_POS)
-	ld de,(PIECE_PRV_BMP)
-	ld bc,(PIECE_PRV_DIM)
+	ld hl,(piece_prv_scr_pos)
+	ld de,(piece_prv_bmp)
+	ld bc,(piece_prv_dim)
 	call DRAW_MASK_BMP
-	ld hl,(PIECE_CUR_SCR_POS)
-	ld de,(PIECE_ROT_SCR_OFST)
+	ld hl,(piece_src_pos)
+	ld de,(piece_rot_scr_ofst)
 	add hl,de
-	ld (PIECE_CUR_SCR_POS),hl
-	ld de,(PIECE_CUR_OFF_POS)
-	ld bc,(PIECE_CUR_DIM)
+	ld (piece_src_pos),hl
+	ld de,(piece_cur_bmp_pos)
+	ld bc,(piece_dim)
 	jp DRAW_BMP_SYNC
 
 ; --------------------------------------------------------
@@ -2719,48 +2797,48 @@ ROTATE:
 ;#8f76
 MOVE_LEFT:
 	; Check if move is possible
-	ld hl,(PIECE_CUR_MSK_POS)
+	ld hl,(piece_cur_msk_pos)
 	dec hl				; move 1 cell left
-	ld (PIECE_PRV_MSK_POS),hl
-	ld bc,(PIECE_MSK_O1)		; Check if the piece block1 
+	ld (piece_prv_msk_pos),hl
+	ld bc,(miece_msk_B1)		; Check if the piece block1 
 	add hl,bc			; hits something
 	ld a,(hl)
 	cp #00
 	jp nz,KEY_CONT			; Move impossible -> abort
-	ld bc,(PIECE_MSK_O2)
+	ld bc,(piece_msk_B2)
 	add hl,bc
 	ld a,(hl)
 	cp #00
 	jp nz,KEY_CONT
-	ld bc,(PIECE_MSK_O3)
+	ld bc,(piece_msk_B3)
 	add hl,bc
 	ld a,(hl)
 	cp #00
 	jp nz,KEY_CONT
-	ld bc,(PIECE_MSK_O4)
+	ld bc,(piece_msk_B4)
 	add hl,bc
 	ld a,(hl)
 	cp #00
 	jp nz,KEY_CONT
-	ld hl,(PIECE_PRV_MSK_POS)
-	ld (PIECE_CUR_MSK_POS),hl
-	ld hl,(PIECE_CUR_OFF_POS)
-	ld de,(PIECE_CUR_BMP)
-	ld bc,(PIECE_CUR_DIM)
+	ld hl,(piece_prv_msk_pos)
+	ld (piece_cur_msk_pos),hl
+	ld hl,(piece_cur_bmp_pos)
+	ld de,(piece_bmp)
+	ld bc,(piece_dim)
 	call CLEAR_MASK_BMP_OFFSCREEN1
-	ld hl,(PIECE_CUR_OFF_POS)
+	ld hl,(piece_cur_bmp_pos)
 	dec hl
 	dec hl
-	ld (PIECE_CUR_OFF_POS),hl
-	ld de,(PIECE_CUR_BMP)
-	ld bc,(PIECE_CUR_DIM)
+	ld (piece_cur_bmp_pos),hl
+	ld de,(piece_bmp)
+	ld bc,(piece_dim)
 	call DRAW_MASK_BMP_OFFSCREEN1
-	ld hl,(PIECE_CUR_SCR_POS)
+	ld hl,(piece_src_pos)
 	dec hl
 	dec hl
-	ld (PIECE_CUR_SCR_POS),hl
-	ld de,(PIECE_CUR_OFF_POS)
-	ld bc,(PIECE_CUR_DIM)
+	ld (piece_src_pos),hl
+	ld de,(piece_cur_bmp_pos)
+	ld bc,(piece_dim)
 	inc c
 	inc c
 	call DRAW_BMP_SYNC
@@ -2771,58 +2849,58 @@ MOVE_LEFT:
 ; --------------------------------------------------------
 ;#8fe8
 MOVE_RIGHT:
-	ld hl,(PIECE_CUR_MSK_POS)
+	ld hl,(piece_cur_msk_pos)
 	inc hl
-	ld (PIECE_PRV_MSK_POS),hl
-	ld bc,(PIECE_MSK_O1)
+	ld (piece_prv_msk_pos),hl
+	ld bc,(miece_msk_B1)
 	add hl,bc
 	ld a,(hl)
 	cp #00
 	jp nz,KEY_CONT
-	ld bc,(PIECE_MSK_O2)
+	ld bc,(piece_msk_B2)
 	add hl,bc
 	ld a,(hl)
 	cp #00
 	jp nz,KEY_CONT
-	ld bc,(PIECE_MSK_O3)
+	ld bc,(piece_msk_B3)
 	add hl,bc
 	ld a,(hl)
 	cp #00
 	jp nz,KEY_CONT
-	ld bc,(PIECE_MSK_O4)
+	ld bc,(piece_msk_B4)
 	add hl,bc
 	ld a,(hl)
 	cp #00
 	jp nz,KEY_CONT
-	ld hl,(PIECE_PRV_MSK_POS)
-	ld (PIECE_CUR_MSK_POS),hl
-	ld hl,(PIECE_CUR_OFF_POS)
-	ld (PIECE_PRV_OFF_POS),hl
-	ld de,(PIECE_CUR_BMP)
-	ld bc,(PIECE_CUR_DIM)
+	ld hl,(piece_prv_msk_pos)
+	ld (piece_cur_msk_pos),hl
+	ld hl,(piece_cur_bmp_pos)
+	ld (piece_prv_bmp_pos),hl
+	ld de,(piece_bmp)
+	ld bc,(piece_dim)
 	call CLEAR_MASK_BMP_OFFSCREEN1
-	ld hl,(PIECE_PRV_OFF_POS)
+	ld hl,(piece_prv_bmp_pos)
 	inc hl
 	inc hl
-	ld (PIECE_CUR_OFF_POS),hl
-	ld de,(PIECE_CUR_BMP)
-	ld bc,(PIECE_CUR_DIM)
+	ld (piece_cur_bmp_pos),hl
+	ld de,(piece_bmp)
+	ld bc,(piece_dim)
 	call DRAW_MASK_BMP_OFFSCREEN1
-	ld hl,(PIECE_CUR_SCR_POS)
-	ld (PIECE_PRV_SCR_POS),hl
+	ld hl,(piece_src_pos)
+	ld (piece_prv_scr_pos),hl
 	inc hl
 	inc hl
-	ld (PIECE_CUR_SCR_POS),hl
-	ld hl,(PIECE_PRV_SCR_POS)
-	ld de,(PIECE_PRV_OFF_POS)
-	ld bc,(PIECE_CUR_DIM)
+	ld (piece_src_pos),hl
+	ld hl,(piece_prv_scr_pos)
+	ld de,(piece_prv_bmp_pos)
+	ld bc,(piece_dim)
 	inc c
 	inc c
 	call DRAW_BMP_SYNC
 	jp KEY_CONT
 
 ; --------------------------------------------------------
-; Adapt in game move repeat's delay according to fall speed
+; Adapt in-game move repeat's delay (left-right) according to falling speed
 ; --------------------------------------------------------
 ;#9063
 ADAPT_MOVE_DELAY:
@@ -2874,35 +2952,35 @@ FLBK_MENU_ANIM_ISR:
 	dec a
 	jr nz,.hscore_levels
 	; Display "<score 1>"
-	ld hl,#c3b3
-	ld de,#7213
+	ld hl,HSCORE1_SCR+8		;#c3b3		
+	ld de,HSCORE1+3
 	ld b,#05
 	call DRW_TXT
 	; Display "<score 2>"
-	ld hl,#c3f3
-	ld de,#7220
+	ld hl,HSCORE2_SCR+8		;#c3f3
+	ld de,HSCORE2+3
 	ld b,#05
 	call DRW_TXT
 	; Display "<score 3>"
-	ld hl,#c433
-	ld de,#722d
+	ld hl,HSCORE3_SCR+8		;#c433
+	ld de,HSCORE3+3
 	ld b,#05
 	call DRW_TXT
 	; Display "<score 4>"
-	ld hl,#c473
-	ld de,#723a
+	ld hl,HSCORE4_SCR+8		;#c473
+	ld de,HSCORE4+3
 	ld b,#05
 	call DRW_TXT
 	; Display "<score 5>"
-	ld hl,#c4b3
-	ld de,#7247
+	ld hl,HSCORE5_SCR+8		;#c4b3
+	ld de,HSCORE5+3
 	ld b,#05
 	call DRW_TXT
 	ld (menu_info),a  ; a!=0
 	
 	; Display "Kazatchok Dancer"
-	ld hl,#e4ea
-	ld de,#45e0
+	ld hl,KOZAK_DANCER_SCR		;#e4ea
+	ld de,KOZAK_DANCER_ZBMP
 	call DRAW_ZBMP
 	xor a
 .hiscore_done:
@@ -2943,8 +3021,8 @@ FLBK_MENU_ANIM_ISR:
 	call DRW_TXT
 	
 	; Display "Alinka's head"
-	ld hl,#e4ea
-	ld de,#400b
+	ld hl,ALINKA_HEAD_SCR		;#e4ea
+	ld de,ALINKA_HEAD_ZBMP
 	call DRAW_ZBMP
 	xor a
 	jr .hiscore_done
@@ -2957,60 +3035,60 @@ NEW_AMANT_MISSED:
 	call DRAW_POPUP_BOX
 	; Draw "SOUPIRANT"
 	ld hl,#c3eb
-	ld de,P1_NAME
+	ld de,SOUPIRANT1_STR
 	ld b,#09
 	call DRW_TXT
 
 	; Draw "<cur_player>"
 	ld hl,#c433
-	ld a,(CUR_PLAYER)
+	ld a,(cur_player)
 	add #30
 	call DRW_CHAR
 
 	; Draw "BRAVO"
-	ld hl,#c46f
-	ld de,#7367
-	ld b,#05
+	ld hl,BRAVO_SCR	;#c46f
+	ld de,BRAVO_STR	;#7367
+	ld b,BRAVO_LEN	;#05
 	call DRW_TXT
 
 	call DELAY
 	call DRAW_POPUP_BOX
 
 	; Draw "MAIS"
-	ld hl,#c3f0
-	ld de,#738b
-	ld b,#04
+	ld hl,MAIS_SCR 		;#c3f0
+	ld de,MAIS_STR		;#738b
+	ld b,MAIS_LEN		;#04
 	call DRW_TXT
 
 	; Draw "TU N'AS"
-	ld hl,#c42d
-	ld de,#7381
-	ld b,#07
+	ld hl,TU_N_AS_SCR 	;#c42d
+	ld de,TU_N_AS_STR	;#7381
+	ld b,TU_N_AS_LEN	;#07
 	call DRW_TXT
 
 	; Draw "PAS"
-	ld hl,#c471
-	ld de,#7388
-	ld b,#03
+	ld hl,PAS_SCR 	;#c471
+	ld de,PAS_STR	;#7388
+	ld b,PAS_LEN	;#03
 	call DRW_TXT
 
 	call DELAY
 	call DRAW_POPUP_BOX
 
 	; Draw "LE TITRE"
-	ld hl,#c3ec
-	ld de,#7377
-	ld b,#08
+	ld hl,LE_TITRE_SCR	;#c3ec
+	ld de,LE_TITRE_STR	;#7377
+	ld b,LE_TITRE_LEN	;#08
 	call DRW_TXT
 
 	; Draw "D'"
-	ld hl,#c42d
-	ld de,#737f
-	ld b,#02
+	ld hl,D_SCR 	;#c42d
+	ld de,D_STR	;#737f
+	ld b,D_LEN	;#02
 	call DRW_WTXT
 
 	; Draw "AMANT"
-	ld de,#71eb
+	ld de,L_AMANT_STR+2	;#71eb
 	ld b,#05
 	call DRW_WTXT
 	call DELAY
@@ -3034,19 +3112,19 @@ GAME_FINISHED:
 	
 	call START_KAZATCHOK
 	
-	ld a,(P1_GAME_OVER)
+	ld a,(p1_game_over)
 	dec a
 	jr z,P2_FINISHED		; P1 is GAME OVER
 	
-	ld a,(P2_GAME_OVER)
+	ld a,(p2_game_over)
 	dec a
 	jr z,P1_FINISHED		; P2 is GAME OVER
 	
 	; -----------------------
 	; Compare player's scores
 	; -----------------------
-	ld hl,P1_SCORE_X10000
-	ld de,P2_SCORE_X10000
+	ld hl,p1_score_X10000
+	ld de,p2_score_X10000
 	ld b,#05
 .cmp_next:
 	ld c,(hl)
@@ -3068,9 +3146,9 @@ GAME_FINISHED:
 P1_WINS:
 	; Process P2 first
 	ld a,#02
-	ld (CUR_PLAYER),a
-	ld hl,CUR_SCORE_X00001
-	ld de,P2_SCORE_X00001
+	ld (cur_player),a
+	ld hl,cur_score_X00001
+	ld de,p2_score_X00001
 	ld b,#05
 .cpy_P2_score:
 	ld a,(de)
@@ -3087,9 +3165,9 @@ P1_WINS:
 ;#9203
 P1_FINISHED:
 	ld a,#01
-	ld (CUR_PLAYER),a
-	ld hl,CUR_SCORE_X00001
-	ld de,P1_SCORE_X00001
+	ld (cur_player),a
+	ld hl,cur_score_X00001
+	ld de,p1_score_X00001
 	ld b,#05
 .cpy_score:
 	ld a,(de)
@@ -3106,9 +3184,9 @@ P1_FINISHED:
 P2_WINS:
 	; Process P1 first.
 	ld a,#01
-	ld (CUR_PLAYER),a
-	ld hl,CUR_SCORE_X00001
-	ld de,P1_SCORE_X00001
+	ld (cur_player),a
+	ld hl,cur_score_X00001
+	ld de,p1_score_X00001
 	ld b,#05
 .cpy_score:
 	ld a,(de)
@@ -3124,9 +3202,9 @@ P2_WINS:
 ;#922f
 P2_FINISHED:
 	ld a,#02
-	ld (CUR_PLAYER),a
-	ld hl,CUR_SCORE_X00001
-	ld de,P2_SCORE_X00001
+	ld (cur_player),a
+	ld hl,cur_score_X00001
+	ld de,p2_score_X00001
 	ld b,#05
 .copy:
 	ld a,(de)
@@ -3140,7 +3218,7 @@ P2_FINISHED:
 ; ------------------------------------------
 ;#9242
 CHECK_NEW_AMANT:
-	ld hl,CUR_SCORE_X10000
+	ld hl,cur_score_X10000
 	ld de,AMANT_SCORE 	; #720b  -> best score
 	ld b,#05
 .cmp_score:
@@ -3171,12 +3249,12 @@ NEW_AMANT_WIN:
 	ld b,#05
 	call DRW_TXT
 	; Draw "SOUPIRANT"
-	ld de,P1_NAME
+	ld de,SOUPIRANT1_STR
 	ld hl,#c42b
 	ld b,#09
 	call DRW_TXT
 	; Draw "<current player>"
-	ld a,(CUR_PLAYER)
+	ld a,(cur_player)
 	add #30
 	ld hl,#c473
 	call DRW_CHAR
@@ -3185,28 +3263,28 @@ NEW_AMANT_WIN:
 
 	call DRAW_POPUP_BOX
 	; Draw "TU ES"
-	ld hl,#c3ef
-	ld de,#736c
-	ld b,#05
+	ld hl,TU_ES_SCR	;#c3ef
+	ld de,TU_ES_STR	;#736c
+	ld b,TU_ES_LEN	;#05
 	call DRW_TXT
 	; Draw "DEVENU"
-	ld hl,#c42e
-	ld b,#06
+	ld hl,DEVENU_SCR	;#c42e
+	ld b,DEVENU_LEN		;#06
 	call DRW_TXT
 
 	call DELAY
 
 	call DRAW_POPUP_BOX
 	; Draw "L'AMANT"
-	ld hl,#c3ed
-	ld de,#71e9
-	ld b,#07
+	ld hl,L_AMANT_SCR2
+	ld de,L_AMANT_STR
+	ld b,L_AMANT_LEN-1
 	call DRW_WTXT
 
 	; Draw "EN TITRE"
-	ld hl,#c46c
-	ld de,#738f
-	ld b,#08
+	ld hl,EN_TITRE_SCR 	;#c46c
+	ld de,EN_TITRE_STR	;#738f
+	ld b,EN_TITRE_LEN	;#08
 	call DRW_TXT
 
 	call DELAY
@@ -3262,11 +3340,11 @@ NEW_AMANT_WIN:
 
 .update_score:
 	ld a,#01
-	ld (HSCORE_CHANGED),a
+	ld (hscore_changed),a
 	
 	; Update Amant
 	inc de
-	ld hl,CUR_SCORE_X10000
+	ld hl,cur_score_X10000
 	ld b,#05
 .cpy_score:
 	ld a,(hl)
@@ -3277,7 +3355,7 @@ NEW_AMANT_WIN:
 	djnz .cpy_score
 	
 	ld b,#05
-	ld de,SOUPIRANT_1
+	ld de,HSCORE1
 
 .check_soupirants:
 	push bc
@@ -3285,7 +3363,7 @@ NEW_AMANT_WIN:
 	inc de
 	inc de
 	inc de
-	ld hl,CUR_SCORE_X10000
+	ld hl,cur_score_X10000
 	ld b,#05
 .check_soupirant:
 	ld a,(hl)
@@ -3310,7 +3388,7 @@ NEW_AMANT_WIN:
 	call CLEAR_SCREEN_AREA
 	call CLEAR_PLAYGND_OFSCR
 	call DANCEFLR_CURTAIN_UP
-	jp MAIN_START
+	jp START
 
 .use_custom_name:
 	ld hl,custom_name
@@ -3369,11 +3447,11 @@ NEW_AMANT_WIN:
 	inc de
 	ld (de),a
 	inc de
-	ld a,(CUR_LEVEL_X10)
+	ld a,(cur_level_X10)
 	add #2f
 	ld (de),a
 	inc de
-	ld a,(CUR_LEVEL_X01)
+	ld a,(cur_level_X01)
 	add #2f
 	ld (de),a
 	jp .finished
@@ -3384,14 +3462,14 @@ NEW_AMANT_WIN:
 ;#93b4
 CHECK_HIGH_SCORE:
 	ld b,#05		; nb of high score table's entry.
-	ld de,SOUPIRANT_1
+	ld de,HSCORE1
 .check_entry:
 	push bc
 	push de
 	inc de
 	inc de
 	inc de
-	ld hl,CUR_SCORE_X10000
+	ld hl,cur_score_X10000
 	ld b,#05
 .cmp_score:
 	ld a,(hl)
@@ -3491,8 +3569,8 @@ CHECK_HIGH_SCORE:
 
 .insert_score:
 	ld a,#01
-	ld (HSCORE_CHANGED),a
-	ld hl,CUR_SCORE_X10000
+	ld (hscore_changed),a
+	ld hl,cur_score_X10000
 	ld b,#05
 .score_loop:
 	ld a,(hl)
@@ -3509,11 +3587,11 @@ CHECK_HIGH_SCORE:
 	inc de
 	ld (de),a
 	inc de
-	ld a,(CUR_LEVEL_X10)
+	ld a,(cur_level_X10)
 	add #2f
 	ld (de),a
 	inc de
-	ld a,(CUR_LEVEL_X01)
+	ld a,(cur_level_X01)
 	add #2f
 	ld (de),a
 	ret
@@ -3607,7 +3685,7 @@ SET_DIR_REVERSED:
 	ret
 
 ;l94d3:
-is_rot_reversed:
+rot_reversed:
 	DB #00
 
 ; -------------------
@@ -3615,7 +3693,7 @@ is_rot_reversed:
 ; -------------------
 ;#94d4
 SET_ROT_NORMAL:
-	ld a,(is_rot_reversed)
+	ld a,(rot_reversed)
 	dec a
 	ret nz
 	ld a,#00
@@ -3626,7 +3704,7 @@ SET_ROT_NORMAL:
 ; --------------------------------
 ;#94dd
 SET_ROT_REVERSED:
-	ld a,(is_rot_reversed)
+	ld a,(rot_reversed)
 	dec a
 	ret z
 	ld a,#01
@@ -3635,8 +3713,8 @@ SET_ROT_REVERSED:
 ; --------------------------------
 ;#94e4
 SWITCH_ROT_DIRECTION:
-	ld (is_rot_reversed),a
-	ld hl,#7c5b
+	ld (rot_reversed),a
+	ld hl,PIECES_DEFS		; = PIECE_1
 	ld de,reversed_rot_buffer
 	ld b,#03
 .loop1:
@@ -3999,7 +4077,7 @@ CLEAR_SCREEN_AREA:
 ; -----------------------------------------
 ;l96b8
 SCORE_ADD_HDRDS:
-	ld a,(CUR_SCORE_X00100)
+	ld a,(cur_score_X00100)
 	add b
 	jp HDRDS
 ; -----------------------------------------
@@ -4008,7 +4086,7 @@ SCORE_ADD_HDRDS:
 ; -----------------------------------------
 ;#96bf
 SCORE_ADD_TENS:
-	ld a,(CUR_SCORE_X00010)
+	ld a,(cur_score_X00010)
 	add b
 	jp TENS
 
@@ -4018,68 +4096,68 @@ SCORE_ADD_TENS:
 ; -----------------------------------------
 ;#96c6
 SCORE_ADD_UNITS:
-	ld a,(CUR_SCORE_X00001)
+	ld a,(cur_score_X00001)
 	add b
-	ld (CUR_SCORE_X00001),a
+	ld (cur_score_X00001),a
 	cp #0b
 	jr c,DRAW_SCORE
 	or a
 	sbc #0a
-	ld (CUR_SCORE_X00001),a
-	ld a,(CUR_SCORE_X00010)
+	ld (cur_score_X00001),a
+	ld a,(cur_score_X00010)
 	inc a
 TENS:
-	ld (CUR_SCORE_X00010),a
+	ld (cur_score_X00010),a
 	sbc #0b
 	jr c,DRAW_SCORE
 	inc a
-	ld (CUR_SCORE_X00010),a
+	ld (cur_score_X00010),a
 	or a
 	sbc #0b
 	jr c,.cont
 	inc a
-	ld (CUR_SCORE_X00010),a
+	ld (cur_score_X00010),a
 .cont:
-	ld a,(CUR_SCORE_X00100)
+	ld a,(cur_score_X00100)
 	inc a
 HDRDS:
-	ld (CUR_SCORE_X00100),a
+	ld (cur_score_X00100),a
 	or a
 	sbc #0b
 	jr c,DRAW_SCORE
 	inc a
-	ld (CUR_SCORE_X00100),a
-	ld a,(CUR_SCORE_X01000)
+	ld (cur_score_X00100),a
+	ld a,(cur_score_X01000)
 	inc a
-	ld (CUR_SCORE_X01000),a
+	ld (cur_score_X01000),a
 	cp #0b
 	jr c,DRAW_SCORE
 	ld a,#01
-	ld (CUR_SCORE_X01000),a
-	ld a,(CUR_SCORE_X10000)
+	ld (cur_score_X01000),a
+	ld a,(cur_score_X10000)
 	inc a
-	ld (CUR_SCORE_X10000),a
+	ld (cur_score_X10000),a
 	cp #0b
 	jr c,DRAW_SCORE
 	ld a,#01
-	ld (CUR_SCORE_X10000),a
+	ld (cur_score_X10000),a
 
 ;#971f:
 DRAW_SCORE:
-	ld hl,(CUR_SCORE_SCR)
-	ld a,(CUR_SCORE_X10000)
+	ld hl,(cur_score_scr)
+	ld a,(cur_score_X10000)
 	add #2f
 	call DRW_CHAR
-	ld a,(CUR_SCORE_X01000)
+	ld a,(cur_score_X01000)
 	add #2f
 	call DRW_CHAR
-	ld a,(CUR_SCORE_X00100)
+	ld a,(cur_score_X00100)
 	add #2f
 	call DRW_CHAR
-	ld a,(CUR_SCORE_X00010)
+	ld a,(cur_score_X00010)
 	add #2f
 	call DRW_CHAR
-	ld a,(CUR_SCORE_X00001)
+	ld a,(cur_score_X00001)
 	add #2f
 	jp DRW_CHAR
 
@@ -4137,7 +4215,7 @@ DRW_CHAR:
 	sbc hl,de
 	sla l
 	rl h
-	ld de,#5823
+	ld de,ALPHABET
 	add hl,de
 	ex de,hl
 	pop hl
@@ -4192,7 +4270,7 @@ DRW_WCHAR:
 	sbc hl,de
 	sla l
 	rl h
-	ld de,#5823
+	ld de,ALPHABET
 	add hl,de
 	ex de,hl
 	pop hl
@@ -4257,14 +4335,14 @@ GET_RNDM_PIECE:
 	sla a			; x2
 	ld c,a
 	ld b,#00
-	ld hl,piece_table
+	ld hl,PIECES_TABLE
 	add hl,bc		; HL = &piece_table[random]
 	ld e,(hl)		; 
 	inc hl			;
 	ld d,(hl)		; DE = piece_table[random]
 
 
-	ld hl,NXT_PIECE_AREA_POS; Copy piece data into current piece buffer
+	ld hl,nxt_piece_prz_pos ; Copy piece data into next piece buffer
 	ld b,#1e		; piece data is #1E long
 .copy:			
 	ld a,(de)
@@ -4292,14 +4370,14 @@ GET_RNDM_PIECE:
 ;l9838:
 random:
 	DB #00
-piece_table:
-	DW #7dd7
-	DW #7d33
-	DW #7cc7
-	DW #7d9f
-	DW #7e0f
-	DW #7e47
-	DW #7c5b
+PIECES_TABLE:
+	DW PIECE_5_DEF
+	DW PIECE_3_DEF
+	DW PIECE_2_DEF
+	DW PIECE_4_DEF
+	DW PIECE_6_DEF
+	DW PIECE_7_DEF
+	DW PIECE_1_DEF
 
 ANIMATION_END:
 	; Draw dance floor
@@ -4584,9 +4662,9 @@ DANCE_ANIMATION:
 	ld bc,#1904
 	call DRAW_BMP
 
-	ld a,#28		; tempo
-	ld (dance_tempo),a
-	ld hl,#7431		; <- dance animation data
+	ld a,#28		; initial delay, then deley 10 frames
+	ld (dance_cnt),a
+	ld hl,DANCE_TBL		; <- dance animation data
 	ld (dance_ptr),hl
 	ld hl,FLBK_DANCE_BLOCK	
 	call #bcda		; Enable dance flyback
@@ -4616,7 +4694,7 @@ DANCE_ANIMATION:
 	call DRAW_BMP
 
 .wait:
-	ld a,(dance_tempo)
+	ld a,(dance_cnt)
 	cp #00
 	jr z,.done	; Animation terminated.
 	jr .wait
@@ -4637,7 +4715,7 @@ FLBK_DANCE_BLOCK:
 	DB #00
 	DB #00,#00,#00,#00  
 	DB #00,#00,#00,#00  
-dance_tempo:
+dance_cnt:
 	DB #00
 dance_ptr:
 	DB #00,#00
@@ -4645,22 +4723,22 @@ dance_ptr:
 ; #99ef
 FLBK_DANCE_ISR:
 	push af
-	ld a,(dance_tempo)
+	ld a,(dance_cnt)
 	dec a
-	ld (dance_tempo),a
+	ld (dance_cnt),a
 	jr nz,.skip
 	di
 	push hl
 	push de
 	push bc
-	ld a,#0a
-	ld (dance_tempo),a
+	ld a,DANCE_TEMPO	;#0a
+	ld (dance_cnt),a
 	ld hl,(dance_ptr)
 	ld a,(hl)
 	cp #ff
 	jr nz,.anim
 	ld a,#00		; <- indicate animation's done
-	ld (dance_tempo),a
+	ld (dance_cnt),a
 	ld hl,FLBK_DANCE_BLOCK
 	call #bcdd
 	jp .done
@@ -4970,11 +5048,11 @@ FLBK_MOVE_UP_DISABLE:
 ; Move playground one line up !!!
 ; ---------------------------------
 PLAYGROUND_MOVE_UP:
-	ld a,(#7582)
+	ld a,(playgnd_top_idx)
 	cp #0f
 	ret nc
 	inc a
-	ld (#7582),a
+	ld (playgnd_top_idx),a
 	ld hl,PLAYGND_MSK_BUF
 	ld de,PLAYGND_MSK_BUF+#C
 	ld b,#19
@@ -5289,6 +5367,7 @@ PRV_SCR_LINE:
 ; -----------------------------------
 ; Configure AY-3-8912 Sound generator  
 ; -----------------------------------
+;#9d21
 CFG_AY_SND:
 	di
 	push bc
@@ -5511,3 +5590,6 @@ BOX_SIDES:
 	pop bc
 	djnz BOX_SIDES
 	ret
+
+
+
