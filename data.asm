@@ -1,8 +1,6 @@
-		org #400b
-DATA_START	equ $
 
-;#400b
-; Alinka's head bitmap (zbmp) 20x96
+;;#400b
+;; Alinka's head bitmap (zbmp) 20x96
 ALINKA_HEAD_ZBMP:
 		db #60,#89,#00,#81,#05,#81,#0f,#81
 		db #2a,#88,#00,#ff,#89,#00,#81,#0f
@@ -191,8 +189,8 @@ ALINKA_HEAD_ZBMP:
 		db #88,#f0,#87,#00,#ff,#86,#00,#87
 		db #f0,#87,#00,#ff,#87,#00,#85,#f0
 		db #81,#a0,#87,#00,#ff
-;#45e0
-; Large Kozak dancer (zbmp)	      20x96
+;;#45e0
+;; Large Kozak dancer (zbmp)	      20x96
 KOZAK_DANCER_ZBMP:
 		db #60,#94,#00,#ff,#94,#00,#ff,#94
 		db #00,#ff,#94,#00,#ff,#94,#00,#ff
@@ -334,8 +332,8 @@ KOZAK_DANCER_ZBMP:
 		db #14,#83,#3c,#8c,#00,#82,#3c,#81
 		db #00,#ff,#82,#00,#82,#3c,#8d,#00
 		db #81,#3c,#81,#28,#81,#00,#ff
-;#4a3f
-;Dancing Kozak going out 4x23 (only 4x22 is displayed) 
+;;#4a3f
+;;Dancing Kozak going out 4x23 (only 4x22 is displayed) 
 KOZAK_OUT_BMP:
 		db #34,#0c,#0c,#0c,#34,#3c,#0c,#0c
 		db #34,#3c,#2c,#0c,#34,#3c,#3c,#0c
@@ -349,8 +347,8 @@ KOZAK_OUT_BMP:
 		db #20,#3f,#3f,#14,#20,#15,#3f,#2a
 		db #20,#15,#3f,#2a,#20,#00,#3f,#2a
 		db #20,#00,#3f,#00
-;#4a9b
-; Dancing Kozak coming in 4x25
+;;#4a9b
+;; Dancing Kozak coming in 4x25
 KOZAK_IN_BMP:
 		db #24,#00,#04,#0c,#20,#00,#50,#0c
 		db #20,#00,#14,#0c,#20,#00,#50,#0c
@@ -365,8 +363,8 @@ KOZAK_IN_BMP:
 		db #24,#fc,#5c,#2c,#24,#fc,#bc,#2c
 		db #30,#fc,#3c,#38,#20,#bc,#3c,#00
 		db #20,#3c,#00,#00
-;#4aff
-; Alinka game title (64x33)
+;;#4aff
+;; Alinka game title (64x33)
 GAME_TITLE_ZBMP:
 		db #21,#81,#c0,#9b,#3f,#81,#2b,#81
 		db #03,#a1,#3f,#81,#c0,#ff,#81,#95
@@ -573,14 +571,14 @@ GAME_TITLE_ZBMP:
 		db #0c,#ff,#81,#84,#81,#0c,#bc,#00
 		db #81,#0c,#81,#48,#ff,#81,#84,#be
 		db #0c,#81,#48,#ff
-;---------------------------------------------------------
-;#5163
-;
-; 	XXX
-; 	X
-;
-;
-; (6x16)
+;;---------------------------------------------------------
+;;#5163
+;;
+;; 	XXX
+;; 	X
+;;
+;;
+;; (6x16)
 PIECE_1_1_BMP:
 		db #3f,#3f,#3f,#3f,#3f,#3f,#3f,#3f
 		db #3f,#3f,#3f,#2e,#6a,#c0,#c0,#c0
@@ -594,13 +592,13 @@ PIECE_1_1_BMP:
 		db #6a,#84,#00,#00,#00,#00,#6a,#84
 		db #00,#00,#00,#00,#2e,#0c,#00,#00
 		db #00,#00,#0c,#0c,#00,#00,#00,#00
-;#51c3
-;
-; 	X
-; 	X
-;	XX
-;
-; (4x24)
+;;#51c3
+;;
+;; 	X
+;; 	X
+;;	XX
+;;
+;; (4x24)
 PIECE_1_2_BMP:
 		db #3f,#3f,#00,#00,#3f,#2e,#00,#00
 		db #6a,#84,#00,#00,#6a,#84,#00,#00
@@ -614,13 +612,13 @@ PIECE_1_2_BMP:
 		db #6a,#c0,#c0,#84,#6a,#c0,#c0,#84
 		db #6a,#c0,#c0,#84,#6a,#c0,#c0,#84
 		db #2e,#0c,#0c,#0c,#0c,#0c,#0c,#0c
-;#5223
-;
-; 	  X
-; 	XXX
-;	
-;
-; (6x16)
+;;#5223
+;;
+;; 	  X
+;; 	XXX
+;;	
+;;
+;; (6x16)
 PIECE_1_3_BMP:
 		db #00,#00,#00,#00,#3f,#3f,#00,#00
 		db #00,#00,#3f,#2e,#00,#00,#00,#00
@@ -634,13 +632,13 @@ PIECE_1_3_BMP:
 		db #6a,#c0,#c0,#c0,#c0,#84,#6a,#c0
 		db #c0,#c0,#c0,#84,#2e,#0c,#0c,#0c
 		db #0c,#0c,#0c,#0c,#0c,#0c,#0c,#0c
-;#5283
-;
-; 	XX
-; 	 X
-;	 X
-;
-; (4x24)
+;;#5283
+;;
+;; 	XX
+;; 	 X
+;;	 X
+;;
+;; (4x24)
 PIECE_1_4_BMP:
 		db #3f,#3f,#3f,#3f,#3f,#3f,#3f,#2e
 		db #6a,#c0,#c0,#84,#6a,#c0,#c0,#84
@@ -655,14 +653,14 @@ PIECE_1_4_BMP:
 		db #00,#00,#6a,#84,#00,#00,#6a,#84
 		db #00,#00,#2e,#0c,#00,#00,#0c,#0c
 
-;---------------------------------------------------------
-;#52e3
-;
-; 	XXX
-; 	  X
-;	
-;
-; (6x16)
+;;---------------------------------------------------------
+;;#52e3
+;;
+;; 	XXX
+;; 	  X
+;;	
+;;
+;; (6x16)
 PIECE_2_1_BMP:
 		db #3f,#3f,#3f,#3f,#3f,#3f,#3f,#3f
 		db #3f,#3f,#3f,#2e,#2b,#03,#03,#03
@@ -676,13 +674,13 @@ PIECE_2_1_BMP:
 		db #00,#00,#00,#00,#2b,#06,#00,#00
 		db #00,#00,#2b,#06,#00,#00,#00,#00
 		db #2e,#0c,#00,#00,#00,#00,#0c,#0c
-;#5343
-;
-; 	XX
-; 	X
-;	X
-;
-; (4x24)
+;;#5343
+;;
+;; 	XX
+;; 	X
+;;	X
+;;
+;; (4x24)
 PIECE_2_2_BMP:
 		db #3f,#3f,#3f,#3f,#3f,#3f,#3f,#2e
 		db #2b,#03,#03,#06,#2b,#03,#03,#06
@@ -696,13 +694,13 @@ PIECE_2_2_BMP:
 		db #2b,#06,#00,#00,#2b,#06,#00,#00
 		db #2b,#06,#00,#00,#2b,#06,#00,#00
 		db #2e,#0c,#00,#00,#0c,#0c,#00,#00
-;#53a3
-;
-; 	X
-; 	XXX
-;	
-;
-; (6x16)
+;;#53a3
+;;
+;; 	X
+;; 	XXX
+;;	
+;;
+;; (6x16)
 PIECE_2_3_BMP:
 		db #3f,#3f,#00,#00,#00,#00,#3f,#2e
 		db #00,#00,#00,#00,#2b,#06,#00,#00
@@ -716,13 +714,13 @@ PIECE_2_3_BMP:
 		db #2b,#03,#03,#03,#03,#06,#2b,#03
 		db #03,#03,#03,#06,#2e,#0c,#0c,#0c
 		db #0c,#0c,#0c,#0c,#0c,#0c,#0c,#0c
-;#5403
-;
-; 	 X
-; 	 X
-;	XX
-;
-; (4x24)
+;;#5403
+;;
+;; 	 X
+;; 	 X
+;;	XX
+;;
+;; (4x24)
 PIECE_2_4_BMP:
 		db #00,#00,#3f,#3f,#00,#00,#3f,#2e
 		db #00,#00,#2b,#06,#00,#00,#2b,#06
@@ -737,14 +735,14 @@ PIECE_2_4_BMP:
 		db #2b,#03,#03,#06,#2b,#03,#03,#06
 		db #2e,#0c,#0c,#0c,#0c,#0c,#0c,#0c
 
-;---------------------------------------------------------
-;#5463
-;
-; 	XXX
-; 	 X
-;	
-;
-; (6x16)
+;;---------------------------------------------------------
+;;#5463
+;;
+;; 	XXX
+;; 	 X
+;;	
+;;
+;; (6x16)
 PIECE_3_1_BMP:
 		db #3f,#3f,#3f,#3f,#3f,#3f,#3f,#3f
 		db #3f,#3f,#3f,#2e,#3b,#33,#33,#33
@@ -758,13 +756,13 @@ PIECE_3_1_BMP:
 		db #00,#00,#3b,#26,#00,#00,#00,#00
 		db #3b,#26,#00,#00,#00,#00,#2e,#0c
 		db #00,#00,#00,#00,#0c,#0c,#00,#00
-;#54c3
-;
-; 	X
-; 	XX
-;	X
-;
-; (4x24)
+;;#54c3
+;;
+;; 	X
+;; 	XX
+;;	X
+;;
+;; (4x24)
 PIECE_3_2_BMP:
 		db #3f,#3f,#00,#00,#3f,#2e,#00,#00
 		db #3b,#26,#00,#00,#3b,#26,#00,#00
@@ -778,13 +776,13 @@ PIECE_3_2_BMP:
 		db #3b,#26,#00,#00,#3b,#26,#00,#00
 		db #3b,#26,#00,#00,#3b,#26,#00,#00
 		db #2e,#0c,#00,#00,#0c,#0c,#00,#00
-;#5523
-;
-; 	 X
-; 	XXX
-;	
-;
-; (6x16)
+;;#5523
+;;
+;; 	 X
+;; 	XXX
+;;	
+;;
+;; (6x16)
 PIECE_3_3_BMP:
 		db #00,#00,#3f,#3f,#00,#00,#00,#00
 		db #3f,#2e,#00,#00,#00,#00,#3b,#26
@@ -798,13 +796,13 @@ PIECE_3_3_BMP:
 		db #3b,#33,#33,#33,#33,#26,#3b,#33
 		db #33,#33,#33,#26,#2e,#0c,#0c,#0c
 		db #0c,#0c,#0c,#0c,#0c,#0c,#0c,#0c
-;#5583
-;
-; 	 X
-; 	XX
-;	 X
-;
-; (4x24)
+;;#5583
+;;
+;; 	 X
+;; 	XX
+;;	 X
+;;
+;; (4x24)
 PIECE_3_4_BMP:
 		db #00,#00,#3f,#3f,#00,#00,#3f,#2e
 		db #00,#00,#3b,#26,#00,#00,#3b,#26
@@ -820,14 +818,14 @@ PIECE_3_4_BMP:
 		db #00,#00,#2e,#0c,#00,#00,#0c,#0c
 
 
-;---------------------------------------------------------
-;#55e3
-;
-; 	 XX
-; 	XX
-;	
-;
-; (6x16)
+;;---------------------------------------------------------
+;;#55e3
+;;
+;; 	 XX
+;; 	XX
+;;	
+;;
+;; (6x16)
 PIECE_4_1_BMP:
 		db #00,#00,#3f,#3f,#3f,#3f,#00,#00
 		db #3f,#3f,#3f,#2e,#00,#00,#3a,#30
@@ -841,13 +839,13 @@ PIECE_4_1_BMP:
 		db #3a,#30,#30,#24,#00,#00,#3a,#30
 		db #30,#24,#00,#00,#2e,#0c,#0c,#0c
 		db #00,#00,#0c,#0c,#0c,#0c,#00,#00
-;#5643
-;
-; 	X
-; 	XX
-;	 X
-;
-; (4x24)
+;;#5643
+;;
+;; 	X
+;; 	XX
+;;	 X
+;;
+;; (4x24)
 PIECE_4_2_BMP:
 		db #3f,#3f,#00,#00,#3f,#2e,#00,#00
 		db #3a,#24,#00,#00,#3a,#24,#00,#00
@@ -862,14 +860,14 @@ PIECE_4_2_BMP:
 		db #00,#00,#3a,#24,#00,#00,#3a,#24
 		db #00,#00,#2e,#0c,#00,#00,#0c,#0c
 
-;---------------------------------------------------------
-;#56a3
-;
-; 	XX
-; 	 XX
-;	
-;
-; (6x16)
+;;---------------------------------------------------------
+;;#56a3
+;;
+;; 	XX
+;; 	 XX
+;;	
+;;
+;; (6x16)
 PIECE_5_1_BMP:
 		db #3f,#3f,#3f,#3f,#00,#00,#3f,#3f
 		db #3f,#2e,#00,#00,#6b,#c3,#c3,#86
@@ -883,13 +881,13 @@ PIECE_5_1_BMP:
 		db #00,#00,#6b,#c3,#c3,#86,#00,#00
 		db #6b,#c3,#c3,#86,#00,#00,#2e,#0c
 		db #0c,#0c,#00,#00,#0c,#0c,#0c,#0c
-;#5703
-;
-; 	 X
-; 	XX
-;	X
-;
-; (4x24)
+;;#5703
+;;
+;; 	 X
+;; 	XX
+;;	X
+;;
+;; (4x24)
 PIECE_5_2_BMP:
 		db #00,#00,#3f,#3f,#00,#00,#3f,#2e
 		db #00,#00,#6b,#86,#00,#00,#6b,#86
@@ -904,14 +902,14 @@ PIECE_5_2_BMP:
 		db #6b,#86,#00,#00,#6b,#86,#00,#00
 		db #2e,#0c,#00,#00,#0c,#0c,#00,#00
 
-;---------------------------------------------------------
-;#5763
-;
-; 	XXXX
-; 	
-;	
-;
-; (8x8)
+;;---------------------------------------------------------
+;;#5763
+;;
+;; 	XXXX
+;; 	
+;;	
+;;
+;; (8x8)
 PIECE_6_1_BMP:
 		db #3f,#3f,#3f,#3f,#3f,#3f,#3f,#3f
 		db #3f,#3f,#3f,#3f,#3f,#3f,#3f,#2e
@@ -921,14 +919,14 @@ PIECE_6_1_BMP:
 		db #7e,#fc,#fc,#fc,#fc,#fc,#fc,#ac
 		db #2e,#0c,#0c,#0c,#0c,#0c,#0c,#0c
 		db #0c,#0c,#0c,#0c,#0c,#0c,#0c,#0c
-;#57a3
-;
-;	X
-; 	X
-;	X
-;	X
-;
-; (2x32)
+;;#57a3
+;;
+;;	X
+;; 	X
+;;	X
+;;	X
+;;
+;; (2x32)
 PIECE_6_2_BMP:
 		db #3f,#3f,#3f,#2e,#7e,#ac,#7e,#ac
 		db #7e,#ac,#7e,#ac,#7e,#ac,#7e,#ac
@@ -939,14 +937,14 @@ PIECE_6_2_BMP:
 		db #7e,#ac,#7e,#ac,#7e,#ac,#7e,#ac
 		db #7e,#ac,#7e,#ac,#2e,#0c,#0c,#0c
 
-;---------------------------------------------------------
-;#57e3
-;
-; 	XX
-; 	XX
-;	
-;
-; (4x16)
+;;---------------------------------------------------------
+;;#57e3
+;;
+;; 	XX
+;; 	XX
+;;	
+;;
+;; (4x16)
 PIECE_7_1_BMP:
 		db #3f,#3f,#3f,#3f,#3f,#3f,#3f,#2e
 		db #6e,#cc,#cc,#8c,#6e,#cc,#cc,#8c
@@ -958,10 +956,10 @@ PIECE_7_1_BMP:
 		db #2e,#0c,#0c,#0c,#0c,#0c,#0c,#0c
 
 
-;---------------------------------------------------------
-;#5823
-; Alphabet
-; 66 characters (2x7)
+;;---------------------------------------------------------
+;;#5823
+;; Alphabet
+;; 66 characters (2x7)
 ALPHABET:
 		db #00,#00,#00,#00,#00,#00,#00,#00
 		db #00,#00,#00,#00,#00,#00
@@ -1097,8 +1095,8 @@ ALPHABET:
 		db #82,#41,#82,#01,#c3,#03
 
 
-;#5bbf
-; Curtain 34x8
+;;#5bbf
+;; Curtain 34x8
 CURTAIN_BMP:
 		db #bc,#3c,#7c,#7c,#bc,#3c,#bc,#3c
 		db #3c,#7c,#7c,#bc,#3c,#3c,#7c,#bc
@@ -1134,8 +1132,8 @@ CURTAIN_BMP:
 		db #00,#00,#00,#00,#00,#00,#00,#00
 		db #43,#00,#00,#00,#41,#43,#43,#00
 		db #00,#41,#43,#00,#00,#00,#00,#00
-;#5ccf	
-; Burning flame 1 20x8
+;;#5ccf	
+;; Burning flame 1 20x8
 FLAME1_BMP:
 		db #00,#fc,#00,#54,#a8,#54,#a8,#00
 		db #a8,#54,#a8,#00,#54,#00,#00,#00
@@ -1157,8 +1155,8 @@ FLAME1_BMP:
 		db #54,#03,#fc,#00,#00,#fc,#00,#00
 		db #00,#a8,#00,#00,#00,#fc,#54,#00
 		db #54,#a8,#00,#00,#00,#fc,#00,#00
-;#5d6f
-; Burning flame 2 20x8
+;;#5d6f
+;; Burning flame 2 20x8
 FLAME2_BMP:
 		db #00,#54,#a8,#00,#00,#00,#00,#00
 		db #00,#00,#00,#00,#00,#00,#00,#00
@@ -1180,8 +1178,8 @@ FLAME2_BMP:
 		db #a9,#56,#54,#a8,#00,#00,#00,#fc
 		db #00,#00,#00,#fc,#00,#00,#00,#00
 		db #54,#a8,#00,#00,#54,#a8,#00,#00
-;#5e0f
-; Burning flame 3 20x8
+;;#5e0f
+;; Burning flame 3 20x8
 FLAME3_BMP:
 		db #00,#54,#a8,#00,#00,#00,#00,#00
 		db #00,#00,#00,#00,#00,#00,#00,#00
@@ -1203,8 +1201,8 @@ FLAME3_BMP:
 		db #a9,#56,#54,#a8,#00,#00,#00,#fc
 		db #00,#00,#00,#fc,#00,#00,#00,#00
 		db #54,#a8,#00,#00,#54,#a8,#00,#00
-;#5eaf
-; P1's head   (20x5)
+;;#5eaf
+;; P1's head   (20x5)
 P1_HEAD_BMP:
 		db #00,#82,#c3,#82,#00,#41,#c3,#c3
 		db #c3,#00,#41,#c3,#c3,#c3,#00,#41
@@ -1219,8 +1217,8 @@ P1_HEAD_BMP:
 		db #50,#b4,#b4,#f0,#00,#00,#f0,#78
 		db #a0,#00,#00,#f0,#f0,#a0,#00,#00
 		db #50,#f0,#00,#00
-;#5f13
-; P2's head   (20x5)
+;;#5f13
+;; P2's head   (20x5)
 P2_HEAD_BMP:
 		db #00,#28,#3c,#28,#00,#14,#3c,#3c
 		db #3c,#00,#14,#3c,#3c,#3c,#00,#14
@@ -1235,8 +1233,8 @@ P2_HEAD_BMP:
 		db #50,#b4,#b4,#f0,#00,#00,#f0,#78
 		db #a0,#00,#00,#f0,#f0,#a0,#00,#00
 		db #50,#f0,#00,#00
-;#5f77
-; Left dance floor's column (5x100)
+;;#5f77
+;; Left dance floor's column (5x100)
 LFT_COLUMN_BMP
 		db #30,#30,#30,#35,#3a,#3f,#3f,#3f
 		db #3a,#3a,#3a,#30,#30,#3f,#30,#35
@@ -1302,8 +1300,8 @@ LFT_COLUMN_BMP
 		db #35,#3a,#3f,#3f,#3f,#35,#20,#3f
 		db #3f,#3f,#30,#00
 
-;#616b	
-; Right dance floor column with Alinka (10x100)
+;;#616b	
+;; Right dance floor column with Alinka (10x100)
 RGT_COLUMN_BMP:
 		db #3f,#3f,#3f,#3f,#3f,#35,#3a,#30
 		db #30,#30,#30,#30,#30,#30,#30,#35
@@ -1430,53 +1428,53 @@ RGT_COLUMN_BMP:
 		db #3a,#30,#30,#30,#14,#3c,#28,#00
 		db #3c,#10,#3a,#3f,#3f,#3f,#00,#00
 		db #00,#00,#3c,#00,#30,#3f,#3f,#3f
-;#6553
-; Block id = #00
+;;#6553
+;; Block id = #00
 EMPTY_BLOCK_BMP
 		db #00,#00,#00,#00,#00,#00,#00,#00
 		db #00,#00,#00,#00,#00,#00,#00,#00
-;#6563
-; Block id = #01
+;;#6563
+;; Block id = #01
 PURPLE_BLOCK_BMP
 		db #3f,#3f,#3f,#2e,#6a,#84,#6a,#84
 		db #6a,#84,#6a,#84,#2e,#0c,#0c,#0c
-;#6573
-; Block id = #02
+;;#6573
+;; Block id = #02
 RED_BLOCK_BMP
 		db #3f,#3f,#3f,#2e,#7e,#ac,#7e,#ac
 		db #7e,#ac,#7e,#ac,#2e,#0c,#0c,#0c
-;#6583
-; Block id = #03
+;;#6583
+;; Block id = #03
 ORANGE_BLOCK_BMP
 		db #3f,#3f,#3f,#2e,#2b,#06,#2b,#06
 		db #2b,#06,#2b,#06,#2e,#0c,#0c,#0c
-;#6593
-; Block id = #04
+;;#6593
+;; Block id = #04
 YELLOW_BLOCK_BMP
 		db #3f,#3f,#3f,#2e,#6b,#86,#6b,#86
 		db #6b,#86,#6b,#86,#2e,#0c,#0c,#0c
-;#65a3
-; Block id = #05
+;;#65a3
+;; Block id = #05
 GREEN_BLOCK_BMP
 		db #3f,#3f,#3f,#2e,#3b,#26,#3b,#26
 		db #3b,#26,#3b,#26,#2e,#0c,#0c,#0c
-;#65b3
-; Block id = #06
+;;#65b3
+;; Block id = #06
 BLUE_BLOCK_BMP:
 		db #3f,#3f,#3f,#2e,#6e,#8c,#6e,#8c
 		db #6e,#8c,#6e,#8c,#2e,#0c,#0c,#0c
-;#65c3	
-; Block id = #07
+;;#65c3	
+;; Block id = #07
 LBLUE_BLOCK_BMP:  
 		db #3f,#3f,#3f,#2e,#3a,#24,#3a,#24
 		db #3a,#24,#3a,#24,#2e,#0c,#0c,#0c
-;#65d3	
-; Block id = #08
+;;#65d3	
+;; Block id = #08
 BLINK_BLOCK_BMP:  
 		db #3f,#3f,#3f,#2e,#7f,#ae,#7f,#ae
 		db #7f,#ae,#7f,#ae,#2e,#0c,#0c,#0c
-;#65e3
-; Kozak dancing 1 (10x32)
+;;#65e3
+;; Kozak dancing 1 (10x32)
 KOZAK1_BMP:
 		db #0c,#0c,#0c,#0c,#0c,#0c,#0c,#0c
 		db #0c,#0c,#0c,#0c,#0c,#0c,#0c,#0c
@@ -1518,8 +1516,8 @@ KOZAK1_BMP:
 		db #00,#fc,#bc,#28,#14,#3c,#3c,#00
 		db #00,#00,#00,#00,#bc,#28,#00,#3c
 		db #00,#00,#00,#00,#00,#00,#14,#28
-;#6723
-; Kozak dancing 2 (10x32)
+;;#6723
+;; Kozak dancing 2 (10x32)
 KOZAK2_BMP:
 		db #0c,#0c,#0c,#0c,#0c,#0c,#0c,#0c
 		db #0c,#0c,#0c,#0c,#0c,#0c,#0c,#0c
@@ -1561,8 +1559,8 @@ KOZAK2_BMP:
 		db #00,#fc,#bc,#28,#14,#3c,#3c,#00
 		db #00,#00,#00,#00,#bc,#28,#00,#3c
 		db #00,#00,#00,#00,#00,#00,#14,#28
-;#6863
-; Kozak dancing 3 (10x32)
+;;#6863
+;; Kozak dancing 3 (10x32)
 KOZAK3_BMP:
 		db #a4,#0c,#0c,#0c,#0c,#0c,#0c,#0c
 		db #0c,#0c,#f0,#58,#0c,#0c,#0c,#0c
@@ -1604,8 +1602,8 @@ KOZAK3_BMP:
 		db #00,#fc,#bc,#28,#14,#3c,#3c,#00
 		db #00,#00,#00,#00,#bc,#28,#00,#3c
 		db #00,#00,#00,#00,#00,#00,#14,#28
-;#69a3
-; Kozak dancing 4 (10x32)
+;;#69a3
+;; Kozak dancing 4 (10x32)
 KOZAK4_BMP:
 		db #0c,#0c,#0c,#0c,#0c,#0c,#0c,#0c
 		db #0c,#0c,#0c,#0c,#0c,#0c,#0c,#0c
@@ -1647,8 +1645,8 @@ KOZAK4_BMP:
 		db #00,#3c,#3c,#28,#14,#7c,#00,#00
 		db #00,#00,#00,#3c,#3c,#28,#14,#28
 		db #00,#00,#00,#00,#00,#00,#3c,#00
-;#6ae3
-; Kozak dancing 5 (10x32)
+;;#6ae3
+;; Kozak dancing 5 (10x32)
 KOZAK5_BMP:
 		db #0c,#0c,#0c,#0c,#0c,#0c,#0c,#0c
 		db #0c,#0c,#0c,#0c,#0c,#0c,#0c,#0c
@@ -1690,8 +1688,8 @@ KOZAK5_BMP:
 		db #00,#3c,#3c,#28,#14,#7c,#00,#00
 		db #00,#00,#00,#3c,#3c,#28,#14,#28
 		db #00,#00,#00,#00,#00,#00,#3c,#00
-;#6c23
-; Kozak dancing 7 (10x32)
+;;#6c23
+;; Kozak dancing 7 (10x32)
 KOZAK6_BMP:
 		db #0c,#0c,#0c,#0c,#0c,#0c,#0c,#0c
 		db #0c,#58,#0c,#0c,#0c,#0c,#0c,#0c
@@ -1733,8 +1731,8 @@ KOZAK6_BMP:
 		db #00,#3c,#3c,#28,#14,#7c,#00,#00
 		db #00,#00,#00,#3c,#3c,#28,#14,#28
 		db #00,#00,#00,#00,#00,#00,#3c,#00
-;#6d63
-; Kozak dancing 7 (10x32)
+;;#6d63
+;; Kozak dancing 7 (10x32)
 KOZAK7_BMP:	
 		db #0c,#0c,#0c,#0c,#0c,#0c,#0c,#0c
 		db #0c,#0c,#0c,#0c,#0c,#0c,#0c,#0c
@@ -1776,8 +1774,8 @@ KOZAK7_BMP:
 		db #7c,#a8,#00,#00,#00,#00,#00,#fc
 		db #3c,#00,#3c,#fc,#00,#00,#00,#00
 		db #00,#3c,#00,#00,#00,#3c,#00,#00
-;#6ea3
-; Kozak dancing 8 (10x32)
+;;#6ea3
+;; Kozak dancing 8 (10x32)
 KOZAK8_BMP:	 	
 		db #0c,#0c,#0c,#0c,#0c,#0c,#0c,#0c
 		db #0c,#0c,#0c,#0c,#0c,#0c,#00,#0c
@@ -1819,8 +1817,8 @@ KOZAK8_BMP:
 		db #7c,#fc,#00,#00,#00,#00,#00,#fc
 		db #3c,#00,#3c,#fc,#00,#00,#00,#00
 		db #00,#3c,#00,#00,#00,#3c,#00,#00
-;#6fe3
-; Kazatchock melody data [duration,note]...[#FF] 
+;;#6fe3
+;; Kazatchock melody data [duration,note]...[#FF] 
 KAZATCHOK_MELODY:
 		db #1e,#00,#d5,#0a,#00,#be,#1e,#00
 		db #b3,#0a,#00,#d5,#0a,#00,#b3,#0a
@@ -1863,9 +1861,9 @@ KAZATCHOK_MELODY:
 		db #00,#9f,#0a,#00,#a9,#0a,#00,#a9
 		db #05,#00,#be,#05,#00,#d5,#0a,#00
 		db #e1,#ff
-;#7125
-; Game melody data [note]...[#FF] 
-; Note durations are fixed to 200ms (10 frames)
+;;#7125
+;; Game melody data [note]...[#FF] 
+;; Note durations are fixed to 200ms (10 frames)
 GAME_MELODY:
 		db #7f,#7f,#8e,#8e,#a9,#9f,#8e,#8e
 		db #a9,#9f,#8e,#8e,#9f,#a9,#be,#be
@@ -1894,132 +1892,134 @@ GAME_MELODY:
 		db #7f,#7f,#ff
 
 
-;#71e8	
-; High score changed
+;;#71e8	
+;; High score changed
 hscore_changed	 db #00 
 
-;#71e9
+;;#71e9
 L_AMANT_STR:	 db "L'AMANT:"
-L_AMANT_LEN	 equ 8
-
-		 db "LES"
-		 db "MEILLEURS"
-		 db "SOUPIRANTS"
-HSCORE_TABLE	 equ $
-AMANT:		 db "RIX "		;#7207
-AMANT_SCORE:	 db "40000"		;#720b"
-HSCORE1:	 db "RIX30000...01"	;#7210
-HSCORE2:	 db "PAT25000...01"	;#721d
-HSCORE3:	 db "THB20000...01"	;#722a
-HSCORE4:	 db "ZOU15000...01"	;#7237
-HSCORE5:	 db "TKD10000...01"	;#7244
-
-DEFI_CHOICE_STR: db "DEFI NUMERO .."	;#7251
-DEFI_CHOICE_LEN	 equ 14
-OK_STR:		 db "OK"		;#725f
-OK_LEN		 equ 2
-INVALID_STR:	 db "INVALIDE"		;#7261
-INVALID_LEN	 equ 8
-INFO_DEFI_STR: 	 db "DEFI  01"		;#7269
-INFO_DEFI_LEN	 equ 8
-INFO_LINES_STR:	 db "LIGNE 00"		;#7271
-INFO_LINES_LEN   	 equ 8
-INFO_BONUS_STR:	 db "BONUS 000"		;#7279
-INFO_BONUS_LEN	 equ 9
-SOUPIRANT1_STR:  db "SOUPIRANT 1"	;#7282
-SOUPIRANT1_LEN	 equ 11
-SCORE1_STR:	 db "00000"		;#728d
-SCORE1_LEN	 equ 5
-SCORE2_STR:	 db "00000"		;#7292
-SCORE2_LEN	 equ 5
-SOUPIRANT2_STR:  db "SOUPIRANT 2"	;#7297
-SOUPIRANT2_LEN	 equ 11
-ALINKA_STR:	 db "< ALINKA >"	;#72a2
-ALINKA_LEN	 equ 10
-MENU1_STR:	 db "1-  1  SOUPIRANT" 	;#72ac 
-MENU1_LEN	 equ 16
-MENU2_STR:	 db "2-  2 SOUPIRANTS" 	;#72bc
-MENU2_LEN	 equ 16
-MENU3_STR:	 db "3- CHOIX DU DEFI" 	;#72cc
-MENU3_LEN	 equ 16
-MENU4_STR1:	 db "4- REDEFINIR LES"	;#72dc
-MENU4_LEN1	 equ 16
-MENU4_STR2:	 db "TOUCHES"		;#72ec
-MENU4_LEN2	 equ 7
-COPYRIGHT1_STR:  db "PROGRAMME  DE"	;#72f3
-COPYRIGHT1_LEN	 equ 13
-COPYRIGHT2_STR:  db "ERIC  BOUCHER"	;#7300
-COPYRIGHT2_LEN	 equ 13
-DROITE_STR:	 db "DROITE:"		;#730d
-DROITE_LEN	 equ 7
-GAUCHE_STR:	 db "GAUCHE:"		;#7314
-GAUCHE_LEN	 equ 7
-ACCELERE_STR:	 DB "ACCELERE:"		;#731b
-ACCELERE_LEN	 equ 9
-ROTATION_STR:	 db "ROTATION:"		;#7324
-ROTATION_LEN	 equ 9
-PRET_STR:	 db "PRET"		;#732d
-PRET_LEN	 equ 4
-DOMMAGE_STR:	 db "DOMMAGE"		;#7331
-DOMMAGE_LEN	 equ 7
-TU_AS_STR:	 db "TU AS"		;#7338
-TU_AS_LEN	 equ 5
-ECHOUE_STR:	 db "ECHOUE"		;#733d
-ECHOUE_LEN	 equ 6
-DAMNED_STR:	 db "DAMNED !!"		;#7343
-DAMNED_LEN	 equ 9
-DEFI_STR:	 db "DEFI"		;#734c
-DEFI_LEN 	 equ 4
-REMPORTE_STR: 	 db "REMPORTE"		;#7350
-REMPORTE_LEN 	 equ 8
-TES_STR:	 db "TES"		;#7358
-TES_LEN 	 equ 3
-INITIALES_STR:	 db "INITIALES"		;#735b
-INITIALES_LEN	 equ 9
-DOTS_STR:	 db "..."		;#7364
-DOTS_LEN	 equ 3
-BRAVO_STR:	 db "BRAVO"		;#7367
-BRAVO_LEN	 equ 5
-TU_ES_STR: 	 db "TU ES"		;#736c
-TU_ES_LEN	 equ 5
-DEVENU_STR:	 db "DEVENU"		;#7371
-DEVENU_LEN	 equ 6
-LE_TITRE_STR:	 db "LE TITRE"		;#7377
-LE_TITRE_LEN	 equ 8
-D_STR:		 db "D'"		;#737f
-D_LEN 		 equ 2
-TU_N_AS_STR: 	 db "TU N'AS"		;#7381
-TU_N_AS_LEN 	 equ 7
-PAS_STR	:	 db "PAS"		;#7388
-PAS_LEN		 equ 3
-MAIS_STR	 db "MAIS"		;#738b
-MAIS_LEN	 equ 4
-EN_TITRE_STR:	 db "EN TITRE"		;#738f
-EN_TITRE_LEN 	 equ 8
-MAESTRIA_STR:	 db "MAESTRIA"		;#7397
-MAESTRIA_LEN	 equ 8
-RAPIDITE_STR:	 db "RAPIDITE"		;#739f
-RAPIDITE_LEN	 equ 8
-
-COMBO_STR_TBL:	 db "------  50"	;#73a7
-		 db "AL---- 100"	;#73b1
-		 db "ALIN-- 200"	;#73bb
-		 db "ALINKA 400"	;#73c5
-COMBO_LEN	equ 10
-
-DEFI2_STR:	 db "DEFI"		;#73cf
-DEFI2_LEN	 equ 4
-
-LIGNES_STR:	 db "LIGNES"		;#73d3
-LIGNES_LEN	 equ 6
-A_STR:		 db "A"			;#73d9
-A_LEN       	 equ 1
-COMPLETER_STR:	 db "COMPLETER"		;#73da
-COMPLETER_LEN	 equ 9
 
 
-KBD_MAP_LEN 	equ 78			;#4e
-KBD_MAP:				;#73e3
+LES_STR:	 db "LES"
+MEILLEURS_STR:	 db "MEILLEURS"
+SOUPIRANTS_STR:	 db "SOUPIRANTS"
+
+HSCORES_TABLE	 equ $
+AMANT_NAME:	 db "RIX "		;;#7207
+AMANT_SCORE:	 db "40000"		;;#720b"
+HSCORE1:	 db "RIX30000...01"	;;#7210
+HSCORE2:	 db "PAT25000...01"	;;#721d
+HSCORE3:	 db "THB20000...01"	;;#722a
+HSCORE4:	 db "ZOU15000...01"	;;#7237
+HSCORE5:	 db "TKD10000...01"	;;#7244
+HSCORES_TABLE_END equ $
+
+DEFI_CHOICE_STR: db "DEFI NUMERO .."	;;#7251
+
+OK_STR:		 db "OK"		;;#725f
+
+INVALID_STR:	 db "INVALIDE"		;;#7261
+
+INFO_DEFI_STR: 	 db "DEFI  01"		;;#7269
+
+INFO_LINES_STR:	 db "LIGNE 00"		;;#7271
+
+INFO_BONUS_STR:	 db "BONUS 000"		;;#7279
+
+SOUPIRANT1_STR:  db "SOUPIRANT 1"	;;#7282
+
+SCORE1_STR:	 db "00000"		;;#728d
+
+SCORE2_STR:	 db "00000"		;;#7292
+
+SOUPIRANT2_STR:  db "SOUPIRANT 2"	;;#7297
+
+ALINKA_STR:	 db "< ALINKA >"	;;#72a2
+
+MENU1_STR:	 db "1-  1  SOUPIRANT" 	;;#72ac 
+
+MENU2_STR:	 db "2-  2 SOUPIRANTS" 	;;#72bc
+
+MENU3_STR:	 db "3- CHOIX DU DEFI" 	;;#72cc
+
+MENU4_STR1:	 db "4- REDEFINIR LES"	;;#72dc
+
+MENU4_STR2:	 db "TOUCHES"		;;#72ec
+
+COPYRIGHT1_STR:  db "PROGRAMME  DE"	;;#72f3
+
+COPYRIGHT2_STR:  db "ERIC  BOUCHER"	;;#7300
+
+DROITE_STR:	 db "DROITE:"		;;#730d
+
+GAUCHE_STR:	 db "GAUCHE:"		;;#7314
+
+ACCELERE_STR:	 DB "ACCELERE:"		;;#731b
+
+ROTATION_STR:	 db "ROTATION:"		;;#7324
+
+PRET_STR:	 db "PRET"		;;#732d
+
+DOMMAGE_STR:	 db "DOMMAGE"		;;#7331
+
+TU_AS_STR:	 db "TU AS"		;;#7338
+
+ECHOUE_STR:	 db "ECHOUE"		;;#733d
+
+DAMNED_STR:	 db "DAMNED !!"		;;#7343
+
+DEFI_STR:	 db "DEFI"		;;#734c
+
+REMPORTE_STR: 	 db "REMPORTE"		;;#7350
+
+TES_STR:	 db "TES"		;;#7358
+
+INITIALES_STR:	 db "INITIALES"		;;#735b
+
+DOTS_STR:	 db "..."		;;#7364
+
+BRAVO_STR:	 db "BRAVO"		;;#7367
+
+TU_ES_STR: 	 db "TU ES"		;;#736c
+
+DEVENU_STR:	 db "DEVENU"		;;#7371
+
+LE_TITRE_STR:	 db "LE TITRE"		;;#7377
+
+D_STR:		 db "D'"		;;#737f
+
+TU_N_AS_STR: 	 db "TU N'AS"		;;#7381
+
+PAS_STR	:	 db "PAS"		;;#7388
+
+MAIS_STR	 db "MAIS"		;;#738b
+
+EN_TITRE_STR:	 db "EN TITRE"		;;#738f
+
+MAESTRIA_STR:	 db "MAESTRIA"		;;#7397
+
+RAPIDITE_STR:	 db "RAPIDITE"		;;#739f
+
+
+COMBO_STR_TBL:	 db "------  50"	;;#73a7
+		 db "AL---- 100"	;;#73b1
+		 db "ALIN-- 200"	;;#73bb
+		 db "ALINKA 400"	;;#73c5
+
+
+DEFI2_STR:	 db "DEFI"		;;#73cf
+
+
+LIGNES_STR:	 db "LIGNES"		;;#73d3
+
+A_STR:		 db "A"			;;#73d9
+
+COMPLETER_STR:	 db "COMPLETER"		;;#73da
+
+
+
+KBD_MAP_LEN 	equ 78			;;#4e
+KBD_MAP:				;;#73e3
 		db #2b,#3d,#3e,#3c,#5f,#5e,#5a,#00
 		db #41,#00,#51,#00,#32,#31,#58,#43
 		db #44,#53,#57,#45,#33,#34,#56,#42
@@ -2033,76 +2033,76 @@ KBD_MAP:				;#73e3
 
 
 DANCE_TEMPO	equ 10
-DANCE_TBL:				;#7431
-		dw KOZAK1_BMP ;#65e3
-		dw KOZAK7_BMP ;#6d63
-		dw KOZAK4_BMP ;#69a3
-		dw KOZAK8_BMP ;#6ea3
-		dw KOZAK3_BMP ;#6863
-		dw KOZAK7_BMP ;#6d63
-		dw KOZAK2_BMP ;#6723
-		dw KOZAK7_BMP ;#6d63
-		dw KOZAK5_BMP ;#6ae3
-		dw KOZAK8_BMP ;#6ea3
-		dw KOZAK6_BMP ;#6c23
-		dw KOZAK8_BMP ;#6ea3
-		dw KOZAK3_BMP ;#6863
-		dw KOZAK7_BMP ;#6d63
-		dw KOZAK4_BMP ;#69a3
-		dw KOZAK7_BMP ;#6d63
-		dw KOZAK2_BMP ;#6723
-		dw KOZAK7_BMP ;#6d63
-		dw KOZAK5_BMP ;#6ae3
-		dw KOZAK8_BMP ;#6ea3
-		dw KOZAK6_BMP ;#6c23
-		dw KOZAK7_BMP ;#6d63
-		dw KOZAK2_BMP ;#6723
-		dw KOZAK7_BMP ;#6d63
-		dw KOZAK3_BMP ;#6863
-		dw KOZAK8_BMP ;#6ea3
-		dw KOZAK1_BMP ;#65e3
-		dw KOZAK8_BMP ;#6ea3
-		dw KOZAK5_BMP ;#6ae3
-		dw KOZAK8_BMP ;#6ea3
-		dw KOZAK2_BMP ;#6723
-		dw KOZAK7_BMP ;#6d63
-		dw KOZAK6_BMP ;#6c23
-		dw KOZAK7_BMP ;#6d63
-		dw KOZAK5_BMP ;#6ae3
-		dw KOZAK8_BMP ;#6ea3
-		dw KOZAK3_BMP ;#6863
-		dw KOZAK8_BMP ;#6ea3
-		dw KOZAK6_BMP ;#6c23
+DANCE_TBL:				;;#7431
+		dw KOZAK1_BMP ;;#65e3
+		dw KOZAK7_BMP ;;#6d63
+		dw KOZAK4_BMP ;;#69a3
+		dw KOZAK8_BMP ;;#6ea3
+		dw KOZAK3_BMP ;;#6863
+		dw KOZAK7_BMP ;;#6d63
+		dw KOZAK2_BMP ;;#6723
+		dw KOZAK7_BMP ;;#6d63
+		dw KOZAK5_BMP ;;#6ae3
+		dw KOZAK8_BMP ;;#6ea3
+		dw KOZAK6_BMP ;;#6c23
+		dw KOZAK8_BMP ;;#6ea3
+		dw KOZAK3_BMP ;;#6863
+		dw KOZAK7_BMP ;;#6d63
+		dw KOZAK4_BMP ;;#69a3
+		dw KOZAK7_BMP ;;#6d63
+		dw KOZAK2_BMP ;;#6723
+		dw KOZAK7_BMP ;;#6d63
+		dw KOZAK5_BMP ;;#6ae3
+		dw KOZAK8_BMP ;;#6ea3
+		dw KOZAK6_BMP ;;#6c23
+		dw KOZAK7_BMP ;;#6d63
+		dw KOZAK2_BMP ;;#6723
+		dw KOZAK7_BMP ;;#6d63
+		dw KOZAK3_BMP ;;#6863
+		dw KOZAK8_BMP ;;#6ea3
+		dw KOZAK1_BMP ;;#65e3
+		dw KOZAK8_BMP ;;#6ea3
+		dw KOZAK5_BMP ;;#6ae3
+		dw KOZAK8_BMP ;;#6ea3
+		dw KOZAK2_BMP ;;#6723
+		dw KOZAK7_BMP ;;#6d63
+		dw KOZAK6_BMP ;;#6c23
+		dw KOZAK7_BMP ;;#6d63
+		dw KOZAK5_BMP ;;#6ae3
+		dw KOZAK8_BMP ;;#6ea3
+		dw KOZAK3_BMP ;;#6863
+		dw KOZAK8_BMP ;;#6ea3
+		dw KOZAK6_BMP ;;#6c23
 		db #ff
 
-;#7480
-		db #00		; ???
+;;#7480
+		db #00		;; ???
 
-;#7481
-cur_level_ptr	dw LEVEL_01	; current player level ptr
-;#7483
-p1_level_ptr	dw #0000	; P1 level ptr
-;#7485
-p2_level_ptr	dw #0000	; P2 level ptr
+;;#7481
+cur_level_ptr	dw LEVEL_01	;; current player level ptr
+;;#7483
+p1_level_ptr	dw #0000	;; P1 level ptr
+;;#7485
+p2_level_ptr	dw #0000	;; P2 level ptr
 
 
-; 31 Level entries
-; 1 entry is 7 bytes long
-;    	0: nb lines ten's
-;    	1: nb lines unit's
-;    	2: ???? related to speed
-;    	3: trick flags, ie reverse rotation, reverse direction, random block, random lines
-;    	4: initial playground setup ptr LSB
-;    	5: initial playground setup ptr HSB
-;    	6: Kozak dance at the end: 0 or 1
-;#7487
+;; 31 Level entries
+;; 1 entry is 7 bytes long
+;;    	0: nb lines ten's
+;;    	1: nb lines unit's
+;;    	2: ???? related to speed
+;;    	3: trick flags, ie reverse rotation, reverse direction, random block, random lines
+;;    	4: initial playground setup ptr LSB
+;;    	5: initial playground setup ptr HSB
+;;    	6: Kozak dance at the end: 0 or 1
+;;#7487
 LEVEL_TABLE:
 LEVEL_01:	
-	db #01,#06	; 05 lignes
-	db #32		; speed #32
-	db #00		; no tricks
-	dw PLAYGND_01	; initial setup 
-	db #00		; No dance 
+	db #01,#06	;; 05 lignes
+	db #32		;; speed #32
+	db #00		;; no tricks
+	dw PLAYGND_01	;; initial setup 
+	db #00		;; No dance 
 	
 LEVEL_02:	
 	db #01,#09	
@@ -2314,188 +2314,188 @@ LEVEL_31:
 	dw PLAYGND_23
 	db #01
 
-;#7560
-combo_lines:	 db #00		; Count number of removed line with one piece
+;;#7560
+combo_lines:	 db #00		;; Count number of removed line with one piece
 
-;#7561
-cur_score_scr: 	 dw #0000 	; Current score screen location
+;;#7561
+cur_score_scr: 	 dw #0000 	;; Current score screen location
 
-;#7563
+;;#7563
 		 dw #0000
 
-;#7565
-cur_player	 db #00 	; player +1
+;;#7565
+cur_player	 db #00 	;; player +1
 
-;#7566
-p1_game_over	 db #00  	; True when player 1 is game over
+;;#7566
+p1_game_over	 db #00  	;; True when player 1 is game over
 
-;#7567
-p2_game_over	 db #00		; True when player 2 is game over
+;;#7567
+p2_game_over	 db #00		;; True when player 2 is game over
 
-;#7568
-cur_score_X00001: db #00 	; score X00001 +1
-cur_score_X00010: db #00 	; score X00010 +1
-cur_score_X00100: db #00	; score X00100 +1
-cur_score_X01000: db #00	; score X01000 +1
-cur_score_X10000: db #00	; score X10000 +1
+;;#7568
+cur_score_X00001: db #00 	;; score X00001 +1
+cur_score_X00010: db #00 	;; score X00010 +1
+cur_score_X00100: db #00	;; score X00100 +1
+cur_score_X01000: db #00	;; score X01000 +1
+cur_score_X10000: db #00	;; score X10000 +1
 
-;#756d
-p1_score_X00001: db #00 	; player 1 score X00001 +1
-p1_score_X00010: db #00		; player 1 score X00010 +1
-p1_score_X00100: db #00		; player 1 score X00100 +1
-p1_score_X01000: db #00		; player 1 score X01000 +1
-p1_score_X10000: db #00		; player 1 score X10000 +1
+;;#756d
+p1_score_X00001: db #00 	;; player 1 score X00001 +1
+p1_score_X00010: db #00		;; player 1 score X00010 +1
+p1_score_X00100: db #00		;; player 1 score X00100 +1
+p1_score_X01000: db #00		;; player 1 score X01000 +1
+p1_score_X10000: db #00		;; player 1 score X10000 +1
 
-;#7572
-p2_score_X00001: db #00		; player 2 score X00001 +1
-p2_score_X00010: db #00		; player 2 score X00010 +1
-p2_score_X00100: db #00		; player 2 score X00100 +1
-p2_score_X01000: db #00		; player 2 score X01000 +1
-p2_score_X10000: db #00		; player 2 score X10000 +1
+;;#7572
+p2_score_X00001: db #00		;; player 2 score X00001 +1
+p2_score_X00010: db #00		;; player 2 score X00010 +1
+p2_score_X00100: db #00		;; player 2 score X00100 +1
+p2_score_X01000: db #00		;; player 2 score X01000 +1
+p2_score_X10000: db #00		;; player 2 score X10000 +1
 
-;#7577
-cur_level_X10: db #00		; level X10 +1
-cur_level_X01: db #00		; level X01 +1
+;;#7577
+cur_level_X10: db #00		;; level X10 +1
+cur_level_X01: db #00		;; level X01 +1
 
-;#7579
-cur_lignes_X10: db #00		; current lignes X10 +1
-cur_lignes_X01: db #00		; current lignes X01 +1
+;;#7579
+cur_lignes_X10: db #00		;; current lignes X10 +1
+cur_lignes_X01: db #00		;; current lignes X01 +1
 
-;#757b
-cur_bonus_X100: db #00		; bonus X100 +1
-cur_bonus_X010: db #00		; bonus X010 +1
-cur_bonus_X001: db #00		; bonus X001 +1
+;;#757b
+cur_bonus_X100: db #00		;; bonus X100 +1
+cur_bonus_X010: db #00		;; bonus X010 +1
+cur_bonus_X001: db #00		;; bonus X001 +1
 
-;#757e
-piece_cur_msk_pos: dw #0000	; current piece position in mask playground.
-piece_prv_msk_pos: dw #0000	; current piece next position in mask playground
+;;#757e
+piece_cur_msk_pos: dw #0000	;; current piece position in mask playground.
+piece_prv_msk_pos: dw #0000	;; current piece next position in mask playground
 
-;#7582
-playgnd_top_idx: db #00		; playground's top line index
-piece_top_idx:	 db #00		; piece's top line index
+;;#7582
+playgnd_top_idx: db #00		;; playground's top line index
+piece_top_idx:	 db #00		;; piece's top line index
 
 
-;#7584
-; mask playground's bottom of piece line address
+;;#7584
+;; mask playground's bottom of piece line address
 
 piece_msk_bottom:	dw #0000
-PIECE_MASK_BOTTOM_START	equ #3eea	; Starting value of the piece's mask bottom line
+PIECE_MASK_BOTTOM_START	equ #3eea	;; Starting value of the piece's mask bottom line
 
-;#7586
-; screen playground's bottom of piece line address
+;;#7586
+;; screen playground's bottom of piece line address
 piece_scr_bottom:	dw #0000
 PIECE_SCR_BOTTOM_START	equ #e22a
 
-;#7588
-; bmp playground's bottom of piece line address
+;;#7588
+;; bmp playground's bottom of piece line address
 piece_bmp_bottom:	dw #0000
 PIECE_BMP_BOTTOM_START	equ #30d2
 
-;#758a
-; number of lines from the top of the playground mask
+;;#758a
+;; number of lines from the top of the playground mask
 nb_msk_lines:		db #00
 NB_MSK_LINES_START	equ 3
 
-;#758b
-; number of lines from the top of the playground bitmap
+;;#758b
+;; number of lines from the top of the playground bitmap
 nb_bmp_lines:		db #00
 NB_BMP_LINES_START	equ 24
 
 
-;#758c
-; point to the next combo string
+;;#758c
+;; point to the next combo string
 combo_str: 	 	dw #0000	
 
-;#758e
-; current piece bitmap position
+;;#758e
+;; current piece bitmap position
 piece_cur_bmp_pos: 	dw #0000	
 
-;#7590
-; current piece previous screen position before move
+;;#7590
+;; current piece previous screen position before move
 piece_prv_scr_pos: 	dw #0000 	
 
-;#7592
-; current piece previsou bitmap position before move
+;;#7592
+;; current piece previsou bitmap position before move
 piece_prv_bmp_pos: 	dw #0000
 
-;#7594	
-; current piece previous bitmap pointer
+;;#7594	
+;; current piece previous bitmap pointer
 piece_prv_bmp:	  	dw #0000 
 
-;#7596	
-; current piece previous bitmap dimensions (w/h)
+;;#7596	
+;; current piece previous bitmap dimensions (w/h)
 piece_prv_dim:	  	dw #0000
 
-;#7598
-; Next piece definition's structure ( #1E|30 bytes long )
-nxt_piece_prz_pos: 	dw #0000	; [0,1]  : piece's presentation screen addr
-;#759a
-nxt_piece_scr_pos:  	dw #0000	; [2,3]  : piece initial screen position
-;#759c
-nxt_piece_cur_bmp:  	dw #0000	; [4,5]  : memory bmp source addr
-;#759e
-nxt_piece_cur_dim:  	dw #0000	; [6,7]  : bmp dimensions: width and height
-;#76a0
-nxt_piece_msk_B1:   	dw #0000	; [8,9]  : mask offset from piece origin of block 1 of the current piece
-;#76a2
-nxt_piece_msk_B2:   	dw #0000	; [10,11]: mask offset from piece origin of block 2 of the current piece
-;#76a4
-nxt_piece_msk_B3:   	dw #0000	; [12,13]: mask offset from piece origin of block 3 of the current piece
-;#76a6
-nxt_piece_msk_B4:   	dw #0000	; [14,15]: mask offset from piece origin of block 4 of the current piece
-;#76a8
-nxt_piece_rot_bmp_ofst: dw #0000	; [16,17]: offset to apply to offscreen position when rotating
-;#76aa
-nxt_piece_rot_scr_ofst:	dw #0000	; [18,19]: offset to apply to screen position when rotating
-;#76ac
-nxt_piece_rot_bmp:  	dw #0000	; [20,11]: bitmap pointer to the rotated piece
-;#76ae
-nxt_piece_rot_B1:   	dw #0000	; [22,13]: mask offset of block 1 of the rotated piece
-;#76b0
-nxt_piece_rot_B2:   	dw #0000	; [24,25]: mask offset of block 2 of the rotated piece
-;#76b2
-nxt_piece_rot_B3:   	dw #0000	; [26,27]: mask offset of block 3 of the rotated piece
-;#76b4
-nxt_piece_rot_B4:   	dw #0000	; [28,29]: mask offset of block 4 of the rotated piece
+;;#7598
+;; Next piece definition's structure ( #1E|30 bytes long )
+nxt_piece_prz_pos: 	dw #0000	;; [0,1]  : piece's presentation screen addr
+;;#759a
+nxt_piece_scr_pos:  	dw #0000	;; [2,3]  : piece initial screen position
+;;#759c
+nxt_piece_cur_bmp:  	dw #0000	;; [4,5]  : memory bmp source addr
+;;#759e
+nxt_piece_cur_dim:  	dw #0000	;; [6,7]  : bmp dimensions: width and height
+;;#76a0
+nxt_piece_msk_B1:   	dw #0000	;; [8,9]  : mask offset from piece origin of block 1 of the current piece
+;;#76a2
+nxt_piece_msk_B2:   	dw #0000	;; [10,11]: mask offset from piece origin of block 2 of the current piece
+;;#76a4
+nxt_piece_msk_B3:   	dw #0000	;; [12,13]: mask offset from piece origin of block 3 of the current piece
+;;#76a6
+nxt_piece_msk_B4:   	dw #0000	;; [14,15]: mask offset from piece origin of block 4 of the current piece
+;;#76a8
+nxt_piece_rot_bmp_ofst: dw #0000	;; [16,17]: offset to apply to offscreen position when rotating
+;;#76aa
+nxt_piece_rot_scr_ofst:	dw #0000	;; [18,19]: offset to apply to screen position when rotating
+;;#76ac
+nxt_piece_rot_bmp:  	dw #0000	;; [20,11]: bitmap pointer to the rotated piece
+;;#76ae
+nxt_piece_rot_B1:   	dw #0000	;; [22,13]: mask offset of block 1 of the rotated piece
+;;#76b0
+nxt_piece_rot_B2:   	dw #0000	;; [24,25]: mask offset of block 2 of the rotated piece
+;;#76b2
+nxt_piece_rot_B3:   	dw #0000	;; [26,27]: mask offset of block 3 of the rotated piece
+;;#76b4
+nxt_piece_rot_B4:   	dw #0000	;; [28,29]: mask offset of block 4 of the rotated piece
 
 
 
-;#75b6	; piece current screen position
-; Current piece definition's structure ( #1c|28 bytes long )
-; Same as next piece structure, except we dont' need piece's presentation screen address
+;;#75b6	;; piece current screen position
+;; Current piece definition's structure ( #1c|28 bytes long )
+;; Same as next piece structure, except we dont' need piece's presentation screen address
 piece_src_pos: 		dw #0000
-;#75b8 
-piece_bmp:	   	dw #0000	; piece bitmap
-;#75ba 
-piece_dim:	   	dw #0000	; piece size (w/h)
-;#75bc 
-miece_msk_B1: 	   	dw #0000	; mask offset from piece origin of block 1 of the current piece
-;#75be
-piece_msk_B2: 	   	dw #0000	; mask offset from piece origin of block 1 of the current piece
-;#75c0
-piece_msk_B3: 	   	dw #0000	; mask offset from piece origin of block 1 of the current piece
-;#75c2
-piece_msk_B4:	   	dw #0000	; mask offset from piece origin of block 1 of the current piece
-;#75c4
-piece_rot_bmp_ofst:	dw #0000    ; offset to apply to offscreen position when rotating
-;#75c6
-piece_rot_scr_ofst: 	dw #0000    ; offset to apply to screen position when rotating
-;#75c8
-piece_rot_bmp: 	   	dw #0000	; bitmap pointer to the rotated piece
-;#75ca
-piece_rot_B1:	   	dw #0000	; mask offset of block 1 of the rotated piece
-;#75cc
-piece_rot_B2:	   	dw #0000	; mask offset of block 2 of the rotated piece
-;#75ce
-piece_rot_B3:	   	dw #0000	; mask offset of block 3 of the rotated piece
-;#75d0
-piece_rot_B4:	   	dw #0000	; mask offset of block 4 of the rotated piece
+;;#75b8 
+piece_bmp:	   	dw #0000	;; piece bitmap
+;;#75ba 
+piece_dim:	   	dw #0000	;; piece size (w/h)
+;;#75bc 
+miece_msk_B1: 	   	dw #0000	;; mask offset from piece origin of block 1 of the current piece
+;;#75be
+piece_msk_B2: 	   	dw #0000	;; mask offset from piece origin of block 1 of the current piece
+;;#75c0
+piece_msk_B3: 	   	dw #0000	;; mask offset from piece origin of block 1 of the current piece
+;;#75c2
+piece_msk_B4:	   	dw #0000	;; mask offset from piece origin of block 1 of the current piece
+;;#75c4
+piece_rot_bmp_ofst:	dw #0000    ;; offset to apply to offscreen position when rotating
+;;#75c6
+piece_rot_scr_ofst: 	dw #0000    ;; offset to apply to screen position when rotating
+;;#75c8
+piece_rot_bmp: 	   	dw #0000	;; bitmap pointer to the rotated piece
+;;#75ca
+piece_rot_B1:	   	dw #0000	;; mask offset of block 1 of the rotated piece
+;;#75cc
+piece_rot_B2:	   	dw #0000	;; mask offset of block 2 of the rotated piece
+;;#75ce
+piece_rot_B3:	   	dw #0000	;; mask offset of block 3 of the rotated piece
+;;#75d0
+piece_rot_B4:	   	dw #0000	;; mask offset of block 4 of the rotated piece
 
 
-;#75d2
-blibliblip_pitch   	db #00		; Completed line bliblibliiip pitch
+;;#75d2
+blibliblip_pitch   	db #00		;; Completed line bliblibliiip pitch
 
-;#75d3
+;;#75d3
 landup_sound:		
 			db #c8,#00
 			db #00,#00
@@ -2508,7 +2508,7 @@ landup_sound:
 LANDUP_SOUND_LEN	equ #08
 
 
-;#75e3
+;;#75e3
 PLAYGND_01:
 			db 1,0,0,0,0,0,0,0,0,0,0,1
 			db 1,0,0,0,0,0,0,0,0,0,0,1
@@ -2516,7 +2516,7 @@ PLAYGND_01:
 			db 1,0,0,0,0,0,0,0,0,0,0,1
 			db 1,0,0,0,0,0,0,0,0,0,0,1
 			db 1,0,0,0,0,0,0,0,0,0,0,1
-;#762b
+;;#762b
 PLAYGND_02:
 			db 1,2,0,0,0,0,0,0,0,0,2,1
 			db 1,4,0,0,0,0,0,0,0,0,4,1
@@ -2524,7 +2524,7 @@ PLAYGND_02:
 			db 1,3,0,0,0,0,0,0,0,0,3,1
 			db 1,5,0,0,0,0,0,0,0,0,5,1
 			db 1,7,0,0,0,0,0,0,0,0,7,1
-;#7673
+;;#7673
 PLAYGND_03:
 			db 1,0,0,0,0,0,0,0,0,0,0,1
 			db 1,0,0,0,0,0,0,0,0,0,0,1
@@ -2532,7 +2532,7 @@ PLAYGND_03:
 			db 1,0,0,0,3,2,1,3,0,0,0,1
 			db 1,0,0,3,7,5,6,2,3,0,0,1
 			db 1,0,3,3,3,3,3,3,3,3,0,1
-;#76bb
+;;#76bb
 PLAYGND_04:
 			db 1,0,0,0,0,0,0,0,0,0,0,1
 			db 1,0,0,0,0,3,0,2,0,0,0,1
@@ -2540,7 +2540,7 @@ PLAYGND_04:
 			db 1,0,0,0,5,0,6,0,0,0,0,1
 			db 1,0,2,0,0,0,0,0,4,0,0,1
 			db 1,0,0,0,0,3,0,0,0,0,5,1
-;#7703
+;;#7703
 PLAYGND_05:
 			db 1,0,0,0,0,0,0,0,0,0,0,1
 			db 1,1,0,0,0,0,0,0,0,0,1,1
@@ -2548,7 +2548,7 @@ PLAYGND_05:
 			db 1,3,2,1,0,0,0,0,1,3,2,1
 			db 1,2,1,0,0,0,0,0,0,1,3,1
 			db 1,1,0,0,0,0,0,0,0,0,1,1
-;#774b
+;;#774b
 PLAYGND_06:
 			db 1,5,5,5,0,0,0,0,0,0,0,1
 			db 1,0,0,0,0,0,0,0,0,0,0,1
@@ -2556,7 +2556,7 @@ PLAYGND_06:
 			db 1,0,0,0,0,0,0,0,0,2,0,1
 			db 1,1,0,0,0,0,0,4,0,2,0,1
 			db 1,0,0,0,0,1,0,4,0,2,0,1
-;#7793
+;;#7793
 PLAYGND_07:
 			db 1,1,0,0,0,0,0,0,0,0,0,1
 			db 1,0,6,0,0,0,5,0,0,0,0,1
@@ -2564,7 +2564,7 @@ PLAYGND_07:
 			db 1,0,0,6,0,0,0,0,5,0,0,1
 			db 1,0,1,0,0,0,0,0,5,0,0,1
 			db 1,6,0,0,0,0,0,0,0,5,0,1
-;#77db
+;;#77db
 PLAYGND_08:
 			db 1,0,0,0,0,0,0,0,0,0,0,1
 			db 1,0,0,0,0,0,0,0,0,0,0,1
@@ -2572,7 +2572,7 @@ PLAYGND_08:
 			db 1,0,0,0,0,0,0,0,0,0,0,1
 			db 1,0,2,0,3,0,4,0,5,0,6,1
 			db 1,1,0,7,0,2,0,6,0,3,0,1
-;#7823
+;;#7823
 PLAYGND_09:
 			db 1,0,0,0,0,0,0,0,0,0,0,1
 			db 1,0,0,0,0,0,0,0,0,0,0,1
@@ -2580,7 +2580,7 @@ PLAYGND_09:
 			db 1,1,0,4,0,7,0,6,0,2,0,1
 			db 1,0,3,0,5,0,2,0,5,0,1,1
 			db 1,2,0,7,0,6,0,1,0,2,0,1
-;#786b
+;;#786b
 PLAYGND_10:
 			db 1,0,2,0,3,0,5,0,7,0,1,1
 			db 1,5,0,2,0,4,0,3,0,2,0,1
@@ -2588,7 +2588,7 @@ PLAYGND_10:
 			db 1,5,0,2,0,4,0,1,0,2,0,1
 			db 1,0,1,0,2,0,3,0,4,0,5,1
 			db 1,5,0,4,0,3,0,7,0,2,0,1
-;#78b3
+;;#78b3
 PLAYGND_11:
 			db 1,0,0,0,0,0,0,0,0,0,0,1
 			db 1,0,0,0,0,0,0,0,0,0,0,1
@@ -2596,7 +2596,7 @@ PLAYGND_11:
 			db 1,0,1,0,0,0,0,0,0,2,0,1
 			db 1,0,0,1,0,0,0,0,2,2,0,1
 			db 1,0,1,0,1,0,0,2,0,2,0,1
-;#78fb
+;;#78fb
 PLAYGND_12:
 			db 1,0,0,0,0,0,0,0,0,0,0,1
 			db 1,0,3,3,0,0,0,0,0,1,0,1
@@ -2604,7 +2604,7 @@ PLAYGND_12:
 			db 1,0,0,0,0,0,5,0,0,0,0,1
 			db 1,0,0,4,0,0,0,0,7,7,0,1
 			db 1,0,0,4,4,0,0,0,7,0,0,1
-;#7943
+;;#7943
 PLAYGND_13:
 			db 1,0,0,1,0,0,0,0,1,0,0,1
 			db 1,0,7,0,0,1,0,0,0,2,0,1
@@ -2612,7 +2612,7 @@ PLAYGND_13:
 			db 1,0,0,5,0,1,0,0,6,0,0,1
 			db 1,0,5,0,0,0,3,0,0,6,0,1
 			db 1,5,0,0,0,0,0,0,0,0,6,1
-;#798b
+;;#798b
 PLAYGND_14:
 			db 1,0,0,0,0,0,0,0,0,0,0,1
 			db 1,1,1,1,0,2,0,5,0,5,0,1
@@ -2620,7 +2620,7 @@ PLAYGND_14:
 			db 1,1,1,0,0,2,0,0,5,0,0,1
 			db 1,1,0,1,0,2,0,5,0,5,0,1
 			db 1,1,0,1,0,2,0,5,0,5,0,1
-;#79d3
+;;#79d3
 PLAYGND_15:
 			db 1,0,0,0,0,0,0,0,0,0,0,1
 			db 1,1,1,1,0,1,0,1,0,1,0,1
@@ -2628,7 +2628,7 @@ PLAYGND_15:
 			db 1,0,3,0,3,0,3,3,0,3,0,1
 			db 1,5,0,0,5,0,5,5,0,5,0,1
 			db 1,7,7,7,0,7,0,0,7,0,0,1
-;#7a1b
+;;#7a1b
 PLAYGND_16:
 			db 1,0,0,0,0,0,0,0,0,0,0,1
 			db 1,0,1,1,3,3,3,0,1,1,0,1
@@ -2636,7 +2636,7 @@ PLAYGND_16:
 			db 1,1,0,0,3,3,3,1,0,0,0,1
 			db 1,1,0,0,3,0,0,1,0,0,0,1
 			db 1,0,1,1,3,0,0,0,1,1,0,1
-;#7a63
+;;#7a63
 PLAYGND_17:
 			db 1,0,0,0,0,0,0,2,0,0,0,1
 			db 1,0,7,0,0,0,2,2,0,0,0,1
@@ -2644,7 +2644,7 @@ PLAYGND_17:
 			db 1,0,0,0,2,7,7,7,7,7,0,1
 			db 1,2,0,2,0,0,0,0,2,0,0,1
 			db 1,0,2,0,0,0,0,0,0,2,0,1
-;#7aab
+;;#7aab
 PLAYGND_18:
 			db 1,0,0,0,4,0,0,0,0,0,0,1
 			db 1,0,0,0,4,0,0,0,0,0,0,1
@@ -2652,7 +2652,7 @@ PLAYGND_18:
 			db 1,0,0,4,0,0,0,0,0,0,0,1
 			db 1,0,0,4,0,0,0,0,4,0,0,1
 			db 1,0,4,4,4,4,4,4,0,0,0,1
-;#7af3
+;;#7af3
 PLAYGND_19:
 			db 1,0,0,0,1,1,1,1,0,0,0,1
 			db 1,0,0,0,0,0,1,0,0,0,0,1
@@ -2660,7 +2660,7 @@ PLAYGND_19:
 			db 1,0,0,0,0,1,0,0,0,0,0,1
 			db 1,0,0,0,0,1,0,0,0,0,0,1
 			db 1,0,0,1,1,1,1,1,0,0,0,1
-;#7b3b
+;;#7b3b
 PLAYGND_20:
 			db 1,0,0,0,0,7,3,0,0,7,7,1
 			db 1,0,0,0,7,0,3,0,0,7,0,1
@@ -2668,7 +2668,7 @@ PLAYGND_20:
 			db 1,0,0,7,0,0,3,7,0,0,0,1
 			db 1,7,0,7,0,3,7,0,0,0,0,1
 			db 1,0,7,0,0,7,0,0,0,0,0,1
-;#7b83
+;;#7b83
 PLAYGND_21:
 			db 1,0,0,0,5,0,0,0,0,0,0,1
 			db 1,0,0,0,5,0,0,0,5,0,0,1
@@ -2676,7 +2676,7 @@ PLAYGND_21:
 			db 1,0,0,0,0,5,5,0,0,0,0,1
 			db 1,0,0,0,5,5,0,5,0,0,0,1
 			db 1,0,0,5,5,0,0,5,0,0,0,1
-;#7bcb
+;;#7bcb
 PLAYGND_22:
 			db 1,0,0,0,0,0,0,2,0,0,0,1
 			db 1,0,7,0,0,0,2,2,0,0,0,1
@@ -2684,7 +2684,7 @@ PLAYGND_22:
 			db 1,0,0,0,2,7,7,7,7,7,0,1
 			db 1,2,0,2,0,0,0,0,2,0,0,1
 			db 1,0,2,0,0,0,0,0,0,2,0,1
-;#7c13
+;;#7c13
 PLAYGND_23:
 			db 1,1,1,1,1,1,0,0,0,0,0,1
 			db 1,1,0,0,0,8,0,0,0,0,0,1
@@ -2693,225 +2693,225 @@ PLAYGND_23:
 			db 1,1,0,0,0,3,0,1,0,1,0,1
 			db 1,1,0,0,0,3,0,1,0,1,0,1
 
-;#7c5b
+;;#7c5b
 PIECES_DEFS:
-	; DW prz addr		; presentation address
-	; DW scr addr		; screen address
-	; DW bmp		; bitmap
-	; DW dim		; dim
-	; DW B1,B2,B3,B4	; 
-	; DW rbmp offset	; rotated bmp offset
-	; DW rscr offset	; rotated scr offfset
-	; DW rpiece def		; rotated piece def
-	; DW rB1,rB2,rB3,rB4	; rotated blocks
+	;; DW prz addr		;; presentation address
+	;; DW scr addr		;; screen address
+	;; DW bmp		;; bitmap
+	;; DW dim		;; dim
+	;; DW B1,B2,B3,B4	;; 
+	;; DW rbmp offset	;; rotated bmp offset
+	;; DW rscr offset	;; rotated scr offfset
+	;; DW rpiece def		;; rotated piece def
+	;; DW rB1,rB2,rB3,rB4	;; rotated blocks
 
-;#7c5b
+;;#7c5b
 PIECE_1_DEF:
 	dw #e19c
 	dw #e1b0
-;#7c5f
+;;#7c5f
 PIECE_1_1:
-	dw PIECE_1_1_BMP	;#5163
+	dw PIECE_1_1_BMP	;;#5163
 	db #06, #10
 	dw #000c, #0001, #0001, #000a
 	dw #00a0
 	dw #0040
-	dw PIECE_1_2		;#7c79
+	dw PIECE_1_2		;;#7c79
 	dw #0001, #000c, #000c, #0001
-;#7c79
+;;#7c79
 PIECE_1_2:
-	dw PIECE_1_2_BMP	;#51c3
+	dw PIECE_1_2_BMP	;;#51c3
 	db #04, #18
 	dw #0001, #000c, #000c, #0001
 	dw #ff62
 	dw #ffc2
-	dw PIECE_1_3		;#7c93
+	dw PIECE_1_3		;;#7c93
 	dw #0002, #000a, #0001, #0001
-;#7c93
+;;#7c93
 PIECE_1_3:
-	dw PIECE_1_3_BMP	;#5223
+	dw PIECE_1_3_BMP	;;#5223
 	db #06, #10
 	dw #0002, #000a, #0001, #0001
 	dw #fffe
 	dw #fffe
-	dw PIECE_1_4		;#7cad
+	dw PIECE_1_4		;;#7cad
 	dw #0000, #0001, #000c, #000c
-;#7cad
+;;#7cad
 PIECE_1_4:
-	dw PIECE_1_4_BMP	;#5283
+	dw PIECE_1_4_BMP	;;#5283
 	db #04, #18
 	dw #0000, #0001, #000c, #000c
 	dw #0000
 	dw #0000
-	dw PIECE_1_1		;#7c5f
+	dw PIECE_1_1		;;#7c5f
 	dw #000c, #0001, #0001, #000a
 
-;#7cc7
+;;#7cc7
 PIECE_2_DEF:
 	dw #e19c
 	dw #e1b0
-;#7ccb
+;;#7ccb
 PIECE_2_1:
-	dw PIECE_2_1_BMP	;#52e3
+	dw PIECE_2_1_BMP	;;#52e3
 	db #06, #10
 	dw #000c, #0001, #0001, #000c
 	dw #00a0
 	dw #0040
-	dw PIECE_2_2		;#7ce5
+	dw PIECE_2_2		;;#7ce5
 	dw #0001, #0001, #000b, #000c
-;#7ce5
+;;#7ce5
 PIECE_2_2:
-	dw PIECE_2_2_BMP	;#5343
+	dw PIECE_2_2_BMP	;;#5343
 	db #04, #18
 	dw #0001, #0001, #000b, #000c
 	dw #ff62
 	dw #ffc2
-	dw PIECE_2_3		;#7cff
+	dw PIECE_2_3		;;#7cff
 	dw #0000, #000c, #0001, #0001
-;#7cff
+;;#7cff
 PIECE_2_3:
-	dw PIECE_2_3_BMP	;#53a3
+	dw PIECE_2_3_BMP	;;#53a3
 	db #06, #10
 	dw #0000, #000c, #0001, #0001
 	dw #fffe
 	dw #fffe
-	dw PIECE_2_4		;#7d19
+	dw PIECE_2_4		;;#7d19
 	dw #0001, #000c, #000b, #0001
-;#7d19
+;;#7d19
 PIECE_2_4:
-	dw PIECE_2_4_BMP	;#5403
+	dw PIECE_2_4_BMP	;;#5403
 	db #04, #18
 	dw #0001, #000c, #000b, #0001
 	dw #0000
 	dw #0000
-	dw PIECE_2_1		;#7ccb
+	dw PIECE_2_1		;;#7ccb
 	dw #000c, #0001, #0001, #000c
 
 
 PIECE_3_DEF:
-;#7d33
+;;#7d33
 	dw #e19c
 	dw #e1b0
-;#7d37
+;;#7d37
 PIECE_3_1:
-	dw PIECE_3_1_BMP	;#5463
+	dw PIECE_3_1_BMP	;;#5463
 	db #06, #10
 	dw #000c, #0001, #0001, #000b
 	dw #00a0
 	dw #0040
-	dw PIECE_3_2		;#7d51
+	dw PIECE_3_2		;;#7d51
 	dw #0001, #000c, #0001, #000b
-;#7d51
+;;#7d51
 PIECE_3_2:
-	dw PIECE_3_2_BMP	;#54c3
+	dw PIECE_3_2_BMP	;;#54c3
 	db #04, #18
 	dw #0001, #000c, #0001, #000b
 	dw #ff62
 	dw #ffc2
-	dw PIECE_3_3		;#7d6b
+	dw PIECE_3_3		;;#7d6b
 	dw #0001, #000b, #0001, #0001
-;#7d6b
+;;#7d6b
 PIECE_3_3:
-	dw PIECE_3_3_BMP	;#5523
+	dw PIECE_3_3_BMP	;;#5523
 	db #06, #10
 	dw #0001, #000b, #0001, #0001
 	dw #fffe
 	dw #fffe
-	dw PIECE_3_4		;#7d85
+	dw PIECE_3_4		;;#7d85
 	dw #0001, #000b, #0001, #000c
-;#7d85
+;;#7d85
 PIECE_3_4:
-	dw PIECE_3_4_BMP	;#5583
+	dw PIECE_3_4_BMP	;;#5583
 	db #04, #18
 	dw #0001, #000b, #0001, #000c
 	dw #0000
 	dw #0000
-	dw PIECE_3_1		;#7c37
+	dw PIECE_3_1		;;#7c37
 	dw #000c, #0001, #0001, #000b
 
 
-;#7d9f
+;;#7d9f
 PIECE_4_DEF:
 	dw #e19c
 	dw #e1b0
-;#7da3
+;;#7da3
 PIECE_4_1:
-	dw PIECE_4_1_BMP	;#55e3
+	dw PIECE_4_1_BMP	;;#55e3
 	db #06, #10
 	dw #000d, #0001, #000a, #0001
 	dw #009e
 	dw #003e
-	dw PIECE_4_2		;#7ddb
+	dw PIECE_4_2		;;#7ddb
 	dw #0001, #000c, #0001, #000c
-;#7dbd
+;;#7dbd
 PIECE_4_2:
-	dw PIECE_4_2_BMP	;#5643
+	dw PIECE_4_2_BMP	;;#5643
 	db #04, #18
 	dw #0001, #000c, #0001, #000c
 	dw #ff62
 	dw #ffc2
-	dw PIECE_4_1		;#7da3
+	dw PIECE_4_1		;;#7da3
 	dw #000d, #0001, #000a, #0001
 
 
-;#7dd7
+;;#7dd7
 PIECE_5_DEF:
 	dw #e19c
 	dw #e1b0
-;#7ddb
+;;#7ddb
 PIECE_5_1:
-	dw PIECE_5_1_BMP	;#56a3
+	dw PIECE_5_1_BMP	;;#56a3
 	db #06, #10
 	dw #000c, #0001, #000c, #0001
 	dw #009e
 	dw #003e
-	dw PIECE_5_2		;#7df5
+	dw PIECE_5_2		;;#7df5
 	dw #0002, #000b, #0001, #000b
-;#7df5
+;;#7df5
 PIECE_5_2:
-	dw PIECE_5_2_BMP	;#5703
+	dw PIECE_5_2_BMP	;;#5703
 	db #04, #18
 	dw #0002, #000b, #0001, #000b
 	dw #ff62
 	dw #ffc2
-	dw PIECE_5_1		;#7ddb
+	dw PIECE_5_1		;;#7ddb
 	dw #000c, #0001, #000c, #0001
 
-;#7e0f
+;;#7e0f
 PIECE_6_DEF:
 	dw #c1db
 	dw #e1b0
-;#7e13
+;;#7e13
 PIECE_6_1:
-	dw PIECE_6_1_BMP	;#5763
+	dw PIECE_6_1_BMP	;;#5763
 	db #08, #08
 	dw #000c, #0001, #0001, #0001
 	dw #009e
 	dw #003e
-	dw PIECE_6_2		;#7e2d
+	dw PIECE_6_2		;;#7e2d
 	dw #0001, #000c, #000c, #000c
-;#7e2d
+;;#7e2d
 PIECE_6_2:
-	dw PIECE_6_2_BMP	;#57a3
+	dw PIECE_6_2_BMP	;;#57a3
 	db #02, #20
 	dw #0001, #000c, #000c, #000c
 	dw #ff62
 	dw #ffc2
-	dw PIECE_6_1		;#7e13
+	dw PIECE_6_1		;;#7e13
 	dw #000c, #0001, #0001, #0001
 
-;#7e47
+;;#7e47
 PIECE_7_DEF:
 	dw #e19d
 	dw #e1b0
-;#7e4b
+;;#7e4b
 PIECE_7_1:
-	dw PIECE_7_1_BMP	;#57e3
+	dw PIECE_7_1_BMP	;;#57e3
 	db #04, #10
 	dw #000c, #0001, #000b, #0001
 	dw #0000
 	dw #0000
-	dw PIECE_7_1		;#7e4b
+	dw PIECE_7_1		;;#7e4b
 	dw #000c, #0001, #000b, #0001
 
-;#7e65
+;;#7e65

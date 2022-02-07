@@ -1,3 +1,4 @@
 .vscode/
 sjasmplus.exe
 *.bak
+/alinka.bin
