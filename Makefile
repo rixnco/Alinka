@@ -4,7 +4,7 @@ all: dsk
 
 bin: alinka.bin
 
-alinka.bin:
+alinka.bin: alinka.asm data.asm
 	rasm -DRASM=1 alinka.asm
 
 dsk: alinka.bin
