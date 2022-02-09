@@ -121,9 +121,8 @@ PLAYGND_MSK_BUF equ #3ebb
 ;; when linking with the uncompressed data
 SKIP_DECOMPRESS equ 1
 
-;;
+;; Uncomment to compile only the CODE section
 ;;NO_DATA		equ 1
-
 
 
 
@@ -144,18 +143,39 @@ BEGIN	equ CODE_ADDR
 	RUN MAIN
 
 	IFDEF DSK
-	SAVE "ALINKA.TBL",HSCORES_TABLE,HSCORES_TABLE_END-HSCORES_TABLE,DSK,"alinka.dsk"
+	;;SAVE "ALINKA.TBL",HSCORES_TABLE,HSCORES_TABLE_END-HSCORES_TABLE,DSK,"alinka.dsk"
 	SAVE "ALINKA.BIN",BEGIN,END-BEGIN,DSK,"alinka.dsk"
-	ENDIF
+	ENDIF  ;; DSK
 	
 	SAVE "alinka.bin",BEGIN,END-BEGIN
 
-	ELSE
-	RUN MAIN
-	ENDIF
+	ELSE  ;; RASM
+
+	RUN MAIN,MAIN
+	
+	ENDIF ;; RASM
 
 ;;#7e65
 MAIN:
+;; Reset the disk rom
+	ld hl,(#BE7D)
+        ld a,(hl)
+        push    AF
+        LD    C,7
+        LD    DE,#40
+        LD    HL,#B0FF
+        CALL    #BCCE
+        POP    AF
+        OR    A
+        JR    Z,CONT
+        RST    #18	;; Call ROM routine
+        DW    LECTB	;; Address of the call structure
+	JR 	CONT	;; Could have made it more compact by moving the call structure further away  
+
+LECTB   DW    #CDDD	;; Call address (select drive B)
+        DB    7		;; ROM number
+
+CONT:
 	;; --------------------
 	;; Set border color
 	;; --------------------

@@ -7,8 +7,9 @@ bin: alinka.bin
 alinka.bin: alinka.asm data.asm
 	rasm -DRASM=1 alinka.asm
 
-dsk: alinka.bin
-	ManageDsk -C  -Ialinka.bas/ALINKA/BAS/368 -Ialinka.bin/ALINKA.BIN/BIN/16395/32357 -Salinka.dsk
+dsk: alinka.asm data.asm
+	rasm -DRASM=1 -DDSK=1 -eo alinka.asm
+
 
 
 clean:
