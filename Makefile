@@ -1,6 +1,6 @@
 
 
-all: dsk
+all: bin
 
 bin: alinka.bin
 
