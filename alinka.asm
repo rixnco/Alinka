@@ -140,7 +140,7 @@ BEGIN	equ CODE_ADDR
 
 	IFDEF RASM
 
-	RUN MAIN
+	RUN DISK_FIX
 
 	IFDEF DSK
 	;;SAVE "ALINKA.TBL",HSCORES_TABLE,HSCORES_TABLE_END-HSCORES_TABLE,DSK,"alinka.dsk"
@@ -151,31 +151,12 @@ BEGIN	equ CODE_ADDR
 
 	ELSE  ;; RASM
 
-	RUN MAIN,MAIN
+	RUN DISK_FIX,DISK_FIX
 	
 	ENDIF ;; RASM
 
 ;;#7e65
 MAIN:
-;; Reset the disk rom
-	ld hl,(#BE7D)
-        ld a,(hl)
-        push    AF
-        LD    C,7
-        LD    DE,#40
-        LD    HL,#B0FF
-        CALL    #BCCE
-        POP    AF
-        OR    A
-        JR    Z,CONT
-        RST    #18	;; Call ROM routine
-        DW    LECTB	;; Address of the call structure
-	JR 	CONT	;; Could have made it more compact by moving the call structure further away  
-
-LECTB   DW    #CDDD	;; Call address (select drive B)
-        DB    7		;; ROM number
-
-CONT:
 	;; --------------------
 	;; Set border color
 	;; --------------------
@@ -6058,7 +6039,33 @@ BOX_SIDES_side:
 	djnz BOX_SIDES
 	ret
 
+;; Reset the disk rom
+DISK_FIX:
+	ld hl,(#be7d)	;; Read address of AMSDOS reserved area (should read #a700)
+        ld a,(hl)	;; Read currently selected drive
+        push af		;; save it
+        ld c,7		;; Rom number
+        ld de,#40	;; start address
+        ld hl,#b0ff	;; end address
+        call #bcce	;; Re initialize Disc ROM (7)
+        pop af		;; restore selected drive
+        or a		
+        jp z,MAIN	;; Drive A? do nothing
+			;; Drive B? select it again
+        rst #18		;; Call ROM routine
+        dw DISCB	;; Address of the call structure
+	jp MAIN		
+
+DISCB   DW    #CDDD	;; Call address (select drive B)
+        DB    7		;; ROM number
+
 END:
+
+	PRINT "BEGIN:",{hex}BEGIN
+	PRINT "END  :",{hex}END
+	PRINT "START:",{hex}DISK_FIX
+
+
 	IFDEF NO_DATA
 
 ALINKA_HEAD_ZBMP equ #400b
