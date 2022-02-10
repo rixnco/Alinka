@@ -1,5 +1,11 @@
+	IFNDEF DATA_ADDR
+DATA_ADDR equ #400b
+	ENDIF
 
 	org DATA_ADDR
+
+
+	PRINT "DATA :",{hex}DATA_ADDR
 
 ;;-------------------------------------------------------
 ;; Alinka's head bitmap (zbmp) 20x96

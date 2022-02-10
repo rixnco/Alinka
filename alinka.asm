@@ -2,9 +2,13 @@
 ;; -----------------------------------------------------------
 ;; Various constants
 ;; -----------------------------------------------------------
-
+	IFNDEF DATA_ADDR
 DATA_ADDR equ #400b
+	ENDIF
+
+	IFNDEF CODE_ADDR
 CODE_ADDR equ #7e65
+	ENDIF
 
 FILE_BUF 	 equ #1388
 
@@ -125,15 +129,17 @@ SKIP_DECOMPRESS equ 1
 ;;NO_DATA		equ 1
 
 
-
-
 	IFNDEF NO_DATA
 BEGIN	equ DATA_ADDR
 	NOLIST
 	READ "data.asm"
 	LIST
+
 	ELSE
+
+
 BEGIN	equ CODE_ADDR
+
 	ENDIF
 
 	org CODE_ADDR
@@ -147,7 +153,7 @@ BEGIN	equ CODE_ADDR
 	SAVE "ALINKA.BIN",BEGIN,END-BEGIN,DSK,"alinka.dsk"
 	ENDIF  ;; DSK
 	
-	SAVE "alinka.bin",BEGIN,END-BEGIN
+	; SAVE "alinka.bin",BEGIN,END-BEGIN
 
 	ELSE  ;; RASM
 
@@ -862,33 +868,55 @@ MENU_3_letter2:
 	ld b,#0e
 	call DRW_TXT
 ;;#827e	
-MENU_3_defi1:
+MENU_3_defi_X10:
 	ld de,start_levelX10	;; Current defi ten's digit
 	ld hl,#c65d
 	call WAIT_KEY
 	cp #7f		;; Check Delete key
-	jr z,MENU_3_defi1
+	jr z,MENU_3_defi_X10
 	cp #30		;; Check < '0'
-	jr c,MENU_3_defi1
-	cp #3a
-	jr nc,MENU_3_defi1	;; Check > '9'
+	jr c,MENU_3_defi_X10
+	cp #34
+	jr nc,MENU_3_defi_X10	;; Check > '3'
 	push af
 	call DRW_CHAR
 	pop af
 	or a
 	sbc #2f
 	ld (de),a	;; Store
+	;; Set unit's min/max according to chosen tens
+	;; Set max unit
+	push af
+	cp #04		; tens = 3 -> max level is 31
+	ld a, #3a
+	jr nz,MENU_3_defi_X10_cont1
+	ld a, #32
+MENU_3_defi_X10_cont1:
+	ld hl,MENU_3_max_X01
+	ld (hl),a
+	pop af
+	;; Set min unit
+	cp #01		; tens == 0 -> min level is 01
+	ld a, #30
+	jr nz,MENU_3_defi_X10_cont2
+	ld a, #31
+MENU_3_defi_X10_cont2:
+	ld hl,MENU_3_min_X01
+	ld (hl),a
+
 ;;#829c
-MENU_3_defi2:
+MENU_3_defi_X01:
 	ld de,start_levelX01	;; Current defi unit's digit
 	ld hl,#c65f
 	call WAIT_KEY
 	cp #7f		;; Check Delete key
-	jr z,MENU_3_defi1
+	jr z,MENU_3_defi_X10
+MENU_3_min_X01 equ $+1	
 	cp #30		;; Check < '0'
-	jr c,MENU_3_defi2
+	jr c,MENU_3_defi_X01
+MENU_3_max_X01 equ $+1	
 	cp #3a		;; Check > '9'
-	jr nc,MENU_3_defi2
+	jr nc,MENU_3_defi_X01
 	push af
 	call DRW_CHAR
 	pop af
@@ -910,7 +938,10 @@ MENU_3_check_next:
 	ld c,(hl)
 	ld a,(de)
 	cp c
-	jp nz,MENU_3_invalid
+	;;jp nz,MENU_3_invalid
+	nop 
+	nop 
+	nop
 	inc hl
 	inc de
 	djnz MENU_3_check_next
@@ -923,7 +954,7 @@ MENU_3_check_next:
 	ld c,a
 	ld a,(hl)
 	cp c
-	jp c,MENU_3_invalid
+	jp c,MENU_3_check_OK
 	jr nz,MENU_3_check_OK
 	inc hl
 	ld a,(start_levelX01)
@@ -931,7 +962,7 @@ MENU_3_check_next:
 	ld c,a
 	ld a,(hl)
 	cp c
-	jp c,MENU_3_invalid
+	jp c,MENU_3_check_OK
 ;;#82ed
 MENU_3_check_OK:
 	pop hl
@@ -6066,289 +6097,3 @@ END:
 	PRINT "START:",{hex}DISK_FIX
 
 
-	IFDEF NO_DATA
-
-ALINKA_HEAD_ZBMP equ #400b
-KOZAK_DANCER_ZBMP equ #45e0
-KOZAK_OUT_BMP equ #4a3f
-KOZAK_IN_BMP equ #4a9b
-GAME_TITLE_ZBMP equ #4aff
-PIECE_1_1_BMP equ #5163
-PIECE_1_2_BMP equ #51c3
-PIECE_1_3_BMP equ #5223
-PIECE_1_4_BMP equ #5283
-PIECE_2_1_BMP equ #52e3
-PIECE_2_2_BMP equ #5343
-PIECE_2_3_BMP equ #53a3
-PIECE_2_4_BMP equ #5403
-PIECE_3_1_BMP equ #5463
-PIECE_3_2_BMP equ #54c3
-PIECE_3_3_BMP equ #5523
-PIECE_3_4_BMP equ #5583
-PIECE_4_1_BMP equ #55e3
-PIECE_4_2_BMP equ #5643
-PIECE_5_1_BMP equ #56a3
-PIECE_5_2_BMP equ #5703
-PIECE_6_1_BMP equ #5763
-PIECE_6_2_BMP equ #57a3
-PIECE_7_1_BMP equ #57e3
-ALPHABET equ #5823
-CURTAIN_BMP equ #5bbf
-FLAME1_BMP equ #5ccf
-FLAME2_BMP equ #5d6f
-FLAME3_BMP equ #5e0f
-P1_HEAD_BMP equ #5eaf
-P2_HEAD_BMP equ #5f13
-LFT_COLUMN_BMP equ #5f77
-RGT_COLUMN_BMP equ #616b
-EMPTY_BLOCK_BMP equ #6553
-PURPLE_BLOCK_BMP equ #6563
-RED_BLOCK_BMP equ #6573
-ORANGE_BLOCK_BMP equ #6583
-YELLOW_BLOCK_BMP equ #6593
-GREEN_BLOCK_BMP equ #65a3
-BLUE_BLOCK_BMP equ #65b3
-LBLUE_BLOCK_BMP equ #65c3
-BLINK_BLOCK_BMP equ #65d3
-KOZAK1_BMP equ #65e3
-KOZAK2_BMP equ #6723
-KOZAK3_BMP equ #6863
-KOZAK4_BMP equ #69a3
-KOZAK5_BMP equ #6ae3
-KOZAK6_BMP equ #6c23
-KOZAK7_BMP equ #6d63
-KOZAK8_BMP equ #6ea3
-KAZATCHOK_MELODY equ #6fe3
-GAME_MELODY equ #7125
-HSCORE_CHANGED equ #71e8
-L_AMANT_STR equ #71e9
-LES_STR equ #71f1
-MEILLEURS_STR equ #71f4
-SOUPIRANTS_STR equ #71fd
-AMANT_NAME equ #7207
-AMANT_SCORE equ #720b
-HSCORE1 equ #7210
-HSCORE2 equ #721d
-HSCORE3 equ #722a
-HSCORE4 equ #7237
-HSCORE5 equ #7244
-DEFI_CHOICE_STR equ #7251
-OK_STR equ #725f
-INVALID_STR equ #7261
-INFO_DEFI_STR equ #7269
-INFO_LINES_STR equ #7271
-INFO_BONUS_STR equ #7279
-SOUPIRANT1_STR equ #7282
-SCORE1_STR equ #728d
-SCORE2_STR equ #7292
-SOUPIRANT2_STR equ #7297
-ALINKA_STR equ #72a2
-MENU1_STR equ #72ac
-MENU2_STR equ #72bc
-MENU3_STR equ #72cc
-MENU4_STR1 equ #72dc
-MENU4_STR2 equ #72ec
-COPYRIGHT1_STR equ #72f3
-COPYRIGHT2_STR equ #7300
-DROITE_STR equ #730d
-GAUCHE_STR equ #7314
-ACCELERE_STR equ #731b
-ROTATION_STR equ #7324
-PRET_STR equ #732d
-DOMMAGE_STR equ #7331
-TU_AS_STR equ #7338
-ECHOUE_STR equ #733d
-DAMNED_STR equ #7343
-DEFI_STR equ #734c
-REMPORTE_STR equ #7350
-TES_STR equ #7358
-INITIALES_STR equ #735b
-DOTS_STR equ #7364
-BRAVO_STR equ #7367
-TU_ES_STR equ #736c
-DEVENU_STR equ #7371
-LE_TITRE_STR equ #7377
-D_STR equ #737f
-TU_N_AS_STR equ #7381
-PAS_STR equ #7388
-MAIS_STR equ #738b
-EN_TITRE_STR equ #738f
-MAESTRIA_STR equ #7397
-RAPIDITE_STR equ #739f
-COMBO_STR_TBL equ #73a7
-DEFI2_STR equ #73cf
-LIGNES_STR equ #73d3
-A_STR equ #73d9
-COMPLETER_STR equ #73da
-KBD_MAP equ #73e3
-DANCE_TBL equ #7431
-CUR_LEVEL_PTR equ #7481
-P1_LEVEL_PTR equ #7483
-P2_LEVEL_PTR equ #7485
-LEVEL_TABLE equ #7487
-LEVEL_01 equ #7487
-LEVEL_02 equ #748e
-LEVEL_03 equ #7495
-LEVEL_04 equ #749c
-LEVEL_05 equ #74a3
-LEVEL_06 equ #74aa
-LEVEL_07 equ #74b1
-LEVEL_08 equ #74b8
-LEVEL_09 equ #74bf
-LEVEL_10 equ #74c6
-LEVEL_11 equ #74cd
-LEVEL_12 equ #74d4
-LEVEL_13 equ #74db
-LEVEL_14 equ #74e2
-LEVEL_15 equ #74e9
-LEVEL_16 equ #74f0
-LEVEL_17 equ #74f7
-LEVEL_18 equ #74fe
-LEVEL_19 equ #7505
-LEVEL_20 equ #750c
-LEVEL_21 equ #7513
-LEVEL_22 equ #751a
-LEVEL_23 equ #7521
-LEVEL_24 equ #7528
-LEVEL_25 equ #752f
-LEVEL_26 equ #7536
-LEVEL_27 equ #753d
-LEVEL_28 equ #7544
-LEVEL_29 equ #754b
-LEVEL_30 equ #7552
-LEVEL_31 equ #7559
-COMBO_LINES equ #7560
-CUR_SCORE_SCR equ #7561
-CUR_PLAYER equ #7565
-P1_GAME_OVER equ #7566
-P2_GAME_OVER equ #7567
-CUR_SCORE_X00001 equ #7568
-CUR_SCORE_X00010 equ #7569
-CUR_SCORE_X00100 equ #756a
-CUR_SCORE_X01000 equ #756b
-CUR_SCORE_X10000 equ #756c
-P1_SCORE_X00001 equ #756d
-P1_SCORE_X00010 equ #756e
-P1_SCORE_X00100 equ #756f
-P1_SCORE_X01000 equ #7570
-P1_SCORE_X10000 equ #7571
-P2_SCORE_X00001 equ #7572
-P2_SCORE_X00010 equ #7573
-P2_SCORE_X00100 equ #7574
-P2_SCORE_X01000 equ #7575
-P2_SCORE_X10000 equ #7576
-CUR_LEVEL_X10 equ #7577
-CUR_LEVEL_X01 equ #7578
-CUR_LIGNES_X10 equ #7579
-CUR_LIGNES_X01 equ #757a
-CUR_BONUS_X100 equ #757b
-CUR_BONUS_X010 equ #757c
-CUR_BONUS_X001 equ #757d
-PIECE_CUR_MSK_POS equ #757e
-PIECE_PRV_MSK_POS equ #7580
-PLAYGND_TOP_IDX equ #7582
-PIECE_TOP_IDX equ #7583
-PIECE_MSK_BOTTOM equ #7584
-PIECE_SCR_BOTTOM equ #7586
-PIECE_BMP_BOTTOM equ #7588
-NB_MSK_LINES equ #758a
-NB_BMP_LINES equ #758b
-COMBO_STR equ #758c
-PIECE_CUR_BMP_POS equ #758e
-PIECE_PRV_SCR_POS equ #7590
-PIECE_PRV_BMP_POS equ #7592
-PIECE_PRV_BMP equ #7594
-PIECE_PRV_DIM equ #7596
-NXT_PIECE_PRZ_POS equ #7598
-NXT_PIECE_SCR_POS equ #759a
-NXT_PIECE_CUR_BMP equ #759c
-NXT_PIECE_CUR_DIM equ #759e
-NXT_PIECE_MSK_B1 equ #75a0
-NXT_PIECE_MSK_B2 equ #75a2
-NXT_PIECE_MSK_B3 equ #75a4
-NXT_PIECE_MSK_B4 equ #75a6
-NXT_PIECE_ROT_BMP_OFST equ #75a8
-NXT_PIECE_ROT_SCR_OFST equ #75aa
-NXT_PIECE_ROT_BMP equ #75ac
-NXT_PIECE_ROT_B1 equ #75ae
-NXT_PIECE_ROT_B2 equ #75b0
-NXT_PIECE_ROT_B3 equ #75b2
-NXT_PIECE_ROT_B4 equ #75b4
-PIECE_SRC_POS equ #75b6
-PIECE_BMP equ #75b8
-PIECE_DIM equ #75ba
-MIECE_MSK_B1 equ #75bc
-PIECE_MSK_B2 equ #75be
-PIECE_MSK_B3 equ #75c0
-PIECE_MSK_B4 equ #75c2
-PIECE_ROT_BMP_OFST equ #75c4
-PIECE_ROT_SCR_OFST equ #75c6
-PIECE_ROT_BMP equ #75c8
-PIECE_ROT_B1 equ #75ca
-PIECE_ROT_B2 equ #75cc
-PIECE_ROT_B3 equ #75ce
-PIECE_ROT_B4 equ #75d0
-BLIBLIBLIP_PITCH equ #75d2
-LANDUP_SOUND equ #75d3
-PLAYGND_01 equ #75e3
-PLAYGND_02 equ #762b
-PLAYGND_03 equ #7673
-PLAYGND_04 equ #76bb
-PLAYGND_05 equ #7703
-PLAYGND_06 equ #774b
-PLAYGND_07 equ #7793
-PLAYGND_08 equ #77db
-PLAYGND_09 equ #7823
-PLAYGND_10 equ #786b
-PLAYGND_11 equ #78b3
-PLAYGND_12 equ #78fb
-PLAYGND_13 equ #7943
-PLAYGND_14 equ #798b
-PLAYGND_15 equ #79d3
-PLAYGND_16 equ #7a1b
-PLAYGND_17 equ #7a63
-PLAYGND_18 equ #7aab
-PLAYGND_19 equ #7af3
-PLAYGND_20 equ #7b3b
-PLAYGND_21 equ #7b83
-PLAYGND_22 equ #7bcb
-PLAYGND_23 equ #7c13
-PIECES_DEFS equ #7c5b
-PIECE_1_DEF equ #7c5b
-PIECE_1_1 equ #7c5f
-PIECE_1_2 equ #7c79
-PIECE_1_3 equ #7c93
-PIECE_1_4 equ #7cad
-PIECE_2_DEF equ #7cc7
-PIECE_2_1 equ #7ccb
-PIECE_2_2 equ #7ce5
-PIECE_2_3 equ #7cff
-PIECE_2_4 equ #7d19
-PIECE_3_DEF equ #7d33
-PIECE_3_1 equ #7d37
-PIECE_3_2 equ #7d51
-PIECE_3_3 equ #7d6b
-PIECE_3_4 equ #7d85
-PIECE_4_DEF equ #7d9f
-PIECE_4_1 equ #7da3
-PIECE_4_2 equ #7dbd
-PIECE_5_DEF equ #7dd7
-PIECE_5_1 equ #7ddb
-PIECE_5_2 equ #7df5
-PIECE_6_DEF equ #7e0f
-PIECE_6_1 equ #7e13
-PIECE_6_2 equ #7e2d
-PIECE_7_DEF equ #7e47
-PIECE_7_1 equ #7e4b
-LANDUP_SOUND_LEN equ #0008
-HSCORES_TABLE equ #7207
-HSCORES_TABLE_END equ #7251
-DANCE_TEMPO equ #000a
-NB_BMP_LINES_START equ #0018
-KBD_MAP_LEN equ #004e
-NB_MSK_LINES_START equ #0003
-PIECE_BMP_BOTTOM_START equ #30d2
-PIECE_MASK_BOTTOM_START equ #3eea
-PIECE_SCR_BOTTOM_START equ #e22a
-
-	ENDIF
