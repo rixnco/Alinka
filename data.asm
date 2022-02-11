@@ -5,7 +5,7 @@ DATA_ADDR equ #400b
 	org DATA_ADDR
 
 
-	PRINT "DATA :",{hex}DATA_ADDR
+	;PRINT "DATA :",{hex}DATA_ADDR
 
 ;;-------------------------------------------------------
 ;; Alinka's head bitmap (zbmp) 20x96
