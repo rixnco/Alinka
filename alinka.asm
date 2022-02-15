@@ -4762,11 +4762,6 @@ DANCEFLR_CURTAIN_DOWN_sync:
 	rra
 	jr nc,DANCEFLR_CURTAIN_DOWN_sync
 
-DANCEFLR_CURTAIN_DOWN_sync2:
-	in a,(c)
-	rra
-	jr c,DANCEFLR_CURTAIN_DOWN_sync2
-
 	;; Draw offscreen bitmap on screen
 	ld bc,#0822
 	pop hl
@@ -4931,7 +4926,7 @@ ADD_DANCEFLOOR_BKG_width:
 DANCE_ANIMATION:
 	;; Prepare dance floor offscreen bitmap.
 	;; - clear background
-	;; - paint background collors
+	;; - paint background colors
 	;; - add left column
 	;; - Add right column with Alinka
 	
