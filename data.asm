@@ -1,3 +1,6 @@
+	ifndef DATA_ADDR
+DATA_ADDR equ #400b
+	endif 
 
 	org DATA_ADDR
 

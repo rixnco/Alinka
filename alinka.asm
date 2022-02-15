@@ -1,10 +1,6 @@
-
 ;; -----------------------------------------------------------
 ;; Various constants
 ;; -----------------------------------------------------------
-
-DATA_ADDR equ #400b
-CODE_ADDR equ #7e65
 
 FILE_BUF 	 equ #1388
 
@@ -124,6 +120,14 @@ SKIP_DECOMPRESS equ 1
 ;;
 ;;NO_DATA		equ 1
 
+	ifndef DATA_ADDR
+DATA_ADDR equ #400b
+	endif 
+	ifndef CODE_ADDR
+CODE_ADDR equ #7e65
+	endif 
+
+ENTRY	  equ DISK_FIX
 
 
 
@@ -141,17 +145,17 @@ BEGIN	equ CODE_ADDR
 
 	IFDEF RASM
 
-	RUN MAIN
+	RUN ENTRY
 
 	IFDEF DSK
-	SAVE "ALINKA.TBL",HSCORES_TABLE,HSCORES_TABLE_END-HSCORES_TABLE,DSK,"alinka.dsk"
+;;	SAVE "ALINKA.TBL",HSCORES_TABLE,HSCORES_TABLE_END-HSCORES_TABLE,DSK,"alinka.dsk"
 	SAVE "ALINKA.BIN",BEGIN,END-BEGIN,DSK,"alinka.dsk"
 	ENDIF
 	
 	SAVE "alinka.bin",BEGIN,END-BEGIN
 
 	ELSE
-	RUN MAIN
+	RUN ENTRY
 	ENDIF
 
 ;;#7e65
@@ -1166,10 +1170,10 @@ START_GAME:
 	;; Setup level
 	ld a,(start_levelX10)
 	add #2f
-	ld (#726f),a
+	ld (INFO_DEFI_STR+6),a
 	ld a,(start_levelX01)
 	add #2f
-	ld (#7270),a
+	ld (INFO_DEFI_STR+7),a
 	ld a,#01
 	ld (p1_score_X00001),a
 	ld (p2_score_X00001),a
@@ -1528,7 +1532,7 @@ PLAY_copy_lignes:
 	call DRAW_POPUP_BOX
 	;; Draw "BONUS"
 	ld hl,#c3ef
-	ld de,#7279
+	ld de,INFO_BONUS_STR
 	ld b,#05
 	call DRW_TXT
 	;; Draw "MAESTRIA"
@@ -1558,7 +1562,7 @@ BONUS_MAESTRIA:
 	ld hl,#c1aa
 	ld bc,#1014
 	call CLEAR_SCREEN_AREA
-	jp BONUS_MAESTRIA_not_empty
+	jp BONUS_MAESTRIA_remove_line
 
 ;;#8702
 BONUS_MAESTRIA_next:
@@ -1584,7 +1588,7 @@ BONUS_MAESTRIA_check1:
 	inc hl
 	inc hl
 	cp #00
-	jp nz,BONUS_MAESTRIA_not_empty
+	jp nz,BONUS_MAESTRIA_remove_line
 	djnz BONUS_MAESTRIA_check1
 
 	;; Line is empty
@@ -1658,7 +1662,7 @@ BONUS_MAESTRIA_display:
 	jr nz,BONUS_MAESTRIA_decrease
 	ret
 ;;#87a2
-BONUS_MAESTRIA_not_empty:
+BONUS_MAESTRIA_remove_line:
 	ld hl,PLAYGND_BOTTOM_LINE_SCR
 	ld de,FLAME1_BMP
 	ld bc,PLAYGND_LINE_DIM
@@ -1738,8 +1742,8 @@ BONUS_MAESTRIA_delay32:
 	jr nz,BONUS_MAESTRIA_delay32
 	djnz BONUS_MAESTRIA_delay31
 
-	;; Decrease maestria bonus
-	or a
+	;; Decrease bonus maestria 
+	or a	;; Clear NC flags ?
 	ld a,(cur_bonus_X010)
 	sbc #02
 	ld (cur_bonus_X010),a
@@ -6038,7 +6042,33 @@ BOX_SIDES_side:
 	djnz BOX_SIDES
 	ret
 
+;; Reset the disk rom
+DISK_FIX:
+	ld hl,(#be7d)	;; Read address of AMSDOS reserved area (should read #a700)
+        ld a,(hl)	;; Read currently selected drive
+        push af		;; save it
+        ld c,7		;; Rom number
+        ld de,#40	;; start address
+        ld hl,#b0ff	;; end address
+        call #bcce	;; Re initialize Disc ROM (7)
+        pop af		;; restore selected drive
+        or a		
+        jp z,MAIN	;; Drive A? do nothing
+			;; Drive B? select it again
+        rst #18		;; Call ROM routine
+        dw DISCB	;; Address of the call structure
+	jp MAIN		
+
+DISCB   DW    #CDDD	;; Call address (select drive B)
+        DB    7		;; ROM number
+
 END:
+
+	PRINT "BEGIN:",{hex}BEGIN
+	PRINT "END  :",{hex}END
+	PRINT "START:",{hex}DISK_FIX
+
+
 	IFDEF NO_DATA
 
 ALINKA_HEAD_ZBMP equ #400b

@@ -14,7 +14,7 @@ Initialement, Alinka, ne s'appelait pas Alinka. En fait, Alinka n'avait même pa
 
 En 1989, j'avais 17 ans et je passais beaucoup de temps avec les copains au CDI du lycée. Il y avait le babyfoot, un flipper, une borne d'arcade et la patronne, euh la surveillante, s'appelait Annie.  
 Bon ok, en fait, on trainait pas mal au bar le Saint Germain, juste à côté du lycée Champollion.  
-Et il y avait forcement compet' de Tetris. Avec Sylvain, Patrice, Xavier, David, le frangin et les autres, on enquillait les parties et au final on y laissait tout notre argent de poche.
+Et il y avait forcement compet' de Tetris. Avec Sylvain, Patrice, Xavier, le frangin et les autres, on enquillait les parties et au final on y laissait tout notre argent de poche.
 
 Alors, pour m'entrainer en douce et ne laisser aucune chance aux potes, je me suis dit que je n'avais qu'à me programmer un Tetris sur l’Amstrad CPC6128 familiale.  
 Je m'étais déjà lancé à la découverte de la programmation, avec "les bidouilles d'Amstrad 100%", "la bible du programmeur de l'Amstrad CPC" et "les clés pour Amstrad - Système de base" ; Alors la glorieuse perspective de devenir le roi du Tetris du Saint Ger', me donna la motivation supplémentaire pour me lancer dans l'aventure.
