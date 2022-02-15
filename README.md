@@ -1,3 +1,4 @@
+
 # Alinka
 
 N'ayant malheureusement pas conservé les sources du tout premier jeu que j'avais écrit en assembleur, il y a fort fort longtemps, je me lance dans le désassemblage du binaire...
@@ -5,6 +6,11 @@ N'ayant malheureusement pas conservé les sources du tout premier jeu que j'avai
 Je ne retomberai évidemment pas sur le code source original, avec ses commentaires et ses conventions de nommage, mais cela me donnera quand même un bon aperçu de ce que j'avais pu pondre comme code à l'époque (j'avais à peine 18 ans), sans formation, et sans internet...
 Juste à l'aide de bouquins, de magazines et certainement beaucoup de persévérance :-)
 
+
+<img src="media/ACPC_199102.PNG"
+     alt="ACPC"
+     width="400px"
+     style="float: right; margin: 10px;" />
 
 
 
@@ -40,6 +46,12 @@ Alors bam, je m'suis dit "Alinka", ça c'est super comme nom !!!
 - Et je crois que le visage d'Alinka vient d'une photo N&B de Grace Kelly.  
 
 Bref, que de l'original :-)))
+
+<img src="media/kosak_gotlib.jpg"
+     alt="ACPC"
+     width="300px"
+     style="float: right; margin: 10px;" />
+
 
 Il m'a fallu de longs mois pour packager tout ça et j'envoie la version finale à Amstrad Cent pour Cent en Septembre 1990.
 
