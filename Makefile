@@ -3,32 +3,31 @@
 DATA=0x400b
 CODE=0x7e65
 
+BUILD_DIR = build/
+TOOLS_DIR = tools/
+
 
 all: alinka
 
 bin: alinka code data
 
 data: data.asm
-	rasm -DDATA_ADDR=${DATA} -sq -s -o data data.asm 
+	rasm -DDATA_ADDR=${DATA} -sq -s -o ${BUILD_DIR}data data.asm 
 
 code: alinka.asm data
-	rasm -DRASM=1 -DCODE_ADDR=${CODE} -DNO_DATA=1 -o code -l data.sym alinka.asm
+	rasm -DRASM=1 -DCODE_ADDR=${CODE} -DNO_DATA=1 -o ${BUILD_DIR}code -l ${BUILD_DIR}data.sym alinka.asm
 
 
 alinka: alinka.asm data.asm
-	rasm -DRASM=1 -DCODE_ADDR=${CODE} -DDATA_ADDR=${DATA} -o alinka alinka.asm
+	rasm -DRASM=1 -DCODE_ADDR=${CODE} -DDATA_ADDR=${DATA} -o ${BUILD_DIR}alinka alinka.asm
 
 dsk: alinka.asm data.asm
 	rasm -DRASM=1 -DCODE_ADDR=${CODE} -DDATA_ADDR=${DATA} -DDSK=1 -eo alinka.asm
 
 run: dsk
-	cpc.exe file=alinka.dsk input=run\"alinka\n
+	cpc.exe file=${BUILD_DIR}alinka.dsk input=run\"alinka\n
 
 clean:
-	rm -f code.bin
-	rm -f data.bin
-	rm -f data.sym
-	rm -f alinka.bin
-	rm -f alinka.dsk
+	rm -f ${BUILD_DIR}/*
 
 

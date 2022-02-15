@@ -9,3 +9,5 @@ sjasmplus.exe
 /rasm.exe
 /cpc.exe
 /cpc-ui.exe
+/.idea
+/build
