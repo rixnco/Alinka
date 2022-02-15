@@ -5,7 +5,7 @@ DATA_ADDR equ #400b
 	org DATA_ADDR
 
 
-	PRINT "DATA :",{hex}DATA_ADDR
+	;;PRINT "DATA :",{hex}DATA_ADDR
 
 ;;-------------------------------------------------------
 ;; Alinka's head bitmap (zbmp) 20x96
@@ -2100,11 +2100,11 @@ p2_level_ptr	dw #0000	;; P2 level ptr
 ;;#7487
 LEVEL_TABLE:
 LEVEL_01:	
-	db #01,#06	;; 05 lignes
+	db #01,#02	;; 05 lignes
 	db #32		;; speed #32
 	db #00		;; no tricks
 	dw PLAYGND_01	;; initial setup 
-	db #00		;; No dance 
+	db #01		;; No dance 
 	
 LEVEL_02:	
 	db #01,#09	

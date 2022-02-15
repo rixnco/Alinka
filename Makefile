@@ -21,7 +21,8 @@ alinka: alinka.asm data.asm
 dsk: alinka.asm data.asm
 	rasm -DRASM=1 -DCODE_ADDR=${CODE} -DDATA_ADDR=${DATA} -DDSK=1 -eo alinka.asm
 
-
+run: dsk
+	cpc.exe file=alinka.dsk input=run\"alinka\n
 
 clean:
 	rm -f code.bin
