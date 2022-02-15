@@ -45,13 +45,13 @@ Alors bam, je m'suis dit "Alinka", ça c'est super comme nom !!!
 - Pour les graphiques, j'ai honteusement pompé sur le Kozak dans les "Rubrique à brac" de Gotlib.
 - Et je crois que le visage d'Alinka vient d'une photo N&B de Grace Kelly.  
 
+Bref, que de l'original :-)))
+
 <img src="media/kosak_gotlib.jpg"
      alt="ACPC"
      width="300px"
      style="float: right; margin: 10px;" />
 
-
-Bref, que de l'original :-)))
 
 Il m'a fallu de longs mois pour packager tout ça et j'envoie la version finale à Amstrad Cent pour Cent en Septembre 1990.
 
